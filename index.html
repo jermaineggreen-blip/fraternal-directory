@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Fraternal Vocational Directory — Member Listing Form</title>
+<style>
+:root{--primary:#1F4788;--accent:#CC9900;--bg:#F4F1EA}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);font-family:Georgia,serif;-webkit-font-smoothing:antialiased}
+#app{display:flex;flex-direction:column;min-height:100vh}
+
+/* HEADER */
+#hdr{background:var(--primary);color:#fff;padding:20px 16px 0;transition:background .4s}
+.hdr-inner{max-width:700px;margin:0 auto}
+.hdr-top{display:flex;align-items:center;gap:13px;margin-bottom:18px}
+#org-badge{width:46px;height:46px;border-radius:50%;background:var(--accent);color:var(--primary);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:10px;
+  text-align:center;line-height:1.1;border:2px solid rgba(255,255,255,.25);flex-shrink:0;
+  overflow:hidden;transition:background .4s,color .4s}
+#org-badge img{width:100%;height:100%;object-fit:cover;object-position:center center;border-radius:50%}
+.hdr-eyebrow{font-size:10px;opacity:.65;letter-spacing:.12em;text-transform:uppercase;font-family:sans-serif;margin-bottom:2px}
+.hdr-title{font-size:18px;font-weight:700}
+.prog-labels{display:flex;margin-bottom:7px}
+.prog-label{flex:1;text-align:center;font-family:sans-serif;font-size:9px;letter-spacing:.05em;
+  text-transform:uppercase;color:rgba(255,255,255,.35);transition:color .3s}
+.prog-label.done,.prog-label.active{color:var(--accent)}
+.prog-label.active{font-weight:700}
+.prog-track{height:3px;background:rgba(255,255,255,.18);border-radius:2px;margin-bottom:-1px}
+.prog-fill{height:100%;width:0;background:var(--accent);border-radius:2px;transition:width .4s ease,background .4s}
+
+/* LAYOUT */
+#body{flex:1;max-width:700px;width:100%;margin:0 auto;padding:22px 14px 48px}
+.card{background:#fff;border-radius:12px;padding:26px 22px;box-shadow:0 2px 20px rgba(0,0,0,.08);border:1px solid #E5E7EB}
+.step{display:none}.step.active{display:block}
+.step-heading{font-size:19px;font-weight:700;color:var(--primary);margin-bottom:5px;transition:color .4s}
+.step-sub{font-size:14px;color:#6B7280;font-family:sans-serif;margin-bottom:20px}
+
+/* FIELDS */
+.field{margin-bottom:16px}
+.field-label{font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;
+  text-transform:uppercase;letter-spacing:.07em;font-family:sans-serif;display:block}
+.field-hint{margin-top:5px;font-size:11px;color:#9CA3AF;font-family:sans-serif;line-height:1.45}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+input[type=text],input[type=tel],input[type=email],select,textarea{
+  width:100%;padding:10px 13px;border:1.5px solid #D1D5DB;border-radius:8px;
+  font-size:14px;color:#1A1A2E;background:#fff;outline:none;font-family:sans-serif;
+  transition:border-color .2s;-webkit-appearance:none;appearance:none}
+input[type=text]:focus,input[type=tel]:focus,input[type=email]:focus,select:focus,textarea:focus{border-color:var(--primary)}
+textarea{resize:vertical;min-height:76px}
+.char-count{text-align:right;font-family:sans-serif;font-size:11px;color:#9CA3AF;margin-top:3px}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+input[type=file]{display:none}
+
+/* TOGGLE */
+.toggle-wrap{display:flex;align-items:center;gap:12px;padding:12px 14px;
+  background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:10px;cursor:pointer;
+  margin-bottom:14px;transition:all .2s;user-select:none}
+.toggle-wrap.on{border-color:var(--primary);background:rgba(31,71,136,.05)}
+.toggle-sw{width:40px;height:21px;border-radius:11px;background:#D1D5DB;
+  position:relative;flex-shrink:0;transition:background .3s}
+.toggle-sw.on{background:var(--primary)}
+.toggle-knob{position:absolute;top:3px;left:3px;width:15px;height:15px;
+  border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .3s}
+.toggle-sw.on .toggle-knob{left:22px}
+.toggle-text{flex:1}
+.toggle-title{font-weight:600;font-size:13px;color:#1F2937;font-family:sans-serif}
+.toggle-sub{font-size:11px;color:#6B7280;font-family:sans-serif;margin-top:1px}
+
+/* IMAGE UPLOAD */
+.img-uploader{margin-bottom:16px}
+.img-upload-row{display:flex;align-items:flex-start;gap:16px}
+.img-zone{flex-shrink:0;border:2px dashed #D1D5DB;background:#F9FAFB;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;transition:border-color .2s;position:relative}
+.img-zone:hover{border-color:var(--primary)}
+.img-zone.circle{border-radius:50%}
+.img-zone.has-preview{border-style:solid;border-color:var(--primary)}
+.img-zone img{width:100%;height:100%;object-fit:cover;object-position:center center;display:none}
+.img-zone.has-preview img{display:block}
+.img-placeholder{text-align:center;color:#9CA3AF;font-family:sans-serif;pointer-events:none}
+.img-placeholder .cam{font-size:22px;margin-bottom:4px}
+.img-placeholder .lbl{font-size:10px;line-height:1.3}
+.img-controls{flex:1}
+.img-hint{font-family:sans-serif;font-size:12px;color:#6B7280;margin-bottom:10px;line-height:1.5}
+.img-btn{display:block;padding:8px 14px;border:1.5px solid var(--primary);background:#fff;
+  color:var(--primary);border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;
+  font-family:sans-serif;margin-bottom:8px;width:max-content;transition:all .2s}
+.img-btn:hover{background:var(--primary);color:#fff}
+.img-rm{display:none;padding:6px 12px;border:1.5px solid #E5E7EB;background:#fff;
+  color:#6B7280;border-radius:7px;cursor:pointer;font-size:12px;font-family:sans-serif;margin-bottom:6px}
+.img-size-note{font-family:sans-serif;font-size:11px;color:#9CA3AF;margin-top:4px}
+
+/* FOCAL POINT CONTROLS */
+.focal-row{display:none;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
+.focal-row.visible{display:flex}
+.focal-label{font-family:sans-serif;font-size:11px;color:#6B7280;margin-right:2px;flex-shrink:0}
+.focal-btn{padding:4px 11px;border:1.5px solid #D1D5DB;border-radius:6px;background:#fff;
+  cursor:pointer;font-size:11px;font-family:sans-serif;color:#374151;transition:all .2s}
+.focal-btn.active{border-color:var(--primary);background:var(--primary);color:#fff}
+
+/* ORG BOX */
+.primary-box{background:#F9FAFB;border:1px solid #E5E7EB;border-radius:10px;padding:16px;margin-bottom:18px}
+.box-label{font-family:sans-serif;font-size:12px;font-weight:700;color:var(--primary);
+  text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px}
+.org-confirm{border-radius:7px;padding:8px 12px;margin-bottom:12px;font-family:sans-serif;
+  font-size:12px;font-style:italic;display:none}
+.addl-section{border-left:3px solid rgba(31,71,136,.2);padding-left:16px;display:none}
+.org-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.org-cb-label{display:flex;align-items:center;gap:9px;padding:9px 11px;
+  border:1.5px solid #E5E7EB;border-radius:8px;cursor:pointer;font-family:sans-serif;
+  font-size:12px;color:#374151;transition:all .2s}
+.org-cb-label.checked{border-color:var(--primary);background:rgba(31,71,136,.06);color:var(--primary)}
+.org-cb-label input{width:14px;height:14px;accent-color:var(--primary);flex-shrink:0}
+.org-short{font-weight:700}
+.org-type{font-size:10px;color:#9CA3AF;margin-top:1px}
+.org-cb-label.checked .org-type{color:var(--primary);opacity:.7}
+
+/* CONTRIBUTION SPLIT — radio cards */
+.split-box{background:#FFF8E7;border:1px solid #F59E0B;border-radius:10px;padding:14px 15px;display:none}
+.split-title{font-family:sans-serif;font-size:12px;font-weight:700;color:#92400E;
+  text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.split-desc{font-family:sans-serif;font-size:13px;color:#374151;margin-bottom:12px;line-height:1.5}
+.radio-card{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;
+  border:2px solid #E5E7EB;border-radius:10px;cursor:pointer;margin-bottom:10px;
+  background:#fff;transition:all .25s;user-select:none}
+.radio-card:last-child{margin-bottom:0}
+.radio-card.selected{border-color:var(--primary);background:rgba(31,71,136,.05)}
+.radio-card .radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid #D1D5DB;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .2s}
+.radio-card.selected .radio-dot{border-color:var(--primary);background:var(--primary)}
+.radio-card.selected .radio-dot::after{content:'';width:6px;height:6px;border-radius:50%;background:#fff}
+.radio-title{font-family:sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin-bottom:3px}
+.radio-card.selected .radio-title{color:var(--primary)}
+.radio-sub{font-family:sans-serif;font-size:12px;color:#6B7280;line-height:1.4}
+
+/* CHECKBOXES — Available For */
+.cb-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cb-label{display:flex;align-items:center;gap:10px;padding:11px 13px;
+  border:2px solid #E5E7EB;border-radius:9px;cursor:pointer;
+  font-family:sans-serif;font-size:13px;color:#374151;transition:all .2s;background:#fff;user-select:none}
+.cb-label.checked{border-color:var(--primary);background:rgba(31,71,136,.07);color:var(--primary);font-weight:600}
+.cb-label input{width:15px;height:15px;accent-color:var(--primary);flex-shrink:0}
+
+/* BUSINESS */
+.biz-section{border-left:3px solid rgba(31,71,136,.2);padding-left:16px;margin-bottom:16px;display:none}
+.biz-img-box{background:#F9FAFB;border:1px solid #E5E7EB;border-radius:10px;padding:16px;margin-bottom:16px}
+.divider{height:1px;background:#E5E7EB;margin:14px 0}
+
+/* NOTICES */
+.notice{border-radius:8px;padding:11px 13px;font-family:sans-serif;font-size:13px;line-height:1.5}
+.notice-warn{background:#FFF8E7;border:1px solid #F59E0B;color:#92400E}
+.notice-ok{background:#F0FDF4;border:1px solid #86EFAC;color:#166534}
+
+/* TIER CARDS */
+.tier-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.tier-card{padding:14px;border:2px solid #E5E7EB;border-radius:10px;cursor:pointer;background:#fff;transition:all .2s}
+.tier-card.selected{border-color:var(--primary);background:rgba(31,71,136,.05)}
+.tier-icon{font-size:18px;margin-bottom:5px}
+.tier-name{font-weight:700;font-size:13px;color:#1A1A2E;font-family:sans-serif;margin-bottom:2px}
+.tier-price{font-weight:800;font-size:20px;color:#374151;font-family:sans-serif;margin-bottom:5px;transition:color .3s}
+.tier-card.selected .tier-price{color:var(--primary)}
+.tier-desc{font-size:12px;color:#6B7280;font-family:sans-serif;line-height:1.45}
+.tier-badge{display:none;margin-top:7px;background:var(--primary);color:#fff;border-radius:20px;
+  padding:3px 10px;font-size:11px;font-family:sans-serif;font-weight:600;width:max-content}
+.tier-card.selected .tier-badge{display:block}
+
+/* CONTRIBUTION BREAKDOWN */
+.contrib-box{border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;margin-bottom:18px}
+.contrib-hdr{background:var(--primary);padding:9px 14px;font-family:sans-serif;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;transition:background .4s}
+.contrib-body{padding:13px 14px;font-family:sans-serif;font-size:13px}
+.c-row{display:flex;justify-content:space-between;margin-bottom:7px;color:#374151;align-items:center}
+.c-row.muted{color:#6B7280}.c-row.muted .val{color:var(--primary);font-weight:600}
+.c-divider{height:1px;background:#E5E7EB;margin:8px 0}
+.c-row.total{color:#111827;font-weight:700;font-size:15px}
+.c-row.total .val{color:var(--primary)}
+.per-org-box{background:#FFFBEB;border:1px solid #FDE68A;border-radius:7px;padding:10px 12px;margin:8px 0}
+.per-org-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:13px}
+.per-org-row:last-child{margin-bottom:0}
+.primary-badge{margin-left:6px;background:var(--primary);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700}
+.contrib-note{margin-top:8px;font-size:12px;color:#9CA3AF;line-height:1.5}
+
+/* REVIEW CARD */
+#review-card{border-radius:12px;overflow:hidden;margin-bottom:18px}
+.rc-header{padding:15px 18px;display:flex;align-items:center;gap:13px}
+.rc-badge{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-weight:800;font-size:10px;text-align:center;line-height:1.2;
+  border:2px solid rgba(255,255,255,.25);flex-shrink:0;overflow:hidden}
+.rc-badge img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
+.rc-name{color:#fff;font-weight:700;font-size:17px}
+.rc-org{font-size:12px;font-family:sans-serif;margin-top:2px}
+.rc-tier-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;font-family:sans-serif;flex-shrink:0}
+.rc-body{padding:15px 18px;background:#fff}
+.rc-biz-imgs{display:flex;gap:10px;margin-bottom:12px;height:56px}
+.rc-biz-imgs .rc-logo{width:56px;height:56px;object-fit:cover;object-position:center center;border-radius:8px;border:1px solid #E5E7EB;flex-shrink:0}
+.rc-biz-imgs .rc-photo{flex:1;height:56px;object-fit:cover;object-position:center center;border-radius:8px;border:1px solid #E5E7EB;min-width:0}
+.rc-section-label{font-size:10px;font-family:sans-serif;color:#9CA3AF;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.rc-voc-title{font-size:15px;font-weight:700;color:#1A1A2E;margin-bottom:2px}
+.rc-voc-sub{font-size:12px;color:#6B7280;font-family:sans-serif;margin-bottom:12px}
+.rc-bio{font-family:sans-serif;font-size:13px;color:#4B5563;line-height:1.5;font-style:italic;padding-left:10px;margin-bottom:12px}
+.rc-biz-block{padding:10px 12px;background:#F9FAFB;border-radius:8px;border:1px solid #E5E7EB;margin-bottom:12px}
+.rc-biz-name{font-weight:700;font-size:14px;color:#1A1A2E;font-family:sans-serif}
+.rc-biz-detail{font-size:12px;color:#6B7280;font-family:sans-serif}
+.rc-biz-url{font-size:12px;color:#2563EB;font-family:sans-serif;margin-top:2px;word-break:break-all}
+.rc-tags{display:flex;gap:7px;flex-wrap:wrap}
+.rc-tag{padding:4px 9px;border-radius:20px;font-size:11px;font-family:sans-serif}
+.rc-tag-loc{background:#F3F4F6;color:#374151}
+
+/* NAV */
+#nav{display:flex;justify-content:space-between;align-items:center;margin-top:26px;padding-top:16px;border-top:1px solid #E5E7EB}
+#nav-step5{display:none;justify-content:space-between;align-items:center;margin-top:26px;padding-top:16px;border-top:1px solid #E5E7EB}
+.step-counter{font-family:sans-serif;font-size:12px;color:#9CA3AF}
+.btn{padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-family:sans-serif;transition:all .2s}
+.btn-back{border:1.5px solid #D1D5DB;background:#fff;color:#374151}
+.btn-back:hover{border-color:#9CA3AF}
+.btn-next{border:none;background:var(--primary);color:#fff;font-weight:700;padding:10px 26px}
+.btn-next:disabled{background:#D1D5DB;color:#9CA3AF;cursor:not-allowed}
+.btn-submit{border:none;background:var(--primary);color:#fff;font-weight:700;padding:11px 28px;font-size:14px;border-radius:8px;cursor:pointer;transition:background .3s}
+.btn-submit:disabled{background:#9CA3AF;cursor:not-allowed}
+#submit-error{display:none;margin-top:14px;background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;padding:12px 14px;font-family:sans-serif;font-size:13px;color:#991B1B}
+
+/* CONFIRMATION */
+#confirmation{display:none;max-width:700px;margin:40px auto;padding:0 14px}
+.confirm-card{background:#fff;border-radius:12px;padding:48px 24px;text-align:center;box-shadow:0 2px 20px rgba(0,0,0,.08)}
+.confirm-emoji{font-size:50px;margin-bottom:16px}
+.confirm-title{color:var(--primary);font-size:23px;margin-bottom:8px;transition:color .4s}
+.confirm-msg{font-family:sans-serif;color:#6B7280;max-width:420px;margin:0 auto 22px;line-height:1.6}
+.confirm-steps{background:#F9FAFB;border-radius:10px;padding:16px;font-family:sans-serif;font-size:13px;color:#374151;max-width:420px;margin:0 auto;text-align:left;line-height:1.85}
+.btn-again{margin-top:22px;padding:10px 22px;border:1.5px solid var(--primary);background:#fff;color:var(--primary);border-radius:8px;cursor:pointer;font-size:14px;font-family:sans-serif}
+
+#footer{text-align:center;padding:12px;font-family:sans-serif;font-size:11px;color:#9CA3AF}
+
+/* RESPONSIVE */
+@media(max-width:520px){
+  .grid2,.grid3,.org-grid,.cb-grid,.tier-grid{grid-template-columns:1fr}
+  .card{padding:20px 16px}
+  .rc-biz-imgs{height:48px}
+  .rc-biz-imgs .rc-logo{width:48px;height:48px}
+  .rc-biz-imgs .rc-photo{height:48px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- HEADER -->
+<div id="hdr">
+  <div class="hdr-inner">
+    <div class="hdr-top">
+      <div id="org-badge"><span id="badge-text">FVD</span></div>
+      <div>
+        <div class="hdr-eyebrow">Fraternal Vocational Directory</div>
+        <div class="hdr-title">Member Listing Form</div>
+      </div>
+    </div>
+    <div class="prog-labels">
+      <div class="prog-label active" data-n="1">Organizations</div>
+      <div class="prog-label" data-n="2">Member Info</div>
+      <div class="prog-label" data-n="3">Vocation</div>
+      <div class="prog-label" data-n="4">Business</div>
+      <div class="prog-label" data-n="5">Tier &amp; Review</div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div id="body">
+<div class="card">
+
+<!-- ═══ STEP 1 ═══ -->
+<div class="step active" id="step-1">
+  <h2 class="step-heading">Your Organizations</h2>
+  <p class="step-sub">Select your primary organization first. Add additional memberships below.</p>
+
+  <div class="primary-box">
+    <div class="box-label">&#9733; Primary Organization</div>
+    <div class="field">
+      <label class="field-label">Organization *</label>
+      <select id="primaryOrg" onchange="onOrgChange()">
+        <option value="">Select your primary organization…</option>
+      </select>
+    </div>
+    <div class="org-confirm" id="org-confirm"></div>
+    <div class="grid2">
+      <div class="field">
+        <label class="field-label" id="chapter-label">Chapter Name *</label>
+        <input id="chapterName" type="text" placeholder="e.g., AKHi Temple No. 280"/>
+      </div>
+      <div class="field">
+        <label class="field-label" id="member-num-label">Member / ID Number *</label>
+        <input id="memberNumber" type="text" placeholder="e.g., 4821"/>
+        <div class="field-hint">Used to verify your membership before listing goes live.</div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label class="field-label">City *</label>
+        <input id="city" type="text" placeholder="Atlanta"/>
+      </div>
+      <div class="field">
+        <label class="field-label">State *</label>
+        <select id="state"><option value="">Select…</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="toggle-wrap" id="addl-toggle" onclick="toggleAddl()">
+    <div class="toggle-sw" id="addl-sw"><div class="toggle-knob"></div></div>
+    <div class="toggle-text">
+      <div class="toggle-title">I belong to additional fraternal organizations</div>
+      <div class="toggle-sub">Add more organizations to appear on your listing</div>
+    </div>
+  </div>
+
+  <div class="addl-section" id="addl-section">
+    <div class="field">
+      <label class="field-label">Select Additional Organizations</label>
+      <div class="org-grid" id="addl-org-grid"></div>
+    </div>
+    <div class="split-box" id="split-box">
+      <div class="split-title">&#x1F49B; Contribution Distribution</div>
+      <div class="split-desc">15% of your annual fee goes to your organizations. How should it be split?</div>
+      <div class="radio-card selected" id="rc-primary" onclick="setSplit(false)">
+        <div class="radio-dot"></div>
+        <div>
+          <div class="radio-title" id="r-primary-label">All 15% goes to my primary organization</div>
+          <div class="radio-sub">Primary org receives the full contribution. Additional orgs are listed on your profile.</div>
+        </div>
+      </div>
+      <div class="radio-card" id="rc-equal" onclick="setSplit(true)">
+        <div class="radio-dot"></div>
+        <div>
+          <div class="radio-title" id="r-equal-label">Divide equally among all my organizations</div>
+          <div class="radio-sub" id="r-equal-sub">Each organization receives an equal share of the 15%.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 2 ═══ -->
+<div class="step" id="step-2">
+  <h2 class="step-heading">Your Information</h2>
+  <p class="step-sub">Your personal contact details and profile photo.</p>
+
+  <!-- Member photo -->
+  <div class="img-uploader">
+    <label class="field-label">Profile Photo (optional)</label>
+    <div class="img-upload-row">
+      <div class="img-zone circle" id="member-photo-zone" style="width:100px;height:100px" onclick="document.getElementById('memberPhotoInput').click()">
+        <img id="member-photo-preview" alt="Member photo"/>
+        <div class="img-placeholder"><div class="cam">&#128247;</div><div class="lbl">Click to<br>upload</div></div>
+      </div>
+      <div class="img-controls">
+        <div class="img-hint">A clear headshot works best. Appears on your member card in the directory.</div>
+        <button class="img-btn" type="button" id="member-photo-btn" onclick="document.getElementById('memberPhotoInput').click()">Select Photo</button>
+        <button class="img-rm" type="button" id="member-photo-rm" onclick="clearPhoto('member')">Remove</button>
+        <div class="focal-row" id="member-focal-row">
+          <span class="focal-label">Focal point:</span>
+          <button class="focal-btn" type="button" data-key="member" data-val="top" onclick="setFocal('member','top')">Top</button>
+          <button class="focal-btn active" type="button" data-key="member" data-val="center" onclick="setFocal('member','center')">Center</button>
+          <button class="focal-btn" type="button" data-key="member" data-val="bottom" onclick="setFocal('member','bottom')">Bottom</button>
+        </div>
+        <div class="img-size-note">JPG, PNG, or WEBP &middot; Max 5 MB</div>
+      </div>
+    </div>
+    <input type="file" id="memberPhotoInput" accept="image/*" onchange="handlePhoto(this,'member')"/>
+  </div>
+
+  <div style="height:1px;background:#E5E7EB;margin:18px 0"></div>
+
+  <div class="grid2">
+    <div class="field"><label class="field-label">First Name *</label><input id="firstName" type="text" placeholder="First"/></div>
+    <div class="field"><label class="field-label">Last Name *</label><input id="lastName" type="text" placeholder="Last"/></div>
+  </div>
+  <div class="field"><label class="field-label">Phone Number *</label><input id="phone" type="tel" placeholder="(404) 555-0100"/></div>
+  <div class="field"><label class="field-label">Email Address *</label><input id="email" type="email" placeholder="you@example.com"/></div>
+  <div class="field">
+    <label class="field-label">Military / Veteran Status</label>
+    <select id="veteranStatus">
+      <option value="">Select status (optional)…</option>
+      <option value="Active Duty">Active Duty</option>
+      <option value="Veteran">Veteran</option>
+      <option value="Reserves / National Guard">Reserves / National Guard</option>
+      <option value="Military Spouse">Military Spouse</option>
+      <option value="None / Not Applicable">None / Not Applicable</option>
+    </select>
+  </div>
+  <div class="notice notice-warn">&#128274; <strong>Privacy:</strong> Personal contact details are visible to verified members only. Public listings show your name, organization, and occupation.</div>
+</div>
+
+<!-- ═══ STEP 3 ═══ -->
+<div class="step" id="step-3">
+  <h2 class="step-heading">Your Vocation</h2>
+  <p class="step-sub">Select your field and specific role &mdash; the heart of the directory.</p>
+  <div class="field">
+    <label class="field-label">Occupation Category *</label>
+    <select id="vocCategory" onchange="onCategoryChange()"><option value="">Select a category…</option></select>
+  </div>
+  <div class="field" id="voc-title-field" style="display:none">
+    <label class="field-label">Your Specific Role / Title *</label>
+    <select id="vocTitle"><option value="">Select your role…</option></select>
+  </div>
+  <div class="field">
+    <label class="field-label">Years in This Field</label>
+    <select id="yearsInField"><option value="">Select…</option></select>
+  </div>
+  <div class="field">
+    <label class="field-label">Professional Bio <span style="font-weight:400;color:#9CA3AF">(optional &middot; 200 chars)</span></label>
+    <textarea id="bio" maxlength="200" placeholder="Briefly describe your expertise or what you offer…" oninput="document.getElementById('bio-count').textContent=this.value.length+'/200'"></textarea>
+    <div class="char-count"><span id="bio-count">0/200</span></div>
+  </div>
+</div>
+
+<!-- ═══ STEP 4 ═══ -->
+<div class="step" id="step-4">
+  <h2 class="step-heading">Business &amp; Professional Details</h2>
+  <p class="step-sub">Own a business? Add it so brothers and sisters can find you.</p>
+
+  <div class="toggle-wrap" id="biz-toggle" onclick="toggleBiz()">
+    <div class="toggle-sw" id="biz-sw"><div class="toggle-knob"></div></div>
+    <div class="toggle-text">
+      <div class="toggle-title">I have a business or professional practice</div>
+      <div class="toggle-sub">Add your business name, phone, location, and images</div>
+    </div>
+  </div>
+
+  <div class="biz-section" id="biz-section">
+    <div class="biz-img-box">
+      <div class="box-label">Business Images</div>
+
+      <!-- Business Logo -->
+      <div class="img-uploader">
+        <label class="field-label">Business Logo (optional)</label>
+        <div class="img-upload-row">
+          <div class="img-zone" id="biz-logo-zone" style="width:110px;height:110px;border-radius:10px" onclick="document.getElementById('bizLogoInput').click()">
+            <img id="biz-logo-preview" alt="Business logo"/>
+            <div class="img-placeholder"><div class="cam">&#x1F3E2;</div><div class="lbl">Click to<br>upload</div></div>
+          </div>
+          <div class="img-controls">
+            <div class="img-hint">Square PNG with transparent background is ideal for logos.</div>
+            <button class="img-btn" type="button" id="biz-logo-btn" onclick="document.getElementById('bizLogoInput').click()">Select Logo</button>
+            <button class="img-rm" type="button" id="biz-logo-rm" onclick="clearPhoto('biz-logo')">Remove</button>
+            <div class="focal-row" id="biz-logo-focal-row">
+              <span class="focal-label">Focal point:</span>
+              <button class="focal-btn" type="button" data-key="biz-logo" data-val="left" onclick="setFocal('biz-logo','left')">Left</button>
+              <button class="focal-btn active" type="button" data-key="biz-logo" data-val="center" onclick="setFocal('biz-logo','center')">Center</button>
+              <button class="focal-btn" type="button" data-key="biz-logo" data-val="right" onclick="setFocal('biz-logo','right')">Right</button>
+            </div>
+            <div class="img-size-note">JPG, PNG, or WEBP &middot; Max 5 MB</div>
+          </div>
+        </div>
+        <input type="file" id="bizLogoInput" accept="image/*" onchange="handlePhoto(this,'biz-logo')"/>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Business Photo -->
+      <div class="img-uploader">
+        <label class="field-label">Business Photo (optional)</label>
+        <div class="img-upload-row">
+          <div class="img-zone" id="biz-photo-zone" style="width:110px;height:110px;border-radius:10px" onclick="document.getElementById('bizPhotoInput').click()">
+            <img id="biz-photo-preview" alt="Business photo"/>
+            <div class="img-placeholder"><div class="cam">&#x1F4F8;</div><div class="lbl">Click to<br>upload</div></div>
+          </div>
+          <div class="img-controls">
+            <div class="img-hint">Storefront, office interior, or photo of you at work. Landscape preferred.</div>
+            <button class="img-btn" type="button" id="biz-photo-btn" onclick="document.getElementById('bizPhotoInput').click()">Select Photo</button>
+            <button class="img-rm" type="button" id="biz-photo-rm" onclick="clearPhoto('biz-photo')">Remove</button>
+            <div class="focal-row" id="biz-photo-focal-row">
+              <span class="focal-label">Focal point:</span>
+              <button class="focal-btn" type="button" data-key="biz-photo" data-val="left" onclick="setFocal('biz-photo','left')">Left</button>
+              <button class="focal-btn active" type="button" data-key="biz-photo" data-val="center" onclick="setFocal('biz-photo','center')">Center</button>
+              <button class="focal-btn" type="button" data-key="biz-photo" data-val="right" onclick="setFocal('biz-photo','right')">Right</button>
+            </div>
+            <div class="img-size-note">JPG, PNG, or WEBP &middot; Max 5 MB</div>
+          </div>
+        </div>
+        <input type="file" id="bizPhotoInput" accept="image/*" onchange="handlePhoto(this,'biz-photo')"/>
+      </div>
+    </div>
+
+    <!-- Business Info -->
+    <div class="grid2">
+      <div class="field"><label class="field-label">Business Name *</label><input id="businessName" type="text" placeholder="e.g., Urban Bladez Barbershop"/></div>
+      <div class="field"><label class="field-label">Business Phone *</label><input id="businessPhone" type="tel" placeholder="(404) 555-0100"/></div>
+    </div>
+
+    <div class="toggle-wrap" id="mobile-toggle" onclick="toggleMobile()">
+      <div class="toggle-sw" id="mobile-sw"><div class="toggle-knob"></div></div>
+      <div class="toggle-text">
+        <div class="toggle-title">Mobile or home-based business</div>
+        <div class="toggle-sub">We'll list your service area city instead of a street address</div>
+      </div>
+    </div>
+
+    <div id="full-address">
+      <div class="field"><label class="field-label">Street Address *</label><input id="businessStreet" type="text" placeholder="123 Main Street"/></div>
+      <div class="grid3">
+        <div class="field"><label class="field-label">City *</label><input id="businessCity" type="text" placeholder="City"/></div>
+        <div class="field"><label class="field-label">State *</label><select id="businessState"><option value="">ST</option></select></div>
+        <div class="field"><label class="field-label">ZIP</label><input id="businessZip" type="text" placeholder="30001" maxlength="10"/></div>
+      </div>
+    </div>
+    <div id="mobile-address" style="display:none">
+      <div class="grid2">
+        <div class="field"><label class="field-label">Service Area City *</label><input id="mobileBizCity" type="text" placeholder="Atlanta"/></div>
+        <div class="field"><label class="field-label">State *</label><select id="mobileBizState"><option value="">Select…</option></select></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="field"><label class="field-label">Business Email (optional)</label><input id="businessEmail" type="email" placeholder="info@business.com"/></div>
+      <div class="field"><label class="field-label">Website (optional)</label><input id="website" type="text" placeholder="https://yourbusiness.com"/></div>
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="field-label">I'm Open To&hellip; <span style="font-weight:400;color:#9CA3AF">(select all that apply)</span></label>
+    <div class="cb-grid" id="avail-grid"></div>
+  </div>
+</div>
+
+<!-- ═══ STEP 5 ═══ -->
+<div class="step" id="step-5">
+  <h2 class="step-heading">Choose Your Tier &amp; Review</h2>
+  <p class="step-sub">Pick your annual listing type, then review your directory card.</p>
+
+  <label class="field-label">Annual Listing Tier *</label>
+  <div class="tier-grid">
+    <div class="tier-card selected" id="tier-member" onclick="selectTier('member')">
+      <div class="tier-icon">&#x1F3DB;&#xFE0F;</div>
+      <div class="tier-name">Member Listing</div>
+      <div class="tier-price">$25<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></div>
+      <div class="tier-desc">Your name, org, and vocation listed. Contact info visible to verified members only.</div>
+      <div class="tier-badge">&#10003; Selected</div>
+    </div>
+    <div class="tier-card" id="tier-business" onclick="selectTier('business')">
+      <div class="tier-icon">&#x1F3E2;</div>
+      <div class="tier-name">Business Listing</div>
+      <div class="tier-price">$50<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></div>
+      <div class="tier-desc">Full member listing plus your business details displayed publicly in the directory.</div>
+      <div class="tier-badge">&#10003; Selected</div>
+    </div>
+  </div>
+
+  <div class="contrib-box">
+    <div class="contrib-hdr">&#x1F49B; Annual Contribution Breakdown</div>
+    <div class="contrib-body" id="contrib-body"></div>
+  </div>
+
+  <label class="field-label">Your Directory Card Preview</label>
+  <div id="review-card"></div>
+  <div class="notice notice-ok" id="ready-notice"></div>
+
+  <div id="nav-step5">
+    <button class="btn btn-back" type="button" onclick="goBack()">&#8592; Back</button>
+    <span class="step-counter">Step 5 of 5</span>
+    <button class="btn-submit" type="button" id="btn-submit" onclick="handleSubmit()">Submit Listing &#10003;</button>
+  </div>
+  <div id="submit-error"></div>
+</div>
+
+<!-- NAV (steps 1–4) -->
+<div id="nav">
+  <button class="btn btn-back" type="button" id="btn-back" onclick="goBack()" style="visibility:hidden">&#8592; Back</button>
+  <span class="step-counter" id="step-counter">Step 1 of 5</span>
+  <button class="btn btn-next" type="button" id="btn-next" onclick="goNext()">Continue &#8594;</button>
+</div>
+
+</div><!-- /card -->
+</div><!-- /body -->
+<div id="footer">Fraternal Vocational Directory &middot; Powered by Greenway International, Inc.</div>
+</div><!-- /app -->
+
+<!-- CONFIRMATION -->
+<div id="confirmation">
+  <div class="confirm-card">
+    <div class="confirm-emoji">&#127881;</div>
+    <h2 class="confirm-title">Submission Received!</h2>
+    <p class="confirm-msg" id="confirm-msg"></p>
+    <div class="confirm-steps" id="confirm-steps"></div>
+    <button class="btn-again" type="button" onclick="location.reload()">Submit Another Listing</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+const WEBHOOK_URL='https://hooks.zapier.com/hooks/catch/23900090/4h1xq3g/';
+
+const ORG_LIST=[
+  {value:'aeaonms',label:'AEAONMS \u2013 Ancient Egyptian Arabic Order Nobles Mystic Shrine',short:'AEAONMS',type:'Shrine',primary:'#1B4D1B',accent:'#FFD700',chapterLabel:'Temple'},
+  {value:'apa',label:'Alpha Phi Alpha Fraternity, Inc.',short:'\u0391\u03A6\u0391',type:'Fraternity',primary:'#1A1A1A',accent:'#C89B2A',chapterLabel:'Chapter'},
+  {value:'aka',label:'Alpha Kappa Alpha Sorority, Inc.',short:'\u0391\u039A\u0391',type:'Sorority',primary:'#006B3C',accent:'#E8A0B4',chapterLabel:'Chapter'},
+  {value:'kap',label:'Kappa Alpha Psi Fraternity, Inc.',short:'\u039A\u0391\u03A8',type:'Fraternity',primary:'#8B0000',accent:'#F0E6C8',chapterLabel:'Chapter'},
+  {value:'opp',label:'Omega Psi Phi Fraternity, Inc.',short:'\u03A9\u03A8\u03A6',type:'Fraternity',primary:'#4B0082',accent:'#FFD700',chapterLabel:'Chapter'},
+  {value:'dst',label:'Delta Sigma Theta Sorority, Inc.',short:'\u0394\u03A3\u0398',type:'Sorority',primary:'#8B0000',accent:'#C8C8C8',chapterLabel:'Chapter'},
+  {value:'pbs',label:'Phi Beta Sigma Fraternity, Inc.',short:'\u03A6\u0392\u03A3',type:'Fraternity',primary:'#003087',accent:'#C8C8C8',chapterLabel:'Chapter'},
+  {value:'zpb',label:'Zeta Phi Beta Sorority, Inc.',short:'\u0396\u03A6\u0392',type:'Sorority',primary:'#003087',accent:'#C8C8C8',chapterLabel:'Chapter'},
+  {value:'sgr',label:'Sigma Gamma Rho Sorority, Inc.',short:'\u03A3\u0393\u03A1',type:'Sorority',primary:'#1565C0',accent:'#FFD700',chapterLabel:'Chapter'},
+  {value:'ipt',label:'Iota Phi Theta Fraternity, Inc.',short:'\u0399\u03A6\u0398',type:'Fraternity',primary:'#6B3A2A',accent:'#D4AF37',chapterLabel:'Chapter'},
+  {value:'pha',label:'Prince Hall Masons (F&AM)',short:'PHA',type:'Masonic',primary:'#1F4788',accent:'#CC9900',chapterLabel:'Lodge'},
+  {value:'oes',label:'Order of the Eastern Star (Prince Hall)',short:'OES',type:'Masonic Auxiliary',primary:'#8B0000',accent:'#C8C8C8',chapterLabel:'Chapter'},
+  {value:'doi',label:'DOI \u2013 Daughters of Isis',short:'DOI',type:'Shrine Auxiliary',primary:'#1B4D1B',accent:'#FFD700',chapterLabel:'Court'},
+  {value:'other',label:'Other Fraternal Organization',short:'FVD',type:'Other',primary:'#1F4788',accent:'#CC9900',chapterLabel:'Chapter'},
+];
+
+const US_STATES=['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC','International'];
+
+const VOCATION_DATA={
+  'Healthcare & Medicine':['Physician / Doctor','Surgeon','Nurse (RN)','Nurse Practitioner (NP)','Licensed Practical Nurse (LPN)','Certified Nursing Assistant (CNA)','Dentist','Dental Hygienist','Oral Surgeon','Orthodontist','Pharmacist','Physical Therapist','Occupational Therapist','Speech-Language Pathologist','Chiropractor','Optometrist','Ophthalmologist','Mental Health Counselor / Therapist','Psychiatrist','Psychologist','Social Worker','Clinical Social Worker (LCSW)','Medical / Lab Technician','Radiologist / Radiology Technician','Paramedic / EMT','Healthcare Administrator','Hospital Executive','Home Health Aide','Medical Coder / Biller','Nutritionist / Registered Dietitian','Veterinarian','Veterinary Technician'],
+  'Legal & Law':['Attorney / Lawyer','Paralegal','Legal Secretary','Judge / Magistrate','Law Enforcement Officer (LEO)','Police Chief / Sheriff','Correctional Officer','Probation / Parole Officer','Private Investigator','Notary Public','Public Defender','Prosecutor / District Attorney','Court Reporter','Bailiff','Mediator / Arbitrator','Bail Bondsman'],
+  'Finance & Accounting':['Financial Advisor / Planner','Accountant / CPA','Bookkeeper','Tax Preparer','Enrolled Agent (EA)','Mortgage Broker / Lender','Banker / Loan Officer','Investment Analyst / Broker','Portfolio Manager','Insurance Agent / Broker (Life)','Insurance Agent / Broker (P&C)','Actuary','Credit Counselor / Debt Specialist','Auditor','Payroll Specialist','Chief Financial Officer (CFO)'],
+  'Real Estate':['Real Estate Agent','Real Estate Broker','Property Manager','Real Estate Investor / Developer','Commercial Real Estate Specialist','Home Inspector','Real Estate Appraiser','Mortgage Underwriter','Title / Escrow Officer','Real Estate Attorney'],
+  'Education & Academia':['Teacher (K\u201312)','Special Education Teacher','School Counselor / Advisor','School Principal / Administrator','Superintendent','College / University Professor','University / College Administrator','Adjunct Instructor','Educational Consultant','Curriculum Developer','Instructional Designer','Tutor / Academic Coach','School Psychologist','Athletic Coach (School / College)','ROTC Instructor'],
+  'Technology & IT':['Software Developer / Engineer','Full-Stack Developer','Front-End Developer','Back-End Developer','Mobile App Developer','Web Designer / Developer','UX / UI Designer','IT Support Technician','Cybersecurity Analyst','Network Engineer','Systems Administrator','Cloud Architect','Data Scientist / Analyst','Database Administrator (DBA)','AI / ML Engineer','DevOps Engineer','IT Project Manager','Product Manager (Tech)','Quality Assurance (QA) Engineer','IT Consultant'],
+  'Construction & Skilled Trades':['General Contractor','Subcontractor','Handyman / Home Repair Specialist','Electrician','Journeyman Electrician','Master Electrician','Plumber','Journeyman Plumber','Master Plumber','HVAC / Heating & AC Technician','Carpenter','Finish Carpenter / Trim Carpenter','Framing Carpenter','Mason / Bricklayer / Tile Setter','Welder','Ironworker','Painter / Finishing Specialist','Roofer / Roofing Contractor','Drywall / Plaster Specialist','Flooring Installer','Landscaper / Hardscaper','Excavator / Grading Contractor','Concrete Contractor','Civil / Structural Engineer','Architect (Licensed)','Construction Project Manager','Building Inspector','Safety Officer (Construction)'],
+  'Barbering & Cosmetology':['Master Barber','Licensed Barber','Barber Shop Owner / Operator','Barbering Instructor / Educator','Cosmetologist / Hair Stylist','Natural Hair Braider','Loctician / Loc Specialist','Nail Technician','Esthetician / Skincare Specialist','Makeup Artist','Waxing Specialist','Laser Technician','Salon / Spa Owner','Cosmetology Instructor','Cosmetology School Owner'],
+  'Military & Veterans Services':['Active Duty \u2013 Army','Active Duty \u2013 Navy','Active Duty \u2013 Air Force','Active Duty \u2013 Marine Corps','Active Duty \u2013 Coast Guard','Active Duty \u2013 Space Force','National Guard / Reserve Member','Veteran','Retired Military Officer','Retired Military Enlisted','Veterans Services Officer (VSO)','Military Chaplain','Defense Contractor','ROTC Instructor / Cadet Advisor','Military Recruiter','Military Spouse'],
+  'Government & Public Service':['Elected Official / Politician','City / County Employee','State Government Employee','Federal Government Employee','Civil Servant (Non-Military)','Firefighter','Fire Marshal','EMT / Paramedic (Government)','Postal Worker (USPS)','Court System Employee','Social Services Worker','Child Protective Services (CPS)','Code Enforcement Officer','Transportation / Infrastructure Worker','Public Health Officer','Foreign Service Officer'],
+  'Events, Food & Hospitality':['Wedding / Event Coordinator','Event Planner / Meeting Planner','DJ / Audio Specialist','Party / Event Promoter','Caterer','Personal Chef','Restaurant Owner / Operator','Chef / Executive Chef','Sous Chef','Line Cook','Baker / Pastry Chef','Food Truck Owner / Operator','Bartender / Mixologist','Hotel / Resort Manager','Front Desk / Hospitality Staff','Event Venue Owner / Manager','Florist / Floral Designer','Photographer (Events)','Videographer (Events)','Nutritionist / Meal Prep Specialist'],
+  'Media & Entertainment':['Journalist / Reporter','News Anchor','Radio Personality / DJ','Podcast Host','TV / Broadcast Personality','Musician / Performer','Singer / Vocalist','Music Producer','Recording Artist','Sound Engineer','Actor / Entertainer','Stand-Up Comedian','Filmmaker / Director','Videographer','Photographer','Social Media Influencer / Creator','Publicist / PR Specialist','Author / Writer','Copywriter','Voice Actor'],
+  'Ministry & Religion':['Pastor / Senior Pastor','Associate Pastor','Minister / Reverend','Bishop / Apostle','Deacon / Deaconess','Elder','Church Administrator / Business Manager','Youth Minister / Youth Pastor','Worship Leader / Music Director','Chaplain (Hospital / Military / Prison)','Missionary','Evangelist','Religious Educator / Sunday School Director','Campus Ministry Leader'],
+  'Nonprofit & Community':['Executive Director / CEO (Nonprofit)','Director of Programs','Program Manager','Grant Writer','Development / Fundraising Director','Community Organizer / Advocate','Volunteer Coordinator','Case Manager / Navigator','Policy Analyst','Outreach Coordinator','Board Member (Nonprofit)','Foundation Officer'],
+  'Automotive':['Auto Mechanic / Technician','Master Technician','Auto Body / Collision Technician','Auto Painter','Car Dealer / Salesperson','Auto Detailer','Tow Truck Operator','Auto Parts Specialist','Automotive Appraiser','Auto Glass Technician','Car Wash Owner / Operator','Fleet Manager','Motorsports Technician'],
+  'Transportation & Logistics':['CDL Truck Driver (OTR)','Local / Regional Truck Driver','Delivery Driver (Package / Courier)','Rideshare Driver (Uber / Lyft)','Logistics Coordinator','Supply Chain Manager','Warehouse Manager','Forklift Operator','Shipping / Receiving Clerk','Freight Broker','Airline Pilot','Flight Attendant','Railroad / Transit Employee','Dispatcher','Port / Dock Worker'],
+  'Retail & Sales':['Retail Business Owner','Store Manager','Sales Representative','Account Executive','Regional / National Sales Manager','E-commerce Entrepreneur','Brand Ambassador','Wholesale / Distribution Rep','Franchise Owner','Merchandiser','Customer Service Manager'],
+  'Arts, Marketing & Creative':['Graphic Designer','Web / UI Designer','Brand Identity Designer','Illustrator','Photographer (Commercial)','Videographer (Commercial)','Animator / Motion Graphics Artist','Interior Designer','Architect (Design-focused)','Fashion Designer / Stylist','Marketing Manager','Digital Marketing Specialist','SEO / SEM Specialist','Social Media Manager','Content Creator / Strategist','Advertising Specialist','Copywriter / Content Writer','Brand Strategist / Consultant','Public Relations Specialist'],
+  'Sports & Fitness':['Personal Trainer / Fitness Coach','Group Fitness Instructor','Yoga / Pilates Instructor','Strength & Conditioning Coach','Athletic Director','Head Coach','Assistant Coach','Sports Agent / Manager','Sports Broadcaster / Analyst','Physical Education Teacher','Recreational Therapist','Sports Nutritionist','Gym / Fitness Studio Owner','Professional Athlete'],
+  'Manufacturing & Industrial':['Plant / Facility Manager','Operations Manager','Quality Control Inspector','Industrial Engineer','Manufacturing Technician','Machine Operator','CNC Machinist','Welding Inspector','Maintenance Technician','Safety Manager / EHS Officer','Production Supervisor','Supply Chain / Procurement Specialist'],
+  'Entrepreneurship & Business':['Small Business Owner','Franchise Owner','Startup Founder / CEO','Business Consultant / Advisor','Management Consultant','Executive Coach / Leadership Coach','Life Coach / Motivational Speaker','Public Speaker / Keynote Speaker','Investor / Angel Investor','Venture Capitalist','Private Equity Professional','Network Marketing / MLM Professional','E-commerce Seller','Import / Export Business Owner','Staffing / Recruiting Agency Owner'],
+  'Other':['Other / Not Listed Above'],
+};
+
+const YEARS_OPTIONS=['Less than 1 year','1\u20135 years','5\u201310 years','10\u201320 years','20+ years'];
+const AVAILABLE_FOR=['Hire / Referrals','Mentorship','Networking','Speaking / Teaching'];
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+const S={
+  primaryOrg:'',chapterName:'',memberNumber:'',city:'',orgState:'',
+  hasAdditionalOrgs:false,additionalOrgs:[],divideSplit:false,
+  firstName:'',lastName:'',phone:'',email:'',veteranStatus:'',
+  memberPhotoBase64:'',memberFocal:'center',
+  vocCategory:'',vocTitle:'',yearsInField:'',bio:'',
+  hasBusiness:false,isMobile:false,
+  businessName:'',businessPhone:'',businessStreet:'',
+  businessCity:'',businessState:'',businessZip:'',
+  businessEmail:'',website:'',
+  bizLogoBase64:'',bizLogoFocal:'center',
+  bizPhotoBase64:'',bizPhotoFocal:'center',
+  availableFor:[],listingTier:'member',
+};
+
+let currentStep=1;
+
+// ── HELPERS ──────────────────────────────────────────────────────────────
+function $(id){return document.getElementById(id);}
+function getOrg(v){return ORG_LIST.find(o=>o.value===v)||{primary:'#1F4788',accent:'#CC9900',short:'FVD',type:'',chapterLabel:'Chapter',label:'',value:''};}
+function safeAccent(o){return['#C8C8C8','#F0E6C8','#FAFAFA'].includes(o.accent)?'#9CA3AF':o.accent;}
+function fmt(n){const r=Math.round(n*100)/100;return'$'+(r%1===0?r.toFixed(0):r.toFixed(2));}
+function eh(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+function init(){
+  // Orgs
+  const ps=$('primaryOrg');
+  ORG_LIST.forEach(o=>{const opt=document.createElement('option');opt.value=o.value;opt.textContent=o.label;ps.appendChild(opt);});
+  // States
+  ['state','businessState','mobileBizState'].forEach(id=>{
+    const s=$(id);
+    US_STATES.forEach(st=>{const o=document.createElement('option');o.value=st;o.textContent=st;s.appendChild(o);});
+  });
+  // Vocation categories
+  const cs=$('vocCategory');
+  Object.keys(VOCATION_DATA).forEach(cat=>{const o=document.createElement('option');o.value=cat;o.textContent=cat;cs.appendChild(o);});
+  // Years
+  const ys=$('yearsInField');
+  YEARS_OPTIONS.forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y;ys.appendChild(o);});
+  // Available-for checkboxes
+  const grid=$('avail-grid');
+  AVAILABLE_FOR.forEach(opt=>{
+    const lbl=document.createElement('label');
+    lbl.className='cb-label';
+    const cb=document.createElement('input');
+    cb.type='checkbox';cb.value=opt;
+    cb.addEventListener('change',()=>onAvailChange(cb,lbl));
+    lbl.appendChild(cb);
+    lbl.appendChild(document.createTextNode(' '+opt));
+    grid.appendChild(lbl);
+  });
+  showStep(1);
+}
+
+// ── THEME ─────────────────────────────────────────────────────────────────
+function updateTheme(v){
+  const o=getOrg(v);
+  const acc=safeAccent(o);
+  document.documentElement.style.setProperty('--primary',o.primary);
+  document.documentElement.style.setProperty('--accent',acc);
+  $('hdr').style.background=o.primary;
+  const badge=$('org-badge');
+  if(S.memberPhotoBase64){
+    badge.innerHTML=`<img src="data:image/jpeg;base64,${S.memberPhotoBase64}" style="object-position:center ${S.memberFocal}">`;
+  }else{
+    badge.style.background=o.accent;
+    badge.style.color=o.primary;
+    badge.innerHTML=`<span id="badge-text">${o.short||'FVD'}</span>`;
+  }
+}
+
+// ── STEPS ─────────────────────────────────────────────────────────────────
+function showStep(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  $('step-'+n).classList.add('active');
+  document.querySelectorAll('.prog-label').forEach(el=>{
+    const i=parseInt(el.dataset.n);
+    el.className='prog-label'+(i<n?' done':i===n?' active':'');
+  });
+  $('prog-fill').style.width=((n-1)/4*100)+'%';
+  $('nav').style.display=n===5?'none':'flex';
+  $('nav-step5').style.display=n===5?'flex':'none';
+  if(n>1)$('btn-back').style.visibility='visible';
+  else $('btn-back').style.visibility='hidden';
+  $('step-counter').textContent='Step '+n+' of 5';
+  if(n===5)renderStep5();
+  currentStep=n;
+}
+
+function goNext(){if(validate(currentStep)){syncState();showStep(currentStep+1);}}
+function goBack(){syncState();showStep(currentStep-1);}
+
+// ── VALIDATE ──────────────────────────────────────────────────────────────
+function validate(step){
+  const msgs={1:['Select your primary organization.','Enter your chapter / temple / lodge name.','Enter your member number.','Enter your city.','Select your state.'],
+               2:['Enter your first name.','Enter your last name.','Enter your phone number.',null]};
+  if(step===1){
+    if(!$('primaryOrg').value){alert(msgs[1][0]);return false;}
+    if(!$('chapterName').value.trim()){alert(msgs[1][1]);return false;}
+    if(!$('memberNumber').value.trim()){alert(msgs[1][2]);return false;}
+    if(!$('city').value.trim()){alert(msgs[1][3]);return false;}
+    if(!$('state').value){alert(msgs[1][4]);return false;}
+  }
+  if(step===2){
+    if(!$('firstName').value.trim()){alert(msgs[2][0]);return false;}
+    if(!$('lastName').value.trim()){alert(msgs[2][1]);return false;}
+    if(!$('phone').value.trim()){alert(msgs[2][2]);return false;}
+    if(!$('email').value.trim()||!$('email').value.includes('@')){alert('Enter a valid email address.');return false;}
+  }
+  if(step===3){
+    if(!$('vocCategory').value){alert('Select an occupation category.');return false;}
+    if(!$('vocTitle').value){alert('Select your specific role.');return false;}
+  }
+  if(step===4&&S.hasBusiness){
+    if(!$('businessName').value.trim()){alert('Enter your business name.');return false;}
+    if(!$('businessPhone').value.trim()){alert('Enter your business phone.');return false;}
+    if(S.isMobile){if(!$('mobileBizCity').value.trim()){alert('Enter your service area city.');return false;}}
+    else{if(!$('businessStreet').value.trim()){alert('Enter your street address.');return false;}
+         if(!$('businessCity').value.trim()){alert('Enter your business city.');return false;}}
+  }
+  return true;
+}
+
+// ── SYNC ──────────────────────────────────────────────────────────────────
+function syncState(){
+  S.primaryOrg=$('primaryOrg').value;
+  S.chapterName=$('chapterName').value.trim();
+  S.memberNumber=$('memberNumber').value.trim();
+  S.city=$('city').value.trim();
+  S.orgState=$('state').value;
+  S.firstName=$('firstName').value.trim();
+  S.lastName=$('lastName').value.trim();
+  S.phone=$('phone').value.trim();
+  S.email=$('email').value.trim();
+  S.veteranStatus=$('veteranStatus').value;
+  S.vocCategory=$('vocCategory').value;
+  S.vocTitle=$('vocTitle').value;
+  S.yearsInField=$('yearsInField').value;
+  S.bio=$('bio').value.trim();
+  S.businessName=$('businessName').value.trim();
+  S.businessPhone=$('businessPhone').value.trim();
+  S.businessStreet=$('businessStreet').value.trim();
+  S.businessCity=$('businessCity').value.trim();
+  S.businessState=$('businessState').value;
+  S.businessZip=$('businessZip').value.trim();
+  S.mobileBizCity=$('mobileBizCity').value.trim();
+  S.mobileBizState=$('mobileBizState').value;
+  S.businessEmail=$('businessEmail').value.trim();
+  S.website=$('website').value.trim();
+}
+
+// ── ORG CHANGE ─────────────────────────────────────────────────────────────
+function onOrgChange(){
+  const v=$('primaryOrg').value;
+  const o=getOrg(v);
+  updateTheme(v);
+  const conf=$('org-confirm');
+  if(v){
+    conf.style.cssText=`display:block;background:${o.primary}18;border:1px solid ${o.primary}40;color:${o.primary}`;
+    conf.textContent=o.type+' \u2014 '+o.label;
+  }else conf.style.display='none';
+  const numMap={Temple:'Temple Member Number *',Court:'Court Member Number *',Lodge:'Lodge Member Number *'};
+  const typeMap={Fraternity:'Chapter Roll Number *',Sorority:'Chapter Roll Number *'};
+  $('chapter-label').textContent=(o.chapterLabel||'Chapter')+' Name *';
+  $('member-num-label').textContent=numMap[o.chapterLabel]||typeMap[o.type]||'Member / ID Number *';
+  $('chapterName').placeholder={Temple:'e.g., AKHi Temple No. 280',Court:'e.g., Nile Court No. 20',Lodge:'e.g., Mount Olive Lodge No. 4'}[o.chapterLabel]||'e.g., Alpha Chapter';
+  S.additionalOrgs=S.additionalOrgs.filter(x=>x!==v);
+  rebuildAddlGrid();
+}
+
+// ── ADDITIONAL ORGS ────────────────────────────────────────────────────────
+function toggleAddl(){
+  S.hasAdditionalOrgs=!S.hasAdditionalOrgs;
+  $('addl-sw').classList.toggle('on',S.hasAdditionalOrgs);
+  $('addl-toggle').classList.toggle('on',S.hasAdditionalOrgs);
+  $('addl-section').style.display=S.hasAdditionalOrgs?'block':'none';
+  if(!S.hasAdditionalOrgs){S.additionalOrgs=[];S.divideSplit=false;}
+  rebuildAddlGrid();
+}
+
+function rebuildAddlGrid(){
+  const grid=$('addl-org-grid');
+  grid.innerHTML='';
+  const primary=$('primaryOrg').value;
+  ORG_LIST.filter(o=>o.value!==primary&&o.value!=='other').forEach(org=>{
+    const checked=S.additionalOrgs.includes(org.value);
+    const lbl=document.createElement('label');
+    lbl.className='org-cb-label'+(checked?' checked':'');
+    const cb=document.createElement('input');
+    cb.type='checkbox';cb.value=org.value;if(checked)cb.checked=true;
+    cb.addEventListener('change',()=>{
+      if(cb.checked){if(!S.additionalOrgs.includes(org.value))S.additionalOrgs.push(org.value);}
+      else S.additionalOrgs=S.additionalOrgs.filter(v=>v!==org.value);
+      lbl.classList.toggle('checked',cb.checked);
+      updateSplitBox();
+    });
+    lbl.appendChild(cb);
+    const inner=document.createElement('div');
+    inner.innerHTML=`<div class="org-short">${eh(org.short)}</div><div class="org-type">${eh(org.type)}</div>`;
+    lbl.appendChild(inner);
+    grid.appendChild(lbl);
+  });
+  updateSplitBox();
+}
+
+function updateSplitBox(){
+  const box=$('split-box');
+  // Total = primary (1) + additional
+  const total=1+S.additionalOrgs.length;
+  box.style.display=S.additionalOrgs.length>0?'block':'none';
+  const org=getOrg($('primaryOrg').value);
+  $('r-primary-label').textContent='All 15% goes to '+(org.short||'my primary organization');
+  $('r-equal-label').textContent='Divide equally among all '+total+' organizations';
+  $('r-equal-sub').textContent='Each of the '+total+' organizations receives '+fmt(25*0.15/total)+'\u2013'+fmt(50*0.15/total)+'/yr depending on your tier.';
+  setSplit(S.divideSplit);
+}
+
+function setSplit(val){
+  S.divideSplit=val;
+  $('rc-primary').classList.toggle('selected',!val);
+  $('rc-equal').classList.toggle('selected',val);
+}
+
+// ── VOCATION ──────────────────────────────────────────────────────────────
+function onCategoryChange(){
+  const cat=$('vocCategory').value;
+  const tf=$('voc-title-field');
+  const ts=$('vocTitle');
+  ts.innerHTML='<option value="">Select your role\u2026</option>';
+  if(cat&&VOCATION_DATA[cat]){
+    VOCATION_DATA[cat].forEach(r=>{const o=document.createElement('option');o.value=r;o.textContent=r;ts.appendChild(o);});
+    tf.style.display='block';
+  }else tf.style.display='none';
+}
+
+// ── BUSINESS ──────────────────────────────────────────────────────────────
+function toggleBiz(){
+  S.hasBusiness=!S.hasBusiness;
+  $('biz-sw').classList.toggle('on',S.hasBusiness);
+  $('biz-toggle').classList.toggle('on',S.hasBusiness);
+  $('biz-section').style.display=S.hasBusiness?'block':'none';
+}
+function toggleMobile(){
+  S.isMobile=!S.isMobile;
+  $('mobile-sw').classList.toggle('on',S.isMobile);
+  $('mobile-toggle').classList.toggle('on',S.isMobile);
+  $('full-address').style.display=S.isMobile?'none':'block';
+  $('mobile-address').style.display=S.isMobile?'block':'none';
+}
+function onAvailChange(cb,lbl){
+  if(cb.checked){if(!S.availableFor.includes(cb.value))S.availableFor.push(cb.value);}
+  else S.availableFor=S.availableFor.filter(v=>v!==cb.value);
+  lbl.classList.toggle('checked',cb.checked);
+}
+
+// ── IMAGE UPLOADS ──────────────────────────────────────────────────────────
+function handlePhoto(input,key){
+  const file=input.files[0];
+  if(!file)return;
+  if(file.size>5*1024*1024){alert('Please choose an image under 5 MB.');input.value='';return;}
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const dataUrl=e.target.result;
+    const b64=dataUrl.split(',')[1]||'';
+    if(key==='member'){
+      S.memberPhotoBase64=b64;
+      const zone=$('member-photo-zone'),prev=$('member-photo-preview');
+      zone.classList.add('has-preview');
+      prev.src=dataUrl;prev.style.objectPosition='center center';
+      $('member-photo-btn').textContent='Change Photo';
+      $('member-photo-rm').style.display='block';
+      $('member-focal-row').classList.add('visible');
+      S.memberFocal='center';
+      // Update header badge
+      const badge=$('org-badge');
+      const org=getOrg($('primaryOrg').value);
+      badge.style.background=org.accent;badge.style.color=org.primary;
+      badge.innerHTML=`<img src="${dataUrl}" style="object-position:center center">`;
+    }else if(key==='biz-logo'){
+      S.bizLogoBase64=b64;
+      $('biz-logo-zone').classList.add('has-preview');
+      $('biz-logo-preview').src=dataUrl;$('biz-logo-preview').style.objectPosition='center center';
+      $('biz-logo-btn').textContent='Change Logo';
+      $('biz-logo-rm').style.display='block';
+      $('biz-logo-focal-row').classList.add('visible');
+      S.bizLogoFocal='center';
+    }else if(key==='biz-photo'){
+      S.bizPhotoBase64=b64;
+      $('biz-photo-zone').classList.add('has-preview');
+      $('biz-photo-preview').src=dataUrl;$('biz-photo-preview').style.objectPosition='center center';
+      $('biz-photo-btn').textContent='Change Photo';
+      $('biz-photo-rm').style.display='block';
+      $('biz-photo-focal-row').classList.add('visible');
+      S.bizPhotoFocal='center';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearPhoto(key){
+  if(key==='member'){
+    S.memberPhotoBase64='';S.memberFocal='center';
+    $('member-photo-zone').classList.remove('has-preview');
+    $('member-photo-preview').src='';
+    $('member-photo-btn').textContent='Select Photo';
+    $('member-photo-rm').style.display='none';
+    $('member-focal-row').classList.remove('visible');
+    $('memberPhotoInput').value='';
+    resetFocalBtns('member');
+    const org=getOrg($('primaryOrg').value);
+    $('org-badge').style.background=org.accent;
+    $('org-badge').style.color=org.primary;
+    $('org-badge').innerHTML=`<span id="badge-text">${org.short||'FVD'}</span>`;
+  }else if(key==='biz-logo'){
+    S.bizLogoBase64='';S.bizLogoFocal='center';
+    $('biz-logo-zone').classList.remove('has-preview');
+    $('biz-logo-preview').src='';
+    $('biz-logo-btn').textContent='Select Logo';
+    $('biz-logo-rm').style.display='none';
+    $('biz-logo-focal-row').classList.remove('visible');
+    $('bizLogoInput').value='';
+    resetFocalBtns('biz-logo');
+  }else if(key==='biz-photo'){
+    S.bizPhotoBase64='';S.bizPhotoFocal='center';
+    $('biz-photo-zone').classList.remove('has-preview');
+    $('biz-photo-preview').src='';
+    $('biz-photo-btn').textContent='Select Photo';
+    $('biz-photo-rm').style.display='none';
+    $('biz-photo-focal-row').classList.remove('visible');
+    $('bizPhotoInput').value='';
+    resetFocalBtns('biz-photo');
+  }
+}
+
+// ── FOCAL POINT ────────────────────────────────────────────────────────────
+function setFocal(key,val){
+  // Update state
+  if(key==='member')S.memberFocal=val;
+  else if(key==='biz-logo')S.bizLogoFocal=val;
+  else S.bizPhotoFocal=val;
+
+  // Update preview image object-position
+  const imgIds={member:'member-photo-preview','biz-logo':'biz-logo-preview','biz-photo':'biz-photo-preview'};
+  const img=$(imgIds[key]);
+  if(img){
+    img.style.objectPosition=key==='member'?'center '+val:val+' center';
+  }
+
+  // Update badge for member photo
+  if(key==='member'&&S.memberPhotoBase64){
+    const bImg=$('org-badge').querySelector('img');
+    if(bImg)bImg.style.objectPosition='center '+val;
+  }
+
+  // Toggle button active states
+  document.querySelectorAll('.focal-btn[data-key="'+key+'"]').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.val===val);
+  });
+}
+
+function resetFocalBtns(key){
+  document.querySelectorAll('.focal-btn[data-key="'+key+'"]').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.val==='center');
+  });
+}
+
+// ── TIER ──────────────────────────────────────────────────────────────────
+function selectTier(t){
+  S.listingTier=t;
+  $('tier-member').classList.toggle('selected',t==='member');
+  $('tier-business').classList.toggle('selected',t==='business');
+  renderContrib();
+  renderReviewCard();
+}
+
+// ── STEP 5 ────────────────────────────────────────────────────────────────
+function renderStep5(){
+  syncState();
+  renderContrib();
+  renderReviewCard();
+  const org=getOrg(S.primaryOrg);
+  $('ready-notice').innerHTML='&#10003; Ready to submit. Your <strong>'+eh(org.chapterLabel||'chapter')+'</strong> administrator will verify member # <strong>'+eh(S.memberNumber||'\u2014')+'</strong> before your listing goes live.';
+}
+
+function renderContrib(){
+  const price=S.listingTier==='business'?50:25;
+  const total=price*0.15;
+  // All orgs = primary + additional
+  const allOrgs=[S.primaryOrg,...S.additionalOrgs].filter(Boolean);
+  const n=allOrgs.length||1;
+  const perOrg=S.divideSplit&&n>1?total/n:total;
+  const org=getOrg(S.primaryOrg);
+  const tierIcon=S.listingTier==='business'?'&#x1F3E2;':'&#x1F3DB;&#xFE0F;';
+  const tierLabel=S.listingTier==='business'?'Business Listing':'Member Listing';
+
+  let perOrgHtml='';
+  allOrgs.forEach(v=>{
+    const o=getOrg(v);
+    const isPrimary=v===S.primaryOrg;
+    const share=S.divideSplit&&n>1?perOrg:(isPrimary?total:0);
+    const pct=S.divideSplit&&n>1?(100/n):(isPrimary?100:0);
+    const badge=isPrimary?'<span class="primary-badge">Primary</span>':'';
+    const valStr=share>0?fmt(share)+'/yr ('+pct.toFixed(1)+'%)':'Listed only';
+    const color=share>0?'#D97706':'#9CA3AF';
+    perOrgHtml+=`<div class="per-org-row"><span>${eh(o.short||v)}${badge}</span><span style="font-weight:700;color:${color}">${valStr}</span></div>`;
+  });
+
+  $('contrib-body').innerHTML=`
+    <div class="c-row"><span>${tierIcon} ${tierLabel}</span><span class="val" style="font-weight:600">${fmt(price)}/yr</span></div>
+    <div class="c-row muted"><span>Total org contribution (15%)</span><span class="val">${fmt(total)}/yr</span></div>
+    ${allOrgs.length?`<div class="per-org-box">${perOrgHtml}</div>`:''}
+    <div class="c-divider"></div>
+    <div class="c-row total"><span>Your annual fee</span><span class="val">${fmt(price)}/yr</span></div>
+    ${org.short?`<div class="contrib-note">${eh(org.short)} receives ${fmt(S.divideSplit&&n>1?perOrg:total)}/yr while your listing is active.</div>`:''}
+  `;
+}
+
+function renderReviewCard(){
+  syncState();
+  const org=getOrg(S.primaryOrg);
+  const acc=safeAccent(org);
+  const allOrgs=[S.primaryOrg,...S.additionalOrgs].filter(Boolean);
+  const tierLabel=S.listingTier==='business'?'Business Listing':'Member Listing';
+
+  const badgeHtml=S.memberPhotoBase64
+    ?`<img src="data:image/jpeg;base64,${S.memberPhotoBase64}" style="object-position:center ${S.memberFocal}">`
+    :`<span style="font-weight:800;font-size:10px;text-align:center;line-height:1.1">${eh(org.short||'FVD')}</span>`;
+
+  const addlStr=S.additionalOrgs.length?' + '+S.additionalOrgs.map(v=>eh(getOrg(v).short)).join(', '):'';
+
+  // Business images — strictly contained
+  let bizImgHtml='';
+  if(S.hasBusiness&&(S.bizLogoBase64||S.bizPhotoBase64)){
+    bizImgHtml='<div class="rc-biz-imgs">';
+    if(S.bizLogoBase64)bizImgHtml+=`<img class="rc-logo" src="data:image/jpeg;base64,${S.bizLogoBase64}" style="object-position:${S.bizLogoFocal} center" alt="logo">`;
+    if(S.bizPhotoBase64)bizImgHtml+=`<img class="rc-photo" src="data:image/jpeg;base64,${S.bizPhotoBase64}" style="object-position:${S.bizPhotoFocal} center" alt="biz">`;
+    bizImgHtml+='</div>';
+  }
+
+  const bioHtml=S.bio?`<div class="rc-bio" style="border-left:3px solid ${acc}">"${eh(S.bio)}"</div>`:'';
+
+  let bizHtml='';
+  if(S.hasBusiness&&S.businessName){
+    const bc=S.isMobile?(S.mobileBizCity||''):S.businessCity;
+    const bs=S.isMobile?S.mobileBizState:S.businessState;
+    const loc=bc+(bc&&bs?', ':'')+bs;
+    const addr=!S.isMobile&&S.businessStreet?'\u00B7 '+S.businessStreet:'';
+    bizHtml=`<div class="rc-biz-block">
+      <div class="rc-section-label">${S.isMobile?'Mobile Business':'Business'}</div>
+      <div class="rc-biz-name">${eh(S.businessName)}</div>
+      <div class="rc-biz-detail">\uD83D\uDCDE ${eh(S.businessPhone)}${loc?' \u00B7 '+(S.isMobile?'Serves ':'')+eh(loc):''} ${eh(addr)}</div>
+      ${S.website?`<div class="rc-biz-url">${eh(S.website)}</div>`:''}
+    </div>`;
+  }
+
+  const locStr=(S.city||'')+(S.city&&S.orgState?', ':'')+S.orgState;
+  let tagsHtml=locStr?`<span class="rc-tag rc-tag-loc">&#128205; ${eh(locStr)}</span>`:'';
+  S.availableFor.forEach(a=>{
+    tagsHtml+=`<span class="rc-tag" style="color:${org.primary};background:${org.primary}18;border:1px solid ${org.primary}30">\u2713 ${eh(a)}</span>`;
+  });
+
+  $('review-card').innerHTML=`
+    <div style="border:2px solid ${org.primary};border-radius:12px;overflow:hidden;box-shadow:0 4px 20px ${org.primary}18">
+      <div class="rc-header" style="background:${org.primary}">
+        <div class="rc-badge" style="background:${org.accent};color:${org.primary}">${badgeHtml}</div>
+        <div style="flex:1;min-width:0">
+          <div class="rc-name">${eh(S.firstName||'Your')} ${eh(S.lastName||'Name')}</div>
+          <div class="rc-org" style="color:${acc}">${eh(org.type)} &middot; ${eh(S.chapterName)}${addlStr}</div>
+        </div>
+        <div class="rc-tier-badge" style="background:${org.accent};color:${org.primary};white-space:nowrap">${tierLabel}</div>
+      </div>
+      <div class="rc-body">
+        ${bizImgHtml}
+        <div style="margin-bottom:12px">
+          <div class="rc-section-label">Vocation</div>
+          <div class="rc-voc-title">${eh(S.vocTitle||'\u2014')}</div>
+          <div class="rc-voc-sub">${eh(S.vocCategory)}${S.yearsInField?' \u00B7 '+eh(S.yearsInField):''}</div>
+        </div>
+        ${bioHtml}${bizHtml}
+        <div class="rc-tags">${tagsHtml}</div>
+      </div>
+    </div>`;
+}
+
+// ── SUBMIT ─────────────────────────────────────────────────────────────────
+async function handleSubmit(){
+  syncState();
+  const errEl=$('submit-error');
+  errEl.style.display='none';
+  const btn=$('btn-submit');
+  btn.disabled=true;btn.textContent='Submitting\u2026';
+
+  const payload={
+    primaryOrg:S.primaryOrg,chapterName:S.chapterName,memberNumber:S.memberNumber,
+    city:S.city,state:S.orgState,
+    hasAdditionalOrgs:S.hasAdditionalOrgs,
+    additionalOrgs:S.additionalOrgs.join(', '),
+    divideSplit:S.divideSplit?'Divide equally':'All to primary',
+    firstName:S.firstName,lastName:S.lastName,phone:S.phone,email:S.email,
+    veteranStatus:S.veteranStatus,
+    vocCategory:S.vocCategory,vocTitle:S.vocTitle,yearsInField:S.yearsInField,bio:S.bio,
+    hasBusiness:S.hasBusiness,isMobile:S.isMobile,
+    businessName:S.businessName,businessPhone:S.businessPhone,
+    businessStreet:S.businessStreet,
+    businessCity:S.isMobile?(S.mobileBizCity||''):S.businessCity,
+    businessState:S.isMobile?(S.mobileBizState||''):S.businessState,
+    businessZip:S.businessZip,businessEmail:S.businessEmail,website:S.website,
+    availableFor:S.availableFor.join(', '),
+    listingTier:S.listingTier==='business'?'Business Listing ($50/yr)':'Member Listing ($25/yr)',
+    memberPhotoBase64:S.memberPhotoBase64,
+    bizLogoBase64:S.bizLogoBase64,
+    bizPhotoBase64:S.bizPhotoBase64,
+  };
+
+  try{
+    const res=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    showConfirmation();
+  }catch(err){
+    errEl.style.display='block';
+    errEl.textContent='\u26A0\uFE0F Submission failed \u2014 check your connection and try again, or email info@greenway.org.';
+    btn.disabled=false;btn.textContent='Submit Listing \u2713';
+  }
+}
+
+function showConfirmation(){
+  $('app').style.display='none';
+  $('confirmation').style.display='block';
+  const org=getOrg(S.primaryOrg);
+  const price=S.listingTier==='business'?50:25;
+  $('confirm-msg').innerHTML='Thank you, <strong>'+eh(S.firstName)+'</strong>. Your <strong>'+(S.listingTier==='business'?'Business':'Member')+' Listing</strong> has been submitted for verification.';
+  $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>\u2460 '+eh(org.chapterLabel||'Chapter')+' administrator verifies member # <strong>'+eh(S.memberNumber)+'</strong><br>\u2461 Payment of <strong>$'+price+'/year</strong> activates your listing<br>\u2462 <strong>'+fmt(price*0.15)+'/year</strong> contributed to '+eh(org.short||'your organization');
+}
+
+init();
+</script>
+</body>
+</html>
