@@ -371,6 +371,29 @@ input[type=file]{display:none}
 
   <div style="height:1px;background:#E5E7EB;margin:18px 0"></div>
 
+  <!-- Driver's License -->
+  <div class="img-uploader">
+    <label class="field-label">Government-Issued ID / Driver's License *</label>
+    <div style="background:#FFF8E7;border:1px solid #F59E0B;border-radius:8px;padding:10px 13px;margin-bottom:12px;font-family:sans-serif;font-size:12px;color:#92400E;line-height:1.5">
+      &#128274; <strong>Verification use only.</strong> Your ID is sent directly to your fraternity or sorority for membership verification. It is never displayed publicly, never stored in the member directory, and is deleted from our system once verification is complete.
+    </div>
+    <div class="img-upload-row">
+      <div class="img-zone" id="dl-zone" style="width:160px;height:100px;border-radius:8px" onclick="document.getElementById('dlInput').click()">
+        <img id="dl-preview" alt="ID preview"/>
+        <div class="img-placeholder"><div class="cam">&#x1F4CB;</div><div class="lbl">Click to<br>upload ID</div></div>
+      </div>
+      <div class="img-controls">
+        <div class="img-hint">Upload a photo or scan of your current driver's license or government-issued ID. Must be valid and current.</div>
+        <button class="img-btn" type="button" id="dl-btn" onclick="document.getElementById('dlInput').click()">Select ID</button>
+        <button class="img-rm" type="button" id="dl-rm" onclick="clearPhoto('dl')">Remove</button>
+        <div class="img-size-note">JPG, PNG, or PDF photo &middot; Max 5 MB</div>
+      </div>
+    </div>
+    <input type="file" id="dlInput" accept="image/*,application/pdf" onchange="handlePhoto(this,'dl')"/>
+  </div>
+
+  <div style="height:1px;background:#E5E7EB;margin:18px 0"></div>
+
   <div class="grid2">
     <div class="field"><label class="field-label">First Name *</label><input id="firstName" type="text" placeholder="First"/></div>
     <div class="field"><label class="field-label">Last Name *</label><input id="lastName" type="text" placeholder="Last"/></div>
@@ -644,6 +667,7 @@ const S={
   hasAdditionalOrgs:false,additionalOrgs:[],divideSplit:false,
   firstName:'',lastName:'',phone:'',email:'',veteranStatus:'',
   memberPhotoBase64:'',memberFocal:'center',
+  driversLicenseBase64:'',
   vocCategory:'',vocTitle:'',yearsInField:'',bio:'',
   hasBusiness:false,isMobile:false,
   businessName:'',businessPhone:'',businessStreet:'',
@@ -748,6 +772,7 @@ function validate(step){
     if(!$('lastName').value.trim()){alert(msgs[2][1]);return false;}
     if(!$('phone').value.trim()){alert(msgs[2][2]);return false;}
     if(!$('email').value.trim()||!$('email').value.includes('@')){alert('Enter a valid email address.');return false;}
+    if(!S.driversLicenseBase64){alert('Please upload a copy of your driver\'s license or government-issued ID. This is required for membership verification.');return false;}
   }
   if(step===3){
     if(!$('vocCategory').value){alert('Select an occupation category.');return false;}
@@ -918,6 +943,12 @@ function handlePhoto(input,key){
       const org=getOrg($('primaryOrg').value);
       badge.style.background=org.accent;badge.style.color=org.primary;
       badge.innerHTML=`<img src="${dataUrl}" style="object-position:center center">`;
+    }else if(key==='dl'){
+      S.driversLicenseBase64=b64;
+      $('dl-zone').classList.add('has-preview');
+      $('dl-preview').src=dataUrl;
+      $('dl-btn').textContent='Change ID';
+      $('dl-rm').style.display='block';
     }else if(key==='biz-logo'){
       S.bizLogoBase64=b64;
       $('biz-logo-zone').classList.add('has-preview');
@@ -953,6 +984,13 @@ function clearPhoto(key){
     $('org-badge').style.background=org.accent;
     $('org-badge').style.color=org.primary;
     $('org-badge').innerHTML=`<span id="badge-text">${org.short||'FVD'}</span>`;
+  }else if(key==='dl'){
+    S.driversLicenseBase64='';
+    $('dl-zone').classList.remove('has-preview');
+    $('dl-preview').src='';
+    $('dl-btn').textContent='Select ID';
+    $('dl-rm').style.display='none';
+    $('dlInput').value='';
   }else if(key==='biz-logo'){
     S.bizLogoBase64='';S.bizLogoFocal='center';
     $('biz-logo-zone').classList.remove('has-preview');
@@ -1150,13 +1188,15 @@ async function handleSubmit(){
     availableFor:S.availableFor.join(', '),
     listingTier:S.listingTier==='business'?'Business Listing ($50/yr)':'Member Listing ($25/yr)',
     memberPhotoBase64:S.memberPhotoBase64,
+    driversLicenseBase64:S.driversLicenseBase64,
     bizLogoBase64:S.bizLogoBase64,
     bizPhotoBase64:S.bizPhotoBase64,
   };
 
   try{
-    const res=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    if(!res.ok)throw new Error('HTTP '+res.status);
+    // no-cors bypasses the CORS preflight that blocks Zapier webhooks from browsers.
+    // Zapier still receives and parses the JSON body; we just can't read the response.
+    await fetch(WEBHOOK_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
     showConfirmation();
   }catch(err){
     errEl.style.display='block';
