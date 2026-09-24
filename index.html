@@ -10,7 +10,6 @@
 html,body{min-height:100%;background:var(--bg);font-family:Georgia,serif;-webkit-font-smoothing:antialiased}
 #app{display:flex;flex-direction:column;min-height:100vh}
 
-/* HEADER */
 #hdr{background:var(--primary);color:#fff;padding:20px 16px 0;transition:background .4s}
 .hdr-inner{max-width:700px;margin:0 auto}
 .hdr-top{display:flex;align-items:center;gap:13px;margin-bottom:18px}
@@ -29,14 +28,12 @@ html,body{min-height:100%;background:var(--bg);font-family:Georgia,serif;-webkit
 .prog-track{height:3px;background:rgba(255,255,255,.18);border-radius:2px;margin-bottom:-1px}
 .prog-fill{height:100%;width:0;background:var(--accent);border-radius:2px;transition:width .4s ease,background .4s}
 
-/* LAYOUT */
 #body{flex:1;max-width:700px;width:100%;margin:0 auto;padding:22px 14px 48px}
 .card{background:#fff;border-radius:12px;padding:26px 22px;box-shadow:0 2px 20px rgba(0,0,0,.08);border:1px solid #E5E7EB}
 .step{display:none}.step.active{display:block}
 .step-heading{font-size:19px;font-weight:700;color:var(--primary);margin-bottom:5px;transition:color .4s}
 .step-sub{font-size:14px;color:#6B7280;font-family:sans-serif;margin-bottom:20px}
 
-/* FIELDS */
 .field{margin-bottom:16px}
 .field-label{font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;
   text-transform:uppercase;letter-spacing:.07em;font-family:sans-serif;display:block}
@@ -54,7 +51,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
 input[type=file]{display:none}
 
-/* TOGGLE */
 .toggle-wrap{display:flex;align-items:center;gap:12px;padding:12px 14px;
   background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:10px;cursor:pointer;
   margin-bottom:14px;transition:all .2s;user-select:none}
@@ -69,7 +65,6 @@ input[type=file]{display:none}
 .toggle-title{font-weight:600;font-size:13px;color:#1F2937;font-family:sans-serif}
 .toggle-sub{font-size:11px;color:#6B7280;font-family:sans-serif;margin-top:1px}
 
-/* IMAGE UPLOAD */
 .img-uploader{margin-bottom:16px}
 .img-upload-row{display:flex;align-items:flex-start;gap:16px}
 .img-zone{flex-shrink:0;border:2px dashed #D1D5DB;background:#F9FAFB;cursor:pointer;
@@ -92,7 +87,6 @@ input[type=file]{display:none}
   color:#6B7280;border-radius:7px;cursor:pointer;font-size:12px;font-family:sans-serif;margin-bottom:6px}
 .img-size-note{font-family:sans-serif;font-size:11px;color:#9CA3AF;margin-top:4px}
 
-/* FOCAL POINT CONTROLS */
 .focal-row{display:none;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
 .focal-row.visible{display:flex}
 .focal-label{font-family:sans-serif;font-size:11px;color:#6B7280;margin-right:2px;flex-shrink:0}
@@ -100,7 +94,6 @@ input[type=file]{display:none}
   cursor:pointer;font-size:11px;font-family:sans-serif;color:#374151;transition:all .2s}
 .focal-btn.active{border-color:var(--primary);background:var(--primary);color:#fff}
 
-/* ORG BOX */
 .primary-box{background:#F9FAFB;border:1px solid #E5E7EB;border-radius:10px;padding:16px;margin-bottom:18px}
 .box-label{font-family:sans-serif;font-size:12px;font-weight:700;color:var(--primary);
   text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px}
@@ -117,7 +110,6 @@ input[type=file]{display:none}
 .org-type{font-size:10px;color:#9CA3AF;margin-top:1px}
 .org-cb-label.checked .org-type{color:var(--primary);opacity:.7}
 
-/* CONTRIBUTION SPLIT — radio cards */
 .split-box{background:#FFF8E7;border:1px solid #F59E0B;border-radius:10px;padding:14px 15px;display:none}
 .split-title{font-family:sans-serif;font-size:12px;font-weight:700;color:#92400E;
   text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
@@ -135,7 +127,6 @@ input[type=file]{display:none}
 .radio-card.selected .radio-title{color:var(--primary)}
 .radio-sub{font-family:sans-serif;font-size:12px;color:#6B7280;line-height:1.4}
 
-/* CHECKBOXES — Available For */
 .cb-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .cb-label{display:flex;align-items:center;gap:10px;padding:11px 13px;
   border:2px solid #E5E7EB;border-radius:9px;cursor:pointer;
@@ -143,17 +134,14 @@ input[type=file]{display:none}
 .cb-label.checked{border-color:var(--primary);background:rgba(31,71,136,.07);color:var(--primary);font-weight:600}
 .cb-label input{width:15px;height:15px;accent-color:var(--primary);flex-shrink:0}
 
-/* BUSINESS */
 .biz-section{border-left:3px solid rgba(31,71,136,.2);padding-left:16px;margin-bottom:16px;display:none}
 .biz-img-box{background:#F9FAFB;border:1px solid #E5E7EB;border-radius:10px;padding:16px;margin-bottom:16px}
 .divider{height:1px;background:#E5E7EB;margin:14px 0}
 
-/* NOTICES */
 .notice{border-radius:8px;padding:11px 13px;font-family:sans-serif;font-size:13px;line-height:1.5}
 .notice-warn{background:#FFF8E7;border:1px solid #F59E0B;color:#92400E}
 .notice-ok{background:#F0FDF4;border:1px solid #86EFAC;color:#166534}
 
-/* TIER CARDS */
 .tier-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
 .tier-card{padding:14px;border:2px solid #E5E7EB;border-radius:10px;cursor:pointer;background:#fff;transition:all .2s}
 .tier-card.selected{border-color:var(--primary);background:rgba(31,71,136,.05)}
@@ -166,7 +154,6 @@ input[type=file]{display:none}
   padding:3px 10px;font-size:11px;font-family:sans-serif;font-weight:600;width:max-content}
 .tier-card.selected .tier-badge{display:block}
 
-/* CONTRIBUTION BREAKDOWN */
 .contrib-box{border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;margin-bottom:18px}
 .contrib-hdr{background:var(--primary);padding:9px 14px;font-family:sans-serif;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;transition:background .4s}
 .contrib-body{padding:13px 14px;font-family:sans-serif;font-size:13px}
@@ -181,7 +168,6 @@ input[type=file]{display:none}
 .primary-badge{margin-left:6px;background:var(--primary);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700}
 .contrib-note{margin-top:8px;font-size:12px;color:#9CA3AF;line-height:1.5}
 
-/* REVIEW CARD */
 #review-card{border-radius:12px;overflow:hidden;margin-bottom:18px}
 .rc-header{padding:15px 18px;display:flex;align-items:center;gap:13px}
 .rc-badge{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;
@@ -207,7 +193,6 @@ input[type=file]{display:none}
 .rc-tag{padding:4px 9px;border-radius:20px;font-size:11px;font-family:sans-serif}
 .rc-tag-loc{background:#F3F4F6;color:#374151}
 
-/* NAV */
 #nav{display:flex;justify-content:space-between;align-items:center;margin-top:26px;padding-top:16px;border-top:1px solid #E5E7EB}
 #nav-step5{display:none;justify-content:space-between;align-items:center;margin-top:26px;padding-top:16px;border-top:1px solid #E5E7EB}
 .step-counter{font-family:sans-serif;font-size:12px;color:#9CA3AF}
@@ -220,7 +205,6 @@ input[type=file]{display:none}
 .btn-submit:disabled{background:#9CA3AF;cursor:not-allowed}
 #submit-error{display:none;margin-top:14px;background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;padding:12px 14px;font-family:sans-serif;font-size:13px;color:#991B1B}
 
-/* CONFIRMATION */
 #confirmation{display:none;max-width:700px;margin:40px auto;padding:0 14px}
 .confirm-card{background:#fff;border-radius:12px;padding:48px 24px;text-align:center;box-shadow:0 2px 20px rgba(0,0,0,.08)}
 .confirm-emoji{font-size:50px;margin-bottom:16px}
@@ -231,7 +215,6 @@ input[type=file]{display:none}
 
 #footer{text-align:center;padding:12px;font-family:sans-serif;font-size:11px;color:#9CA3AF}
 
-/* RESPONSIVE */
 @media(max-width:520px){
   .grid2,.grid3,.org-grid,.cb-grid,.tier-grid{grid-template-columns:1fr}
   .card{padding:20px 16px}
@@ -244,7 +227,6 @@ input[type=file]{display:none}
 <body>
 <div id="app">
 
-<!-- HEADER -->
 <div id="hdr">
   <div class="hdr-inner">
     <div class="hdr-top">
@@ -265,11 +247,9 @@ input[type=file]{display:none}
   </div>
 </div>
 
-<!-- BODY -->
 <div id="body">
 <div class="card">
 
-<!-- ═══ STEP 1 ═══ -->
 <div class="step active" id="step-1">
   <h2 class="step-heading">Your Organizations</h2>
   <p class="step-sub">Select your primary organization first. Add additional memberships below.</p>
@@ -340,12 +320,10 @@ input[type=file]{display:none}
   </div>
 </div>
 
-<!-- ═══ STEP 2 ═══ -->
 <div class="step" id="step-2">
   <h2 class="step-heading">Your Information</h2>
   <p class="step-sub">Your personal contact details and profile photo.</p>
 
-  <!-- Member photo -->
   <div class="img-uploader">
     <label class="field-label">Profile Photo (optional)</label>
     <div class="img-upload-row">
@@ -371,7 +349,6 @@ input[type=file]{display:none}
 
   <div style="height:1px;background:#E5E7EB;margin:18px 0"></div>
 
-  <!-- Driver's License -->
   <div class="img-uploader">
     <label class="field-label">Government-Issued ID / Driver's License *</label>
     <div style="background:#FFF8E7;border:1px solid #F59E0B;border-radius:8px;padding:10px 13px;margin-bottom:12px;font-family:sans-serif;font-size:12px;color:#92400E;line-height:1.5">
@@ -414,7 +391,6 @@ input[type=file]{display:none}
   <div class="notice notice-warn">&#128274; <strong>Privacy:</strong> Personal contact details are visible to verified members only. Public listings show your name, organization, and occupation.</div>
 </div>
 
-<!-- ═══ STEP 3 ═══ -->
 <div class="step" id="step-3">
   <h2 class="step-heading">Your Vocation</h2>
   <p class="step-sub">Select your field and specific role &mdash; the heart of the directory.</p>
@@ -437,7 +413,6 @@ input[type=file]{display:none}
   </div>
 </div>
 
-<!-- ═══ STEP 4 ═══ -->
 <div class="step" id="step-4">
   <h2 class="step-heading">Business &amp; Professional Details</h2>
   <p class="step-sub">Own a business? Add it so brothers and sisters can find you.</p>
@@ -454,7 +429,6 @@ input[type=file]{display:none}
     <div class="biz-img-box">
       <div class="box-label">Business Images</div>
 
-      <!-- Business Logo -->
       <div class="img-uploader">
         <label class="field-label">Business Logo (optional)</label>
         <div class="img-upload-row">
@@ -480,7 +454,6 @@ input[type=file]{display:none}
 
       <div class="divider"></div>
 
-      <!-- Business Photo -->
       <div class="img-uploader">
         <label class="field-label">Business Photo (optional)</label>
         <div class="img-upload-row">
@@ -505,7 +478,6 @@ input[type=file]{display:none}
       </div>
     </div>
 
-    <!-- Business Info -->
     <div class="grid2">
       <div class="field"><label class="field-label">Business Name *</label><input id="businessName" type="text" placeholder="e.g., Urban Bladez Barbershop"/></div>
       <div class="field"><label class="field-label">Business Phone *</label><input id="businessPhone" type="tel" placeholder="(404) 555-0100"/></div>
@@ -546,7 +518,6 @@ input[type=file]{display:none}
   </div>
 </div>
 
-<!-- ═══ STEP 5 ═══ -->
 <div class="step" id="step-5">
   <h2 class="step-heading">Choose Your Tier &amp; Review</h2>
   <p class="step-sub">Pick your annual listing type, then review your directory card.</p>
@@ -586,19 +557,17 @@ input[type=file]{display:none}
   <div id="submit-error"></div>
 </div>
 
-<!-- NAV (steps 1–4) -->
 <div id="nav">
   <button class="btn btn-back" type="button" id="btn-back" onclick="goBack()" style="visibility:hidden">&#8592; Back</button>
   <span class="step-counter" id="step-counter">Step 1 of 5</span>
-  <button class="btn btn-next" type="button" id="btn-next" onclick="goNext()">Continue &#8594;</button>
+  <button class="btn-next" type="button" id="btn-next" onclick="goNext()">Continue &#8594;</button>
 </div>
 
-</div><!-- /card -->
-</div><!-- /body -->
+</div>
+</div>
 <div id="footer">Fraternal Vocational Directory &middot; Powered by Greenway International, Inc.</div>
-</div><!-- /app -->
+</div>
 
-<!-- CONFIRMATION -->
 <div id="confirmation">
   <div class="confirm-card">
     <div class="confirm-emoji">&#127881;</div>
@@ -628,7 +597,7 @@ const ORG_LIST=[
   {value:'pha',label:'Prince Hall Masons (F&AM)',short:'PHA',type:'Masonic',primary:'#1F4788',accent:'#CC9900',chapterLabel:'Lodge'},
   {value:'oes',label:'Order of the Eastern Star (Prince Hall)',short:'OES',type:'Masonic Auxiliary',primary:'#8B0000',accent:'#C8C8C8',chapterLabel:'Chapter'},
   {value:'doi',label:'DOI \u2013 Daughters of Isis',short:'DOI',type:'Shrine Auxiliary',primary:'#1B4D1B',accent:'#FFD700',chapterLabel:'Court'},
-  {value:'other',label:'Other Fraternal Organization',short:'FVD',type:'Other',primary:'#1F4788',accent:'#CC9900',chapterLabel:'Chapter'},
+  {value:'other',label:'Other Fraternal Organization',short:'FVD',type:'Other',primary:'#1F4788',accent:'#CC9900',chapterLabel:'Chapter'}
 ];
 
 const US_STATES=['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC','International'];
@@ -655,13 +624,12 @@ const VOCATION_DATA={
   'Sports & Fitness':['Personal Trainer / Fitness Coach','Group Fitness Instructor','Yoga / Pilates Instructor','Strength & Conditioning Coach','Athletic Director','Head Coach','Assistant Coach','Sports Agent / Manager','Sports Broadcaster / Analyst','Physical Education Teacher','Recreational Therapist','Sports Nutritionist','Gym / Fitness Studio Owner','Professional Athlete'],
   'Manufacturing & Industrial':['Plant / Facility Manager','Operations Manager','Quality Control Inspector','Industrial Engineer','Manufacturing Technician','Machine Operator','CNC Machinist','Welding Inspector','Maintenance Technician','Safety Manager / EHS Officer','Production Supervisor','Supply Chain / Procurement Specialist'],
   'Entrepreneurship & Business':['Small Business Owner','Franchise Owner','Startup Founder / CEO','Business Consultant / Advisor','Management Consultant','Executive Coach / Leadership Coach','Life Coach / Motivational Speaker','Public Speaker / Keynote Speaker','Investor / Angel Investor','Venture Capitalist','Private Equity Professional','Network Marketing / MLM Professional','E-commerce Seller','Import / Export Business Owner','Staffing / Recruiting Agency Owner'],
-  'Other':['Other / Not Listed Above'],
+  'Other':['Other / Not Listed Above']
 };
 
 const YEARS_OPTIONS=['Less than 1 year','1\u20135 years','5\u201310 years','10\u201320 years','20+ years'];
 const AVAILABLE_FOR=['Hire / Referrals','Mentorship','Networking','Speaking / Teaching'];
 
-// ── STATE ──────────────────────────────────────────────────────────────────
 const S={
   primaryOrg:'',chapterName:'',memberNumber:'',city:'',orgState:'',
   hasAdditionalOrgs:false,additionalOrgs:[],divideSplit:false,
@@ -675,36 +643,55 @@ const S={
   businessEmail:'',website:'',
   bizLogoBase64:'',bizLogoFocal:'center',
   bizPhotoBase64:'',bizPhotoFocal:'center',
-  availableFor:[],listingTier:'member',
+  availableFor:[],listingTier:'member'
 };
 
 let currentStep=1;
 
-// ── HELPERS ──────────────────────────────────────────────────────────────
 function $(id){return document.getElementById(id);}
 function getOrg(v){return ORG_LIST.find(o=>o.value===v)||{primary:'#1F4788',accent:'#CC9900',short:'FVD',type:'',chapterLabel:'Chapter',label:'',value:''};}
 function safeAccent(o){return['#C8C8C8','#F0E6C8','#FAFAFA'].includes(o.accent)?'#9CA3AF':o.accent;}
 function fmt(n){const r=Math.round(n*100)/100;return'$'+(r%1===0?r.toFixed(0):r.toFixed(2));}
 function eh(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-// ── INIT ──────────────────────────────────────────────────────────────────
 function init(){
   const ps=$('primaryOrg');
-  ORG_LIST.forEach(o=>{const opt=document.createElement('option');opt.value=o.value;opt.textContent=o.label;ps.appendChild(opt);});
+  ORG_LIST.forEach(o=>{
+    const opt=document.createElement('option');
+    opt.value=o.value;
+    opt.textContent=o.label;
+    ps.appendChild(opt);
+  });
   ['state','businessState','mobileBizState'].forEach(id=>{
     const s=$(id);
-    US_STATES.forEach(st=>{const o=document.createElement('option');o.value=st;o.textContent=st;s.appendChild(o);});
+    US_STATES.forEach(st=>{
+      const o=document.createElement('option');
+      o.value=st;
+      o.textContent=st;
+      s.appendChild(o);
+    });
   });
   const cs=$('vocCategory');
-  Object.keys(VOCATION_DATA).forEach(cat=>{const o=document.createElement('option');o.value=cat;o.textContent=cat;cs.appendChild(o);});
+  Object.keys(VOCATION_DATA).forEach(cat=>{
+    const o=document.createElement('option');
+    o.value=cat;
+    o.textContent=cat;
+    cs.appendChild(o);
+  });
   const ys=$('yearsInField');
-  YEARS_OPTIONS.forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y;ys.appendChild(o);});
+  YEARS_OPTIONS.forEach(y=>{
+    const o=document.createElement('option');
+    o.value=y;
+    o.textContent=y;
+    ys.appendChild(o);
+  });
   const grid=$('avail-grid');
   AVAILABLE_FOR.forEach(opt=>{
     const lbl=document.createElement('label');
     lbl.className='cb-label';
     const cb=document.createElement('input');
-    cb.type='checkbox';cb.value=opt;
+    cb.type='checkbox';
+    cb.value=opt;
     cb.addEventListener('change',()=>onAvailChange(cb,lbl));
     lbl.appendChild(cb);
     lbl.appendChild(document.createTextNode(' '+opt));
@@ -713,7 +700,6 @@ function init(){
   showStep(1);
 }
 
-// ── THEME ─────────────────────────────────────────────────────────────────
 function updateTheme(v){
   const o=getOrg(v);
   const acc=safeAccent(o);
@@ -730,7 +716,6 @@ function updateTheme(v){
   }
 }
 
-// ── STEPS ─────────────────────────────────────────────────────────────────
 function showStep(n){
   document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
   $('step-'+n).classList.add('active');
@@ -749,10 +734,11 @@ function showStep(n){
 function goNext(){if(validate(currentStep)){syncState();showStep(currentStep+1);}}
 function goBack(){syncState();showStep(currentStep-1);}
 
-// ── VALIDATE ──────────────────────────────────────────────────────────────
 function validate(step){
-  const msgs={1:['Select your primary organization.','Enter your chapter / temple / lodge name.','Enter your member number.','Enter your city.','Select your state.'],
-               2:['Enter your first name.','Enter your last name.','Enter your phone number.',null]};
+  const msgs={
+    1:['Select your primary organization.','Enter your chapter / temple / lodge name.','Enter your member number.','Enter your city.','Select your state.'],
+    2:['Enter your first name.','Enter your last name.','Enter your phone number.',null]
+  };
   if(step===1){
     if(!$('primaryOrg').value){alert(msgs[1][0]);return false;}
     if(!$('chapterName').value.trim()){alert(msgs[1][1]);return false;}
@@ -781,7 +767,6 @@ function validate(step){
   return true;
 }
 
-// ── SYNC ──────────────────────────────────────────────────────────────────
 function syncState(){
   S.primaryOrg=$('primaryOrg').value;
   S.chapterName=$('chapterName').value.trim();
@@ -809,7 +794,6 @@ function syncState(){
   S.website=$('website').value.trim();
 }
 
-// ── ORG CHANGE ─────────────────────────────────────────────────────────────
 function onOrgChange(){
   const v=$('primaryOrg').value;
   const o=getOrg(v);
@@ -827,7 +811,6 @@ function onOrgChange(){
   rebuildAddlGrid();
 }
 
-// ── ADDITIONAL ORGS ────────────────────────────────────────────────────────
 function toggleAddl(){
   S.hasAdditionalOrgs=!S.hasAdditionalOrgs;
   $('addl-sw').classList.toggle('on',S.hasAdditionalOrgs);
@@ -875,37 +858,41 @@ function setSplit(val){
   $('rc-primary').classList.toggle('selected',!val);$('rc-equal').classList.toggle('selected',val);
 }
 
-// ── VOCATION ──────────────────────────────────────────────────────────────
 function onCategoryChange(){
   const cat=$('vocCategory').value;
   const tf=$('voc-title-field');
   const ts=$('vocTitle');
   ts.innerHTML='<option value="">Select your role\u2026</option>';
   if(cat&&VOCATION_DATA[cat]){
-    VOCATION_DATA[cat].forEach(r=>{const o=document.createElement('option');o.value=r;o.textContent=r;ts.appendChild(o);});
+    VOCATION_DATA[cat].forEach(r=>{
+      const o=document.createElement('option');
+      o.value=r;
+      o.textContent=r;
+      ts.appendChild(o);
+    });
     tf.style.display='block';
   }else tf.style.display='none';
 }
 
-// ── BUSINESS ──────────────────────────────────────────────────────────────
 function toggleBiz(){
   S.hasBusiness=!S.hasBusiness;
   $('biz-sw').classList.toggle('on',S.hasBusiness);
   $('biz-toggle').classList.toggle('on',S.hasBusiness);$('biz-section').style.display=S.hasBusiness?'block':'none';
 }
+
 function toggleMobile(){
   S.isMobile=!S.isMobile;
   $('mobile-sw').classList.toggle('on',S.isMobile);
   $('mobile-toggle').classList.toggle('on',S.isMobile);$('full-address').style.display=S.isMobile?'none':'block';
   $('mobile-address').style.display=S.isMobile?'block':'none';
 }
+
 function onAvailChange(cb,lbl){
   if(cb.checked){if(!S.availableFor.includes(cb.value))S.availableFor.push(cb.value);}
   else S.availableFor=S.availableFor.filter(v=>v!==cb.value);
   lbl.classList.toggle('checked',cb.checked);
 }
 
-// ── IMAGE UPLOADS ──────────────────────────────────────────────────────────
 function handlePhoto(input,key){
   const file=input.files[0];
   if(!file)return;
@@ -918,13 +905,15 @@ function handlePhoto(input,key){
       S.memberPhotoBase64=b64;
       const zone=$('member-photo-zone'),prev=$('member-photo-preview');
       zone.classList.add('has-preview');
-      prev.src=dataUrl;prev.style.objectPosition='center center';
+      prev.src=dataUrl;
+      prev.style.objectPosition='center center';
       $('member-photo-btn').textContent='Change Photo';
       $('member-photo-rm').style.display='block';$('member-focal-row').classList.add('visible');
       S.memberFocal='center';
       const badge=$('org-badge');
       const org=getOrg($('primaryOrg').value);
-      badge.style.background=org.accent;badge.style.color=org.primary;
+      badge.style.background=org.accent;
+      badge.style.color=org.primary;
       badge.innerHTML=`<img src="${dataUrl}" style="object-position:center center">`;
     }else if(key==='dl'){
       S.driversLicenseBase64=b64;
@@ -932,12 +921,14 @@ function handlePhoto(input,key){
       $('dl-btn').textContent='Change ID';$('dl-rm').style.display='block';
     }else if(key==='biz-logo'){
       S.bizLogoBase64=b64;
-      $('biz-logo-zone').classList.add('has-preview');$('biz-logo-preview').src=dataUrl;$('biz-logo-preview').style.objectPosition='center center';$('biz-logo-btn').textContent='Change Logo';
+      $('biz-logo-zone').classList.add('has-preview');$('biz-logo-preview').src=dataUrl;
+      $('biz-logo-preview').style.objectPosition='center center';$('biz-logo-btn').textContent='Change Logo';
       $('biz-logo-rm').style.display='block';$('biz-logo-focal-row').classList.add('visible');
       S.bizLogoFocal='center';
     }else if(key==='biz-photo'){
       S.bizPhotoBase64=b64;
-      $('biz-photo-zone').classList.add('has-preview');$('biz-photo-preview').src=dataUrl;$('biz-photo-preview').style.objectPosition='center center';$('biz-photo-btn').textContent='Change Photo';
+      $('biz-photo-zone').classList.add('has-preview');$('biz-photo-preview').src=dataUrl;
+      $('biz-photo-preview').style.objectPosition='center center';$('biz-photo-btn').textContent='Change Photo';
       $('biz-photo-rm').style.display='block';$('biz-photo-focal-row').classList.add('visible');
       S.bizPhotoFocal='center';
     }
@@ -975,7 +966,6 @@ function clearPhoto(key){
   }
 }
 
-// ── FOCAL POINT ────────────────────────────────────────────────────────────
 function setFocal(key,val){
   if(key==='member')S.memberFocal=val;
   else if(key==='biz-logo')S.bizLogoFocal=val;
@@ -986,12 +976,10 @@ function setFocal(key,val){
   if(img){
     img.style.objectPosition=key==='member'?'center '+val:val+' center';
   }
-
   if(key==='member'&&S.memberPhotoBase64){
     const bImg=$('org-badge').querySelector('img');
     if(bImg)bImg.style.objectPosition='center '+val;
   }
-
   document.querySelectorAll('.focal-btn[data-key="'+key+'"]').forEach(btn=>{
     btn.classList.toggle('active',btn.dataset.val===val);
   });
@@ -1003,7 +991,6 @@ function resetFocalBtns(key){
   });
 }
 
-// ── TIER ──────────────────────────────────────────────────────────────────
 function selectTier(t){
   S.listingTier=t;
   $('tier-member').classList.toggle('selected',t==='member');$('tier-business').classList.toggle('selected',t==='business');
@@ -1011,7 +998,6 @@ function selectTier(t){
   renderReviewCard();
 }
 
-// ── STEP 5 ────────────────────────────────────────────────────────────────
 function renderStep5(){
   syncState();
   renderContrib();
@@ -1116,7 +1102,6 @@ function renderReviewCard(){
     </div>`;
 }
 
-// ── SUBMIT ─────────────────────────────────────────────────────────────────
 async function handleSubmit(){
   syncState();
   const errEl=$('submit-error');
@@ -1175,7 +1160,10 @@ function showConfirmation(){
   $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>\u2460 '+eh(org.chapterLabel||'Chapter')+' administrator verifies member # <strong>'+eh(S.memberNumber)+'</strong><br>\u2461 Payment of <strong>$'+price+'/year</strong> activates your listing<br>\u2462 <strong>'+fmt(price*0.15)+'/year</strong> contributed to '+eh(org.short||'your organization');
 }
 
-init();
+document.addEventListener('DOMContentLoaded', init);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  init();
+}
 </script>
 </body>
 </html>
