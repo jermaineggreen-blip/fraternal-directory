@@ -689,21 +689,16 @@ function eh(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').r
 
 // ── INIT ──────────────────────────────────────────────────────────────────
 function init(){
-  // Orgs
   const ps=$('primaryOrg');
   ORG_LIST.forEach(o=>{const opt=document.createElement('option');opt.value=o.value;opt.textContent=o.label;ps.appendChild(opt);});
-  // States
   ['state','businessState','mobileBizState'].forEach(id=>{
     const s=$(id);
     US_STATES.forEach(st=>{const o=document.createElement('option');o.value=st;o.textContent=st;s.appendChild(o);});
   });
-  // Vocation categories
   const cs=$('vocCategory');
   Object.keys(VOCATION_DATA).forEach(cat=>{const o=document.createElement('option');o.value=cat;o.textContent=cat;cs.appendChild(o);});
-  // Years
   const ys=$('yearsInField');
   YEARS_OPTIONS.forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y;ys.appendChild(o);});
-  // Available-for checkboxes
   const grid=$('avail-grid');
   AVAILABLE_FOR.forEach(opt=>{
     const lbl=document.createElement('label');
@@ -744,11 +739,9 @@ function showStep(n){
     el.className='prog-label'+(i<n?' done':i===n?' active':'');
   });
   $('prog-fill').style.width=((n-1)/4*100)+'%';
-  $('nav').style.display=n===5?'none':'flex';
-  $('nav-step5').style.display=n===5?'flex':'none';
+  $('nav').style.display=n===5?'none':'flex';$('nav-step5').style.display=n===5?'flex':'none';
   if(n>1)$('btn-back').style.visibility='visible';
-  else $('btn-back').style.visibility='hidden';
-  $('step-counter').textContent='Step '+n+' of 5';
+  else $('btn-back').style.visibility='hidden';$('step-counter').textContent='Step '+n+' of 5';
   if(n===5)renderStep5();
   currentStep=n;
 }
@@ -771,7 +764,7 @@ function validate(step){
     if(!$('firstName').value.trim()){alert(msgs[2][0]);return false;}
     if(!$('lastName').value.trim()){alert(msgs[2][1]);return false;}
     if(!$('phone').value.trim()){alert(msgs[2][2]);return false;}
-    if(!$('email').value.trim()||!$('email').value.includes('@')){alert('Enter a valid email address.');return false;}
+    if(!$('email').value.trim()\vert{}\vert{}!$('email').value.includes('@')){alert('Enter a valid email address.');return false;}
     if(!S.driversLicenseBase64){alert('Please upload a copy of your driver\'s license or government-issued ID. This is required for membership verification.');return false;}
   }
   if(step===3){
@@ -829,8 +822,7 @@ function onOrgChange(){
   const numMap={Temple:'Temple Member Number *',Court:'Court Member Number *',Lodge:'Lodge Member Number *'};
   const typeMap={Fraternity:'Chapter Roll Number *',Sorority:'Chapter Roll Number *'};
   $('chapter-label').textContent=(o.chapterLabel||'Chapter')+' Name *';
-  $('member-num-label').textContent=numMap[o.chapterLabel]||typeMap[o.type]||'Member / ID Number *';
-  $('chapterName').placeholder={Temple:'e.g., AKHi Temple No. 280',Court:'e.g., Nile Court No. 20',Lodge:'e.g., Mount Olive Lodge No. 4'}[o.chapterLabel]||'e.g., Alpha Chapter';
+  $('member-num-label').textContent=numMap[o.chapterLabel]\vert{}\vert{}typeMap[o.type]\vert{}\vert{}'Member / ID Number *';$('chapterName').placeholder={Temple:'e.g., AKHi Temple No. 280',Court:'e.g., Nile Court No. 20',Lodge:'e.g., Mount Olive Lodge No. 4'}[o.chapterLabel]||'e.g., Alpha Chapter';
   S.additionalOrgs=S.additionalOrgs.filter(x=>x!==v);
   rebuildAddlGrid();
 }
@@ -839,8 +831,7 @@ function onOrgChange(){
 function toggleAddl(){
   S.hasAdditionalOrgs=!S.hasAdditionalOrgs;
   $('addl-sw').classList.toggle('on',S.hasAdditionalOrgs);
-  $('addl-toggle').classList.toggle('on',S.hasAdditionalOrgs);
-  $('addl-section').style.display=S.hasAdditionalOrgs?'block':'none';
+  $('addl-toggle').classList.toggle('on',S.hasAdditionalOrgs);$('addl-section').style.display=S.hasAdditionalOrgs?'block':'none';
   if(!S.hasAdditionalOrgs){S.additionalOrgs=[];S.divideSplit=false;}
   rebuildAddlGrid();
 }
@@ -872,20 +863,16 @@ function rebuildAddlGrid(){
 
 function updateSplitBox(){
   const box=$('split-box');
-  // Total = primary (1) + additional
   const total=1+S.additionalOrgs.length;
   box.style.display=S.additionalOrgs.length>0?'block':'none';
-  const org=getOrg($('primaryOrg').value);
-  $('r-primary-label').textContent='All 15% goes to '+(org.short||'my primary organization');
-  $('r-equal-label').textContent='Divide equally among all '+total+' organizations';
-  $('r-equal-sub').textContent='Each of the '+total+' organizations receives '+fmt(25*0.15/total)+'\u2013'+fmt(50*0.15/total)+'/yr depending on your tier.';
+  const org=getOrg($('primaryOrg').value);$('r-primary-label').textContent='All 15% goes to '+(org.short||'my primary organization');
+  $('r-equal-label').textContent='Divide equally among all '+total+' organizations';$('r-equal-sub').textContent='Each of the '+total+' organizations receives '+fmt(25*0.15/total)+'\u2013'+fmt(50*0.15/total)+'/yr depending on your tier.';
   setSplit(S.divideSplit);
 }
 
 function setSplit(val){
   S.divideSplit=val;
-  $('rc-primary').classList.toggle('selected',!val);
-  $('rc-equal').classList.toggle('selected',val);
+  $('rc-primary').classList.toggle('selected',!val);$('rc-equal').classList.toggle('selected',val);
 }
 
 // ── VOCATION ──────────────────────────────────────────────────────────────
@@ -904,14 +891,12 @@ function onCategoryChange(){
 function toggleBiz(){
   S.hasBusiness=!S.hasBusiness;
   $('biz-sw').classList.toggle('on',S.hasBusiness);
-  $('biz-toggle').classList.toggle('on',S.hasBusiness);
-  $('biz-section').style.display=S.hasBusiness?'block':'none';
+  $('biz-toggle').classList.toggle('on',S.hasBusiness);$('biz-section').style.display=S.hasBusiness?'block':'none';
 }
 function toggleMobile(){
   S.isMobile=!S.isMobile;
   $('mobile-sw').classList.toggle('on',S.isMobile);
-  $('mobile-toggle').classList.toggle('on',S.isMobile);
-  $('full-address').style.display=S.isMobile?'none':'block';
+  $('mobile-toggle').classList.toggle('on',S.isMobile);$('full-address').style.display=S.isMobile?'none':'block';
   $('mobile-address').style.display=S.isMobile?'block':'none';
 }
 function onAvailChange(cb,lbl){
@@ -935,35 +920,25 @@ function handlePhoto(input,key){
       zone.classList.add('has-preview');
       prev.src=dataUrl;prev.style.objectPosition='center center';
       $('member-photo-btn').textContent='Change Photo';
-      $('member-photo-rm').style.display='block';
-      $('member-focal-row').classList.add('visible');
+      $('member-photo-rm').style.display='block';$('member-focal-row').classList.add('visible');
       S.memberFocal='center';
-      // Update header badge
       const badge=$('org-badge');
       const org=getOrg($('primaryOrg').value);
       badge.style.background=org.accent;badge.style.color=org.primary;
       badge.innerHTML=`<img src="${dataUrl}" style="object-position:center center">`;
     }else if(key==='dl'){
       S.driversLicenseBase64=b64;
-      $('dl-zone').classList.add('has-preview');
-      $('dl-preview').src=dataUrl;
-      $('dl-btn').textContent='Change ID';
-      $('dl-rm').style.display='block';
+      $('dl-zone').classList.add('has-preview');$('dl-preview').src=dataUrl;
+      $('dl-btn').textContent='Change ID';$('dl-rm').style.display='block';
     }else if(key==='biz-logo'){
       S.bizLogoBase64=b64;
-      $('biz-logo-zone').classList.add('has-preview');
-      $('biz-logo-preview').src=dataUrl;$('biz-logo-preview').style.objectPosition='center center';
-      $('biz-logo-btn').textContent='Change Logo';
-      $('biz-logo-rm').style.display='block';
-      $('biz-logo-focal-row').classList.add('visible');
+      $('biz-logo-zone').classList.add('has-preview');$('biz-logo-preview').src=dataUrl;$('biz-logo-preview').style.objectPosition='center center';$('biz-logo-btn').textContent='Change Logo';
+      $('biz-logo-rm').style.display='block';$('biz-logo-focal-row').classList.add('visible');
       S.bizLogoFocal='center';
     }else if(key==='biz-photo'){
       S.bizPhotoBase64=b64;
-      $('biz-photo-zone').classList.add('has-preview');
-      $('biz-photo-preview').src=dataUrl;$('biz-photo-preview').style.objectPosition='center center';
-      $('biz-photo-btn').textContent='Change Photo';
-      $('biz-photo-rm').style.display='block';
-      $('biz-photo-focal-row').classList.add('visible');
+      $('biz-photo-zone').classList.add('has-preview');$('biz-photo-preview').src=dataUrl;$('biz-photo-preview').style.objectPosition='center center';$('biz-photo-btn').textContent='Change Photo';
+      $('biz-photo-rm').style.display='block';$('biz-photo-focal-row').classList.add('visible');
       S.bizPhotoFocal='center';
     }
   };
@@ -973,66 +948,50 @@ function handlePhoto(input,key){
 function clearPhoto(key){
   if(key==='member'){
     S.memberPhotoBase64='';S.memberFocal='center';
-    $('member-photo-zone').classList.remove('has-preview');
-    $('member-photo-preview').src='';
-    $('member-photo-btn').textContent='Select Photo';
-    $('member-photo-rm').style.display='none';
-    $('member-focal-row').classList.remove('visible');
-    $('memberPhotoInput').value='';
+    $('member-photo-zone').classList.remove('has-preview');$('member-photo-preview').src='';
+    $('member-photo-btn').textContent='Select Photo';$('member-photo-rm').style.display='none';
+    $('member-focal-row').classList.remove('visible');$('memberPhotoInput').value='';
     resetFocalBtns('member');
-    const org=getOrg($('primaryOrg').value);
-    $('org-badge').style.background=org.accent;
+    const org=getOrg($('primaryOrg').value);$('org-badge').style.background=org.accent;
     $('org-badge').style.color=org.primary;
     $('org-badge').innerHTML=`<span id="badge-text">${org.short||'FVD'}</span>`;
   }else if(key==='dl'){
     S.driversLicenseBase64='';
     $('dl-zone').classList.remove('has-preview');
-    $('dl-preview').src='';
-    $('dl-btn').textContent='Select ID';
-    $('dl-rm').style.display='none';
-    $('dlInput').value='';
+    $('dl-preview').src='';$('dl-btn').textContent='Select ID';
+    $('dl-rm').style.display='none';$('dlInput').value='';
   }else if(key==='biz-logo'){
     S.bizLogoBase64='';S.bizLogoFocal='center';
-    $('biz-logo-zone').classList.remove('has-preview');
-    $('biz-logo-preview').src='';
-    $('biz-logo-btn').textContent='Select Logo';
-    $('biz-logo-rm').style.display='none';
-    $('biz-logo-focal-row').classList.remove('visible');
-    $('bizLogoInput').value='';
+    $('biz-logo-zone').classList.remove('has-preview');$('biz-logo-preview').src='';
+    $('biz-logo-btn').textContent='Select Logo';$('biz-logo-rm').style.display='none';
+    $('biz-logo-focal-row').classList.remove('visible');$('bizLogoInput').value='';
     resetFocalBtns('biz-logo');
   }else if(key==='biz-photo'){
     S.bizPhotoBase64='';S.bizPhotoFocal='center';
-    $('biz-photo-zone').classList.remove('has-preview');
-    $('biz-photo-preview').src='';
-    $('biz-photo-btn').textContent='Select Photo';
-    $('biz-photo-rm').style.display='none';
-    $('biz-photo-focal-row').classList.remove('visible');
-    $('bizPhotoInput').value='';
+    $('biz-photo-zone').classList.remove('has-preview');$('biz-photo-preview').src='';
+    $('biz-photo-btn').textContent='Select Photo';$('biz-photo-rm').style.display='none';
+    $('biz-photo-focal-row').classList.remove('visible');$('bizPhotoInput').value='';
     resetFocalBtns('biz-photo');
   }
 }
 
 // ── FOCAL POINT ────────────────────────────────────────────────────────────
 function setFocal(key,val){
-  // Update state
   if(key==='member')S.memberFocal=val;
   else if(key==='biz-logo')S.bizLogoFocal=val;
   else S.bizPhotoFocal=val;
 
-  // Update preview image object-position
   const imgIds={member:'member-photo-preview','biz-logo':'biz-logo-preview','biz-photo':'biz-photo-preview'};
   const img=$(imgIds[key]);
   if(img){
     img.style.objectPosition=key==='member'?'center '+val:val+' center';
   }
 
-  // Update badge for member photo
   if(key==='member'&&S.memberPhotoBase64){
     const bImg=$('org-badge').querySelector('img');
     if(bImg)bImg.style.objectPosition='center '+val;
   }
 
-  // Toggle button active states
   document.querySelectorAll('.focal-btn[data-key="'+key+'"]').forEach(btn=>{
     btn.classList.toggle('active',btn.dataset.val===val);
   });
@@ -1047,8 +1006,7 @@ function resetFocalBtns(key){
 // ── TIER ──────────────────────────────────────────────────────────────────
 function selectTier(t){
   S.listingTier=t;
-  $('tier-member').classList.toggle('selected',t==='member');
-  $('tier-business').classList.toggle('selected',t==='business');
+  $('tier-member').classList.toggle('selected',t==='member');$('tier-business').classList.toggle('selected',t==='business');
   renderContrib();
   renderReviewCard();
 }
@@ -1065,7 +1023,6 @@ function renderStep5(){
 function renderContrib(){
   const price=S.listingTier==='business'?50:25;
   const total=price*0.15;
-  // All orgs = primary + additional
   const allOrgs=[S.primaryOrg,...S.additionalOrgs].filter(Boolean);
   const n=allOrgs.length||1;
   const perOrg=S.divideSplit&&n>1?total/n:total;
@@ -1091,7 +1048,7 @@ function renderContrib(){
     ${allOrgs.length?`<div class="per-org-box">${perOrgHtml}</div>`:''}
     <div class="c-divider"></div>
     <div class="c-row total"><span>Your annual fee</span><span class="val">${fmt(price)}/yr</span></div>
-    ${org.short?`<div class="contrib-note">${eh(org.short)} receives ${fmt(S.divideSplit&&n>1?perOrg:total)}/yr while your listing is active.</div>`:''}
+    ${org.short?`<div class="contrib-note">${eh(org.short)} receives${fmt(S.divideSplit&&n>1?perOrg:total)}/yr while your listing is active.</div>`:''}
   `;
 }
 
@@ -1099,16 +1056,13 @@ function renderReviewCard(){
   syncState();
   const org=getOrg(S.primaryOrg);
   const acc=safeAccent(org);
-  const allOrgs=[S.primaryOrg,...S.additionalOrgs].filter(Boolean);
+  const addlStr=S.additionalOrgs.length?' + '+S.additionalOrgs.map(v=>eh(getOrg(v).short)).join(', '):'';
   const tierLabel=S.listingTier==='business'?'Business Listing':'Member Listing';
 
   const badgeHtml=S.memberPhotoBase64
     ?`<img src="data:image/jpeg;base64,${S.memberPhotoBase64}" style="object-position:center ${S.memberFocal}">`
     :`<span style="font-weight:800;font-size:10px;text-align:center;line-height:1.1">${eh(org.short||'FVD')}</span>`;
 
-  const addlStr=S.additionalOrgs.length?' + '+S.additionalOrgs.map(v=>eh(getOrg(v).short)).join(', '):'';
-
-  // Business images — strictly contained
   let bizImgHtml='';
   if(S.hasBusiness&&(S.bizLogoBase64||S.bizPhotoBase64)){
     bizImgHtml='<div class="rc-biz-imgs">';
@@ -1194,9 +1148,17 @@ async function handleSubmit(){
   };
 
   try{
-    // no-cors bypasses the CORS preflight that blocks Zapier webhooks from browsers.
-    // Zapier still receives and parses the JSON body; we just can't read the response.
-    await fetch(WEBHOOK_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
+    const bodyParams = new URLSearchParams();
+    for(const key in payload){
+      bodyParams.append(key, payload[key] ?? '');
+    }
+
+    await fetch(WEBHOOK_URL,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:bodyParams.toString()
+    });
     showConfirmation();
   }catch(err){
     errEl.style.display='block';
@@ -1206,8 +1168,7 @@ async function handleSubmit(){
 }
 
 function showConfirmation(){
-  $('app').style.display='none';
-  $('confirmation').style.display='block';
+  $('app').style.display='none';$('confirmation').style.display='block';
   const org=getOrg(S.primaryOrg);
   const price=S.listingTier==='business'?50:25;
   $('confirm-msg').innerHTML='Thank you, <strong>'+eh(S.firstName)+'</strong>. Your <strong>'+(S.listingTier==='business'?'Business':'Member')+' Listing</strong> has been submitted for verification.';
