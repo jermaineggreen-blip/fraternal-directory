@@ -79,6 +79,8 @@ input[type=file]{display:none}
 .img-zone.has-preview{border-style:solid;border-color:var(--primary)}
 .img-zone img{width:100%;height:100%;object-fit:cover;object-position:center center;display:none}
 .img-zone.has-preview img{display:block}
+.img-zone.has-preview .img-placeholder{display:none}
+.img-zone{overflow:hidden}
 .img-placeholder{text-align:center;color:#9CA3AF;font-family:sans-serif;pointer-events:none}
 .img-placeholder .cam{font-size:22px;margin-bottom:4px}
 .img-placeholder .lbl{font-size:10px;line-height:1.3}
@@ -240,6 +242,7 @@ input[type=file]{display:none}
   .rc-biz-imgs .rc-logo{width:48px;height:48px}
   .rc-biz-imgs .rc-photo{height:48px}
 }
+.req-org{display:flex;gap:12px;align-items:center;text-decoration:none;border:1.5px dashed #CC9900;background:#FFFBEB;border-radius:10px;padding:12px 14px;margin:0 0 16px;font-family:sans-serif;font-size:12.5px;color:#374151;line-height:1.45}.req-org b{color:#1F4788;font-size:13px}.req-ic{width:28px;height:28px;border-radius:50%;background:#CC9900;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -292,7 +295,7 @@ input[type=file]{display:none}
       <div class="field">
         <label class="field-label" id="member-num-label">Member / ID Number *</label>
         <input id="memberNumber" type="text" placeholder="e.g., 4821"/>
-        <div class="field-hint">Used to verify your membership before listing goes live.</div>
+        <div class="field-hint">&#128274; Kept private. Your organization only sees the last 4 digits when verifying you, and it never appears in the public directory.</div>
       </div>
     </div>
     <div class="grid2">
@@ -306,6 +309,11 @@ input[type=file]{display:none}
       </div>
     </div>
   </div>
+
+  <a class="req-org" href="https://form.jotform.com/263007405643047" target="_blank" rel="noopener">
+    <span class="req-ic">+</span>
+    <span><b>Don't see your organization?</b><br>Request to have it represented in the directory.</span>
+  </a>
 
   <div class="toggle-wrap" id="addl-toggle" onclick="toggleAddl()">
     <div class="toggle-sw" id="addl-sw"><div class="toggle-knob"></div></div>
@@ -364,36 +372,13 @@ input[type=file]{display:none}
           <button class="focal-btn active" type="button" data-key="member" data-val="center" onclick="setFocal('member','center')">Center</button>
           <button class="focal-btn" type="button" data-key="member" data-val="bottom" onclick="setFocal('member','bottom')">Bottom</button>
         </div>
-        <div class="img-size-note">JPG, PNG, or WEBP &middot; Max 5 MB</div>
+        <div class="img-size-note">JPG, PNG, or WEBP &middot; Resized automatically</div>
       </div>
     </div>
     <input type="file" id="memberPhotoInput" accept="image/*" onchange="handlePhoto(this,'member')"/>
   </div>
 
 
-  <!-- Driver's License / Gov ID -->
-  <div class="img-uploader">
-    <label class="field-label">Government-Issued ID / Driver&#39;s License *</label>
-    <div style="background:#FFF8E7;border:1px solid #F59E0B;border-radius:8px;padding:10px 13px;margin-bottom:12px;font-family:sans-serif;font-size:12px;color:#92400E;line-height:1.5">
-      &#128274; <strong>Admin verification only.</strong> Your ID is sent privately to your organization administrator to confirm membership. It is never displayed publicly and never stored in the member directory.
-    </div>
-    <div class="img-upload-row">
-      <div class="img-zone" id="dl-zone" style="width:160px;height:100px;border-radius:8px" onclick="document.getElementById('dlInput').click()">
-        <img id="dl-preview" alt="ID preview"/>
-        <div class="img-placeholder"><div class="cam">&#x1F4CB;</div><div class="lbl">Click to<br>upload ID</div></div>
-      </div>
-      <div class="img-controls">
-        <div class="img-hint">A clear photo or scan of your current driver&#39;s license or government-issued ID. Must be valid and unexpired.</div>
-        <button class="img-btn" type="button" id="dl-btn" onclick="document.getElementById('dlInput').click()">Select ID</button>
-        <button class="img-rm" type="button" id="dl-rm" onclick="clearPhoto('dl')">Remove</button>
-        <div class="img-size-note">JPG, PNG &middot; Max 5 MB &middot; Admin eyes only</div>
-      </div>
-    </div>
-    <input type="file" id="dlInput" accept="image/*" onchange="handlePhoto(this,'dl')"/>
-  </div>
-
-
-  <div style="height:1px;background:#E5E7EB;margin:18px 0"></div>
 
   <div class="grid2">
     <div class="field"><label class="field-label">First Name *</label><input id="firstName" type="text" placeholder="First"/></div>
@@ -473,7 +458,7 @@ input[type=file]{display:none}
               <button class="focal-btn active" type="button" data-key="biz-logo" data-val="center" onclick="setFocal('biz-logo','center')">Center</button>
               <button class="focal-btn" type="button" data-key="biz-logo" data-val="right" onclick="setFocal('biz-logo','right')">Right</button>
             </div>
-            <div class="img-size-note">JPG, PNG, or WEBP &middot; Max 5 MB</div>
+            <div class="img-size-note">JPG, PNG, or WEBP &middot; Resized automatically</div>
           </div>
         </div>
         <input type="file" id="bizLogoInput" accept="image/*" onchange="handlePhoto(this,'biz-logo')"/>
@@ -499,7 +484,7 @@ input[type=file]{display:none}
               <button class="focal-btn active" type="button" data-key="biz-photo" data-val="center" onclick="setFocal('biz-photo','center')">Center</button>
               <button class="focal-btn" type="button" data-key="biz-photo" data-val="right" onclick="setFocal('biz-photo','right')">Right</button>
             </div>
-            <div class="img-size-note">JPG, PNG, or WEBP &middot; Max 5 MB</div>
+            <div class="img-size-note">JPG, PNG, or WEBP &middot; Resized automatically</div>
           </div>
         </div>
         <input type="file" id="bizPhotoInput" accept="image/*" onchange="handlePhoto(this,'biz-photo')"/>
@@ -613,24 +598,28 @@ input[type=file]{display:none}
 <script>
 'use strict';
 
+function last4(n){n=String(n||'').trim();return n?'\u2022\u2022\u2022\u2022 '+n.slice(-4):'\u2014';}
 const WEBHOOK_URL='https://hooks.zapier.com/hooks/catch/23900090/4h1xq3g/';
 
-const ORG_LIST=[
-  {value:'aeaonms',label:'AEAONMS \u2013 Ancient Egyptian Arabic Order Nobles Mystic Shrine',short:'AEAONMS',type:'Shrine',primary:'#1B4D1B',accent:'#FFD700',chapterLabel:'Temple'},
-  {value:'apa',label:'Alpha Phi Alpha Fraternity, Inc.',short:'\u0391\u03A6\u0391',type:'Fraternity',primary:'#1A1A1A',accent:'#C89B2A',chapterLabel:'Chapter'},
-  {value:'aka',label:'Alpha Kappa Alpha Sorority, Inc.',short:'\u0391\u039A\u0391',type:'Sorority',primary:'#006B3C',accent:'#E8A0B4',chapterLabel:'Chapter'},
-  {value:'kap',label:'Kappa Alpha Psi Fraternity, Inc.',short:'\u039A\u0391\u03A8',type:'Fraternity',primary:'#8B0000',accent:'#F0E6C8',chapterLabel:'Chapter'},
-  {value:'opp',label:'Omega Psi Phi Fraternity, Inc.',short:'\u03A9\u03A8\u03A6',type:'Fraternity',primary:'#4B0082',accent:'#FFD700',chapterLabel:'Chapter'},
-  {value:'dst',label:'Delta Sigma Theta Sorority, Inc.',short:'\u0394\u03A3\u0398',type:'Sorority',primary:'#8B0000',accent:'#C8C8C8',chapterLabel:'Chapter'},
-  {value:'pbs',label:'Phi Beta Sigma Fraternity, Inc.',short:'\u03A6\u0392\u03A3',type:'Fraternity',primary:'#003087',accent:'#C8C8C8',chapterLabel:'Chapter'},
-  {value:'zpb',label:'Zeta Phi Beta Sorority, Inc.',short:'\u0396\u03A6\u0392',type:'Sorority',primary:'#003087',accent:'#C8C8C8',chapterLabel:'Chapter'},
-  {value:'sgr',label:'Sigma Gamma Rho Sorority, Inc.',short:'\u03A3\u0393\u03A1',type:'Sorority',primary:'#1565C0',accent:'#FFD700',chapterLabel:'Chapter'},
-  {value:'ipt',label:'Iota Phi Theta Fraternity, Inc.',short:'\u0399\u03A6\u0398',type:'Fraternity',primary:'#6B3A2A',accent:'#D4AF37',chapterLabel:'Chapter'},
+const ALL_ORGS=[
+  {value:'aeaonms',label:'AEAONMS \u2013 Ancient Egyptian Arabic Order Nobles Mystic Shrine',short:'AEAONMS',badge:'<span style="font-size:8.5px;letter-spacing:0">AEAONMS</span>',type:'Shrine',primary:'#1B4D1B',accent:'#FFD700',chapterLabel:'Temple'},
+  {value:'apa',pending:true,label:'Alpha Phi Alpha Fraternity, Inc.',short:'\u0391\u03A6\u0391',type:'Fraternity',primary:'#1A1A1A',accent:'#C89B2A',chapterLabel:'Chapter'},
+  {value:'aka',pending:true,label:'Alpha Kappa Alpha Sorority, Inc.',short:'\u0391\u039A\u0391',type:'Sorority',primary:'#006B3C',accent:'#E8A0B4',chapterLabel:'Chapter'},
+  {value:'kap',pending:true,label:'Kappa Alpha Psi Fraternity, Inc.',short:'\u039A\u0391\u03A8',type:'Fraternity',primary:'#8B0000',accent:'#F0E6C8',chapterLabel:'Chapter'},
+  {value:'opp',pending:true,label:'Omega Psi Phi Fraternity, Inc.',short:'\u03A9\u03A8\u03A6',type:'Fraternity',primary:'#4B0082',accent:'#FFD700',chapterLabel:'Chapter'},
+  {value:'dst',pending:true,label:'Delta Sigma Theta Sorority, Inc.',short:'\u0394\u03A3\u0398',type:'Sorority',primary:'#8B0000',accent:'#C8C8C8',chapterLabel:'Chapter'},
+  {value:'pbs',pending:true,label:'Phi Beta Sigma Fraternity, Inc.',short:'\u03A6\u0392\u03A3',type:'Fraternity',primary:'#003087',accent:'#C8C8C8',chapterLabel:'Chapter'},
+  {value:'zpb',pending:true,label:'Zeta Phi Beta Sorority, Inc.',short:'\u0396\u03A6\u0392',type:'Sorority',primary:'#003087',accent:'#C8C8C8',chapterLabel:'Chapter'},
+  {value:'sgr',pending:true,label:'Sigma Gamma Rho Sorority, Inc.',short:'\u03A3\u0393\u03A1',type:'Sorority',primary:'#1565C0',accent:'#FFD700',chapterLabel:'Chapter'},
+  {value:'ipt',pending:true,label:'Iota Phi Theta Fraternity, Inc.',short:'\u0399\u03A6\u0398',type:'Fraternity',primary:'#6B3A2A',accent:'#D4AF37',chapterLabel:'Chapter'},
   {value:'pha',label:'Prince Hall Masons (F&AM)',short:'PHA',type:'Masonic',primary:'#1F4788',accent:'#CC9900',chapterLabel:'Lodge'},
   {value:'oes',label:'Order of the Eastern Star (Prince Hall)',short:'OES',type:'Masonic Auxiliary',primary:'#8B0000',accent:'#C8C8C8',chapterLabel:'Chapter'},
-  {value:'doi',label:'DOI \u2013 Daughters of Isis',short:'DOI',type:'Shrine Auxiliary',primary:'#1B4D1B',accent:'#FFD700',chapterLabel:'Court'},
+  {value:'doi',label:'Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc.',short:'Daughters of AEAONMS',badge:'<span style="font-size:6.3px;letter-spacing:0;line-height:1.2;display:block;text-align:center">DAUGHTERS<br>AEAONMS</span>',type:'Shrine Auxiliary',primary:'#1B4D1B',accent:'#FFD700',chapterLabel:'Court'},
   {value:'other',label:'Other Fraternal Organization',short:'FVD',type:'Other',primary:'#1F4788',accent:'#CC9900',chapterLabel:'Chapter'},
 ];
+// Orgs marked pending:true stay hidden until their leadership approves. Remove the flag to show one.
+const ORG_LIST=ALL_ORGS.filter(o=>!o.pending);
+const REQUEST_ORG_URL='https://form.jotform.com/263007405643047';
 
 const US_STATES=['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC','International'];
 
@@ -732,7 +721,7 @@ function updateTheme(v){
   }else{
     badge.style.background=o.accent;
     badge.style.color=o.primary;
-    badge.innerHTML=`<span id="badge-text">${o.short||'FVD'}</span>`;
+    badge.innerHTML=`<span id="badge-text">${o.badge||o.short||'FVD'}</span>`;
   }
 }
 
@@ -773,7 +762,6 @@ function validate(step){
     if(!$('lastName').value.trim()){alert(msgs[2][1]);return false;}
     if(!$('phone').value.trim()){alert(msgs[2][2]);return false;}
     if(!$('email').value.trim()||!$('email').value.includes('@')){alert('Enter a valid email address.');return false;}
-    if(!S.driversLicenseBase64){alert('A copy of your government-issued ID is required for membership verification.');return false;}
   }
   if(step===3){
     if(!$('vocCategory').value){alert('Select an occupation category.');return false;}
@@ -925,10 +913,50 @@ function onAvailChange(cb,lbl){
 function handlePhoto(input,key){
   const file=input.files[0];
   if(!file)return;
-  if(file.size>5*1024*1024){alert('Please choose an image under 5 MB.');input.value='';return;}
+  if(file.size>15*1024*1024){alert('Please choose an image under 15 MB.');input.value='';return;}
   const reader=new FileReader();
   reader.onload=function(e){
-    const dataUrl=e.target.result;
+    S._orig=S._orig||{};S._orig[key]=e.target.result;
+    standardizeImage(key,e.target.result,'center').then(out=>applyPhoto(key,out))
+      .catch(()=>{alert('That image could not be read. Please choose a JPG or PNG photo.');input.value='';});
+  };
+  reader.readAsDataURL(file);
+}
+
+// Every image is resized and cropped to one standard size before upload,
+// so listings look uniform in the directory and uploads stay small.
+const IMG_SPECS={
+  'member':   {w:600, h:600, fit:'cover',   type:'image/jpeg', q:0.85},
+  'biz-photo':{w:1200,h:675, fit:'cover',   type:'image/jpeg', q:0.82},
+  'biz-logo': {w:500, h:500, fit:'contain', type:'image/png'}
+};
+function standardizeImage(key,src,focal){
+  const spec=IMG_SPECS[key];
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    img.onload=()=>{
+      const c=document.createElement('canvas');c.width=spec.w;c.height=spec.h;
+      const ctx=c.getContext('2d');ctx.imageSmoothingQuality='high';
+      const iw=img.naturalWidth,ih=img.naturalHeight;
+      if(spec.fit==='contain'){
+        const pad=Math.round(spec.w*0.06),sc=Math.min((spec.w-2*pad)/iw,(spec.h-2*pad)/ih);
+        const dw=iw*sc,dh=ih*sc;
+        ctx.drawImage(img,(spec.w-dw)/2,(spec.h-dh)/2,dw,dh);
+      }else{
+        const sc=Math.max(spec.w/iw,spec.h/ih),cw=spec.w/sc,ch=spec.h/sc;
+        let sx=(iw-cw)/2,sy=(ih-ch)/2;
+        if(focal==='top')sy=0; else if(focal==='bottom')sy=ih-ch;
+        if(focal==='left')sx=0; else if(focal==='right')sx=iw-cw;
+        if(spec.type==='image/jpeg'){ctx.fillStyle='#fff';ctx.fillRect(0,0,spec.w,spec.h);}
+        ctx.drawImage(img,sx,sy,cw,ch,0,0,spec.w,spec.h);
+      }
+      resolve(c.toDataURL(spec.type,spec.q));
+    };
+    img.onerror=reject;img.src=src;
+  });
+}
+
+function applyPhoto(key,dataUrl){
     const b64=dataUrl.split(',')[1]||'';
     if(key==='member'){
       S.memberPhotoBase64=b64;
@@ -944,19 +972,12 @@ function handlePhoto(input,key){
       const org=getOrg($('primaryOrg').value);
       badge.style.background=org.accent;badge.style.color=org.primary;
       badge.innerHTML=`<img src="${dataUrl}" style="object-position:center center">`;
-    }else if(key==='dl'){
-      S.driversLicenseBase64=b64;
-      $('dl-zone').classList.add('has-preview');
-      $('dl-preview').src=dataUrl;
-      $('dl-btn').textContent='Change ID';
-      $('dl-rm').style.display='block';
     }else if(key==='biz-logo'){
       S.bizLogoBase64=b64;
       $('biz-logo-zone').classList.add('has-preview');
       $('biz-logo-preview').src=dataUrl;$('biz-logo-preview').style.objectPosition='center center';
       $('biz-logo-btn').textContent='Change Logo';
       $('biz-logo-rm').style.display='block';
-      $('biz-logo-focal-row').classList.add('visible');
       S.bizLogoFocal='center';
     }else if(key==='biz-photo'){
       S.bizPhotoBase64=b64;
@@ -967,11 +988,10 @@ function handlePhoto(input,key){
       $('biz-photo-focal-row').classList.add('visible');
       S.bizPhotoFocal='center';
     }
-  };
-  reader.readAsDataURL(file);
 }
 
 function clearPhoto(key){
+  if(S._orig)delete S._orig[key];
   if(key==='member'){
     S.memberPhotoBase64='';S.memberFocal='center';
     $('member-photo-zone').classList.remove('has-preview');
@@ -984,14 +1004,7 @@ function clearPhoto(key){
     const org=getOrg($('primaryOrg').value);
     $('org-badge').style.background=org.accent;
     $('org-badge').style.color=org.primary;
-    $('org-badge').innerHTML=`<span id="badge-text">${org.short||'FVD'}</span>`;
-  }else if(key==='dl'){
-    S.driversLicenseBase64='';
-    $('dl-zone').classList.remove('has-preview');
-    $('dl-preview').src='';
-    $('dl-btn').textContent='Select ID';
-    $('dl-rm').style.display='none';
-    $('dlInput').value='';
+    $('org-badge').innerHTML=`<span id="badge-text">${org.badge||org.short||'FVD'}</span>`;
   }else if(key==='biz-logo'){
     S.bizLogoBase64='';S.bizLogoFocal='center';
     $('biz-logo-zone').classList.remove('has-preview');
@@ -1037,6 +1050,13 @@ function setFocal(key,val){
   document.querySelectorAll('.focal-btn[data-key="'+key+'"]').forEach(btn=>{
     btn.classList.toggle('active',btn.dataset.val===val);
   });
+  if(S._orig&&S._orig[key]&&key!=='biz-logo'){
+    standardizeImage(key,S._orig[key],val).then(d=>{
+      const b=d.split(',')[1]||'';
+      if(key==='member'){S.memberPhotoBase64=b;$('member-photo-preview').src=d;const bi=$('org-badge').querySelector('img');if(bi)bi.src=d;}
+      else{S.bizPhotoBase64=b;$('biz-photo-preview').src=d;}
+    });
+  }
 }
 
 function resetFocalBtns(key){
@@ -1060,7 +1080,7 @@ function renderStep5(){
   renderContrib();
   renderReviewCard();
   const org=getOrg(S.primaryOrg);
-  $('ready-notice').innerHTML='&#10003; Ready to submit. Your <strong>'+eh(org.chapterLabel||'chapter')+'</strong> administrator will verify member # <strong>'+eh(S.memberNumber||'\u2014')+'</strong> before your listing goes live.';
+  $('ready-notice').innerHTML='&#10003; Ready to submit. Your <strong>'+eh(org.chapterLabel||'chapter')+'</strong> administrator will verify member # <strong>'+eh(last4(S.memberNumber))+'</strong> before your listing goes live.';
 }
 
 function renderContrib(){
@@ -1105,7 +1125,7 @@ function renderReviewCard(){
 
   const badgeHtml=S.memberPhotoBase64
     ?`<img src="data:image/jpeg;base64,${S.memberPhotoBase64}" style="object-position:center ${S.memberFocal}">`
-    :`<span style="font-weight:800;font-size:10px;text-align:center;line-height:1.1">${eh(org.short||'FVD')}</span>`;
+    :`<span style="font-weight:800;font-size:10px;text-align:center;line-height:1.1">${org.badge||eh(org.short||'FVD')}</span>`;
 
   const addlStr=S.additionalOrgs.length?' + '+S.additionalOrgs.map(v=>eh(getOrg(v).short)).join(', '):'';
 
@@ -1173,7 +1193,7 @@ async function handleSubmit(){
   btn.disabled=true;btn.textContent='Submitting\u2026';
 
   const payload={
-    primaryOrg:S.primaryOrg,chapterName:S.chapterName,memberNumber:S.memberNumber,
+    primaryOrg:S.primaryOrg,chapterName:S.chapterName,memberNumber:S.memberNumber,memberNumberLast4:String(S.memberNumber||'').slice(-4),
     city:S.city,state:S.orgState,
     hasAdditionalOrgs:S.hasAdditionalOrgs,
     additionalOrgs:S.additionalOrgs.join(', '),
@@ -1190,7 +1210,7 @@ async function handleSubmit(){
     availableFor:S.availableFor.join(', '),
     listingTier:S.listingTier==='business'?'Business Listing ($50/yr)':'Member Listing ($25/yr)',
     memberPhotoBase64:S.memberPhotoBase64,
-    driversLicenseBase64:S.driversLicenseBase64,
+    driversLicenseBase64:'',
     bizLogoBase64:S.bizLogoBase64,
     bizPhotoBase64:S.bizPhotoBase64,
   };
@@ -1213,7 +1233,7 @@ function showConfirmation(){
   const org=getOrg(S.primaryOrg);
   const price=S.listingTier==='business'?50:25;
   $('confirm-msg').innerHTML='Thank you, <strong>'+eh(S.firstName)+'</strong>. Your <strong>'+(S.listingTier==='business'?'Business':'Member')+' Listing</strong> has been submitted for verification.';
-  $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>\u2460 '+eh(org.chapterLabel||'Chapter')+' administrator verifies member # <strong>'+eh(S.memberNumber)+'</strong><br>\u2461 Payment of <strong>$'+price+'/year</strong> activates your listing<br>\u2462 <strong>'+fmt(price*0.15)+'/year</strong> contributed to '+eh(org.short||'your organization');
+  $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>\u2460 '+eh(org.chapterLabel||'Chapter')+' administrator verifies member # <strong>'+eh(last4(S.memberNumber))+'</strong><br>\u2461 Payment of <strong>$'+price+'/year</strong> activates your listing<br>\u2462 <strong>'+fmt(price*0.15)+'/year</strong> contributed to '+eh(org.short||'your organization');
 }
 
 init();
