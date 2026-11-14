@@ -1263,8 +1263,14 @@ function showConfirmation(){
   $('confirmation').style.display='block';
   const org=getOrg(S.primaryOrg);
   const price=tierPrice(S.listingTier);
-  $('confirm-msg').innerHTML='Thank you, <strong>'+eh(S.firstName)+'</strong>. Your <strong>'+tierName(S.listingTier)+' Listing</strong> has been submitted for verification.';
-  $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>\u2460 '+eh(org.chapterLabel||'Chapter')+' administrator verifies member # <strong>'+eh(last4(S.memberNumber))+'</strong><br>\u2461 Payment of <strong>$'+price+'/year</strong> activates your listing<br>\u2462 <strong>'+fmt(price*0.15)+'/year</strong> contributed to '+eh(org.short||'your organization');
+  const isBizTier=S.listingTier!=='member';
+  const founding=S.listingTier==='business'&&FOUNDING_OPEN;
+  $('confirm-msg').innerHTML='Thank you, <strong>'+eh(S.firstName)+'</strong>. Your <strong>'+tierName(S.listingTier)+' Listing</strong> has been received. <strong>Your listing is not live yet and nothing is due today.</strong> A confirmation is on its way to <strong>'+eh(S.email)+'</strong> (check your spam folder if you do not see it).';
+  $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>'
+    +'\u2460 We verify your membership (member # <strong>'+eh(last4(S.memberNumber))+'</strong>) within 2\u20133 business days.<br>'
+    +'\u2461 Once approved, you will receive an email with a payment link for <strong>$'+price+'/year</strong>'+(founding?' (founding rate, locked for 2 years)':'')+'. You pay only after approval.<br>'
+    +'\u2462 After payment your listing goes live'+(isBizTier?', with a Request a Quote button so customers can contact you without your email being shown':'')+'.<br>'
+    +'\u2463 <strong>'+fmt(price*0.15)+'/year</strong> (15%) is contributed to '+eh(org.short||'your organization')+'.';
 }
 
 init();
