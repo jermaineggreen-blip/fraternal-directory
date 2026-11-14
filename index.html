@@ -386,6 +386,18 @@ input[type=file]{display:none}
   </div>
   <div class="field"><label class="field-label">Phone Number *</label><input id="phone" type="tel" placeholder="(404) 555-0100"/></div>
   <div class="field"><label class="field-label">Email Address *</label><input id="email" type="email" placeholder="you@example.com"/></div>
+  <div class="field">
+    <label class="field-label">Military / Veteran Status <span style="font-weight:400;color:#6B7280">(optional)</span></label>
+    <select id="veteranStatus">
+      <option value="">Prefer not to say / skip</option>
+      <option value="Active Duty">Active Duty</option>
+      <option value="Veteran">Veteran</option>
+      <option value="Reserves / National Guard">Reserves / National Guard</option>
+      <option value="Military Spouse">Military Spouse</option>
+      <option value="None / Not Applicable">None / Not Applicable</option>
+    </select>
+    <div style="font-family:sans-serif;font-size:11px;color:#6B7280;margin-top:4px">Optional. Used only so members can honor and connect with one another. It is not shown publicly.</div>
+  </div>
   <div class="notice notice-warn">&#128274; <strong>Privacy:</strong> Personal contact details are visible to verified members only. Public listings show your name, organization, and occupation.</div>
 </div>
 
@@ -784,6 +796,7 @@ function syncState(){
   S.lastName=$('lastName').value.trim();
   S.phone=$('phone').value.trim();
   S.email=$('email').value.trim();
+  S.veteranStatus=$('veteranStatus').value;
   S.vocCategory=$('vocCategory').value;
   S.vocTitle=$('vocTitle').value;
   S.yearsInField=$('yearsInField').value;
@@ -1191,6 +1204,7 @@ async function handleSubmit(){
 
   const payload={
     primaryOrg:orgName(S.primaryOrg),chapterName:S.chapterName,memberNumber:S.memberNumber,memberNumberLast4:String(S.memberNumber||'').slice(-4),
+    veteranStatus:S.veteranStatus||'',
     city:S.city,state:S.orgState,
     hasAdditionalOrgs:S.hasAdditionalOrgs,
     additionalOrgs:S.additionalOrgs.map(orgName).join(', '),
