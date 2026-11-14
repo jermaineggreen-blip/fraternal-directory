@@ -543,8 +543,8 @@ input[type=file]{display:none}
     <div class="tier-card selected" id="tier-member" onclick="selectTier('member')">
       <div class="tier-icon">&#x1F3DB;&#xFE0F;</div>
       <div class="tier-name">Member Listing</div>
-      <div class="tier-price">$25<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></div>
-      <div class="tier-desc">Your name, org, and vocation listed in the directory.</div>
+      <div class="tier-price" id="member-price">Free<span style="font-size:12px;font-weight:400;color:#9CA3AF"> through Mar 31, 2027</span></div>
+      <div class="tier-desc" id="member-desc">Charter Member offer: your name, org, and vocation listed free through March 31, 2027, then $25/yr.</div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
     <div class="tier-card" id="tier-business" onclick="selectTier('business')">
@@ -1085,7 +1085,17 @@ function resetFocalBtns(key){
 // Set FOUNDING_OPEN=false once the first 100 business listings are sold.
 const FOUNDING_OPEN=true;
 const PRICES={member:25,business:FOUNDING_OPEN?50:75,featured:199};
-document.addEventListener('DOMContentLoaded',function(){var o=document.getElementById('biz-price-old');if(o&&!FOUNDING_OPEN)o.style.display='none';});
+// Charter period: Member listings are free through this date, then renew at the Member price.
+const CHARTER_END_ISO='2027-03-31', CHARTER_END_TXT='March 31, 2027';
+function charterOpen(){return new Date()<=new Date(CHARTER_END_ISO+'T23:59:59');}
+function isCharter(t){return t==='member'&&charterOpen();}
+document.addEventListener('DOMContentLoaded',function(){
+  var o=document.getElementById('biz-price-old');if(o&&!FOUNDING_OPEN)o.style.display='none';
+  if(!charterOpen()){
+    var mp=document.getElementById('member-price');if(mp)mp.innerHTML='$25<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span>';
+    var md=document.getElementById('member-desc');if(md)md.textContent='Your name, org, and vocation listed in the directory.';
+  }
+});
 function tierPrice(t){return PRICES[t]||25;}
 function tierName(t){return t==='featured'?'Featured Business':t==='business'?'Business':'Member';}
 function tierLabelFull(t){
@@ -1141,8 +1151,8 @@ function renderContrib(){
     <div class="c-row muted"><span>Total org contribution (15%)</span><span class="val">${fmt(total)}/yr</span></div>
     ${allOrgs.length?`<div class="per-org-box">${perOrgHtml}</div>`:''}
     <div class="c-divider"></div>
-    <div class="c-row total"><span>Your annual fee</span><span class="val">${fmt(price)}/yr</span></div>
-    ${org.short?`<div class="contrib-note">${eh(org.short)} receives ${fmt(S.divideSplit&&n>1?perOrg:total)}/yr while your listing is active.</div>`:''}
+    <div class="c-row total"><span>Your annual fee</span><span class="val">${isCharter(S.listingTier)?'$0 through '+CHARTER_END_TXT+', then '+fmt(price)+'/yr':fmt(price)+'/yr'}</span></div>
+    ${org.short?`<div class="contrib-note">${isCharter(S.listingTier)?eh(org.short)+' begins receiving '+fmt(S.divideSplit&&n>1?perOrg:total)+'/yr when you renew at '+fmt(price)+'/yr after the charter period.':eh(org.short)+' receives '+fmt(S.divideSplit&&n>1?perOrg:total)+'/yr while your listing is active.'}</div>`:''}
   `;
 }
 
@@ -1265,12 +1275,20 @@ function showConfirmation(){
   const price=tierPrice(S.listingTier);
   const isBizTier=S.listingTier!=='member';
   const founding=S.listingTier==='business'&&FOUNDING_OPEN;
+  const charter=isCharter(S.listingTier);
   $('confirm-msg').innerHTML='Thank you, <strong>'+eh(S.firstName)+'</strong>. Your <strong>'+tierName(S.listingTier)+' Listing</strong> has been received. <strong>Your listing is not live yet and nothing is due today.</strong> A confirmation is on its way to <strong>'+eh(S.email)+'</strong> (check your spam folder if you do not see it).';
-  $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>'
-    +'\u2460 We verify your membership (member # <strong>'+eh(last4(S.memberNumber))+'</strong>) within 2\u20133 business days.<br>'
-    +'\u2461 Once approved, you will receive an email with a payment link for <strong>$'+price+'/year</strong>'+(founding?' (founding rate, locked for 2 years)':'')+'. You pay only after approval.<br>'
-    +'\u2462 After payment your listing goes live'+(isBizTier?', with a Request a Quote button so customers can contact you without your email being shown':'')+'.<br>'
-    +'\u2463 <strong>'+fmt(price*0.15)+'/year</strong> (15%) is contributed to '+eh(org.short||'your organization')+'.';
+  const step1='\u2460 We verify your membership (member # <strong>'+eh(last4(S.memberNumber))+'</strong>) within 2\u20133 business days.<br>';
+  if(charter){
+    $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>'+step1
+      +'\u2461 Once approved, your listing goes live <strong>free through '+CHARTER_END_TXT+'</strong> as a Charter Member. No payment is needed now.<br>'
+      +'\u2462 Before the charter period ends we will email you about renewing at <strong>$'+price+'/year</strong>.<br>'
+      +'\u2463 When you renew, <strong>'+fmt(price*0.15)+'/year</strong> (15%) is contributed to '+eh(org.short||'your organization')+'.';
+  } else {
+    $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>'+step1
+      +'\u2461 Once approved, you will receive an email with a payment link for <strong>$'+price+'/year</strong>'+(founding?' (founding rate, locked for 2 years)':'')+'. You pay only after approval.<br>'
+      +'\u2462 After payment your listing goes live'+(isBizTier?', with a Request a Quote button so customers can contact you without your email being shown':'')+'.<br>'
+      +'\u2463 <strong>'+fmt(price*0.15)+'/year</strong> (15%) is contributed to '+eh(org.short||'your organization')+'.';
+  }
 }
 
 init();
