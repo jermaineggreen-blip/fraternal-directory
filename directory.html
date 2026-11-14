@@ -108,6 +108,18 @@ footer a{color:var(--primary)}
 .bizrow{display:flex;gap:10px;align-items:center}.logo{width:44px;height:44px;border-radius:8px;background:#fff;border:1px solid var(--line);object-fit:contain;padding:3px;flex-shrink:0}
 .bizphoto{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;margin-top:16px;background:#F3F4F6;display:block}
 .av img{aspect-ratio:1/1}
+.qform{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}
+.qform h4{font:700 16px Georgia,serif;color:var(--ink);margin-bottom:4px}
+.qform p.sub{font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.45}
+.qform label{display:block;font-size:12px;font-weight:700;color:#374151;margin:10px 0 4px}
+.qform input,.qform textarea{width:100%;border:1.5px solid #D1D5DB;border-radius:10px;padding:11px 12px;font:inherit;font-size:15px;background:#fff}
+.qform textarea{min-height:96px;resize:vertical}
+.qform input:focus,.qform textarea:focus{outline:2px solid var(--primary);border-color:var(--primary)}
+.qform .hp{position:absolute;left:-9999px;height:0;overflow:hidden}
+.qform .err{color:#B91C1C;font-size:13px;margin-top:8px}
+.qform button.act{width:100%;margin-top:12px;cursor:pointer;font:inherit;font-weight:700}
+.qdone{background:#DCFCE7;color:#166534;border-radius:10px;padding:14px;font-size:14px;line-height:1.5;margin-top:18px}
+.tier.feat{background:var(--accent);color:var(--primary)}
 </style>
 </head>
 <body>
@@ -186,7 +198,9 @@ let ALL = [], state = {q:'',cat:'',org:'',city:'',biz:false};
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const initials = l => ((l.first||'')[0]||'') + ((l.last||'')[0]||'');
-const isBiz = l => l.tier === 'Business' && l.business;
+const QUOTE_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/23900090/Cw3Qmoia8B6xDIsyo/';
+const isBiz = l => (l.tier === 'Business' || l.tier === 'Featured') && l.business;
+const isFeat = l => l.tier === 'Featured' && l.business;
 const loc = l => [l.city, l.state].filter(Boolean).join(', ');
 const allOrgs = l => [l.org, ...(l.orgs||[])].filter(Boolean);
 const shortOrg = o => o.startsWith('Daughters of AEAONMS') ? 'Daughters of AEAONMS' : o.replace(/\s*\(.*?\)\s*/,'').replace(/,? Inc\.?$/,'');
@@ -198,7 +212,7 @@ function card(l){
   return `<button class="card" type="button" data-id="${esc(l.id)}">
     <div class="top">${avatar(l)}
       <div class="who"><h3>${esc(l.first)} ${esc(l.last)}</h3><div class="t">${esc(l.title)}</div><div class="loc">${esc(loc(l))}${l.years ? ` · ${esc(l.years)} yrs` : ''}</div></div>
-      ${biz ? '<span class="tier">Business</span>' : ''}
+      ${biz ? (isFeat(l) ? '<span class="tier feat">&#9733; Featured</span>' : '<span class="tier">Business</span>') : ''}
     </div>
     ${biz ? `<div class="biz bizrow">${l.logo ? `<img class="logo" src="${esc(l.logo)}" alt="" loading="lazy">` : ''}<div><b>${esc(l.business)}</b><span>${l.mobile ? 'Serves ' + esc(loc(l)) + ' area' : esc(loc(l))}</span></div></div>` : ''}
     <div class="orgs">${allOrgs(l).map((o,i)=>`<span class="org${i?'':' p'}">${esc(shortOrg(o))}</span>`).join('')}</div>
@@ -233,7 +247,7 @@ function open(id){
   const tel = (l.phone||'').replace(/[^\d+]/g,'');
   const acts = [];
   if (biz && tel) acts.push(`<a class="act pri" href="tel:${esc(tel)}">Call</a>`);
-  if (biz && l.email) acts.push(`<a class="act${acts.length?'':' pri'}" href="mailto:${esc(l.email)}">Email</a>`);
+  if (biz) acts.push(`<button class="act${acts.length?'':' pri'}" type="button" id="qBtn">Request a Quote</button>`);
   if (biz && l.website) acts.push(`<a class="act" href="${esc(l.website)}" target="_blank" rel="noopener">Website</a>`);
   $('sheet').innerHTML = `
     <button class="x" id="close" aria-label="Close">×</button>
@@ -245,18 +259,56 @@ function open(id){
     ${(l.available||[]).length ? `<div class="sec"><h4>Available for</h4><div class="tags">${l.available.map(a=>`<span class="tag">${esc(a)}</span>`).join('')}</div></div>` : ''}
     <div class="sec"><h4>Organizations</h4><div class="orgs">${allOrgs(l).map((o,i)=>`<span class="org${i?'':' p'}">${esc(o)}${i?'':' · primary'}</span>`).join('')}</div></div>
     ${l.years ? `<div class="sec"><h4>Experience</h4><p>${esc(l.years)} years in the field</p></div>` : ''}
-    ${acts.length ? `<div class="actions">${acts.join('')}</div>` : `<p class="note">This member has a personal listing. Ask for an introduction through your temple, lodge, or chapter.</p>`}
+    ${acts.length ? `<div class="actions">${acts.join('')}</div><div id="qHost"></div>` : `<p class="note">This member has a personal listing. Ask for an introduction through your temple, lodge, or chapter.</p>`}
   `;
   $('scrim').classList.add('open');
   document.body.style.overflow = 'hidden';
   $('close').onclick = close; $('close').focus();
+  const qb = $('qBtn'); if (qb) qb.onclick = () => showQuote(l);
+}
+
+function showQuote(l){
+  const host = $('qHost'); if (!host) return;
+  host.innerHTML = `<form class="qform" id="qForm" novalidate>
+    <h4>Request a quote from ${esc(l.business)}</h4>
+    <p class="sub">Your message goes to the business by email. Your contact details are shared only with them.</p>
+    <label for="qName">Your name *</label><input id="qName" autocomplete="name" maxlength="120" required>
+    <label for="qEmail">Your email *</label><input id="qEmail" type="email" autocomplete="email" maxlength="200" required>
+    <label for="qPhone">Phone (optional)</label><input id="qPhone" type="tel" autocomplete="tel" maxlength="40">
+    <label for="qMsg">What do you need? *</label><textarea id="qMsg" maxlength="2000" placeholder="Describe the job, timing, and location."></textarea>
+    <div class="hp" aria-hidden="true"><label>Website</label><input id="qHp" tabindex="-1" autocomplete="off"></div>
+    <div class="err" id="qErr" hidden></div>
+    <button class="act pri" type="submit" id="qSend">Send request</button>
+    <p class="note">The Fraternal Vocational Directory does not endorse or guarantee any member's work.</p>
+  </form>`;
+  $('qName').focus();
+  $('qForm').onsubmit = async ev => {
+    ev.preventDefault();
+    const name=$('qName').value.trim(), email=$('qEmail').value.trim(), phone=$('qPhone').value.trim(), message=$('qMsg').value.trim();
+    const err=$('qErr'); err.hidden=true;
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || message.length < 10) {
+      err.textContent='Please enter your name, a valid email, and a short description (at least 10 characters).'; err.hidden=false; return;
+    }
+    if (!/^rec[A-Za-z0-9]{14}$/.test(l.id)) {
+      err.textContent='This is a sample listing, so requests are turned off. Quotes work on live listings.'; err.hidden=false; return;
+    }
+    const btn=$('qSend'); btn.disabled=true; btn.textContent='Sending...';
+    try {
+      await fetch(QUOTE_WEBHOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+        body:JSON.stringify({listingId:l.id,name,email,phone,message,website_url:$('qHp').value})});
+      host.innerHTML='<div class="qdone"><b>Request sent.</b><br>'+esc(l.business)+' will reply to you directly by email. A confirmation is on its way to '+esc(email)+'.</div>';
+    } catch(e) {
+      btn.disabled=false; btn.textContent='Send request';
+      err.textContent='Could not send. Check your connection and try again.'; err.hidden=false;
+    }
+  };
 }
 function close(){ $('scrim').classList.remove('open'); document.body.style.overflow = ''; }
 
 function fill(sel, values){ values.forEach(v => sel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`)); }
 
 function boot(data){
-  ALL = (data.listings||[]).slice().sort((a,b) => (isBiz(b)-isBiz(a)) || (a.last||'').localeCompare(b.last||''));
+  ALL = (data.listings||[]).slice().sort((a,b) => (isFeat(b)-isFeat(a)) || (isBiz(b)-isBiz(a)) || (a.last||'').localeCompare(b.last||''));
   const uniq = a => [...new Set(a.filter(Boolean))].sort();
   fill($('fCat'), uniq(ALL.map(l=>l.category)));
   fill($('fOrg'), uniq(ALL.flatMap(allOrgs)));

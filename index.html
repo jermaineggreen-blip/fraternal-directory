@@ -156,7 +156,7 @@ input[type=file]{display:none}
 .notice-ok{background:#F0FDF4;border:1px solid #86EFAC;color:#166534}
 
 /* TIER CARDS */
-.tier-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.tier-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
 .tier-card{padding:14px;border:2px solid #E5E7EB;border-radius:10px;cursor:pointer;background:#fff;transition:all .2s}
 .tier-card.selected{border-color:var(--primary);background:rgba(31,71,136,.05)}
 .tier-icon{font-size:18px;margin-bottom:5px}
@@ -544,14 +544,21 @@ input[type=file]{display:none}
       <div class="tier-icon">&#x1F3DB;&#xFE0F;</div>
       <div class="tier-name">Member Listing</div>
       <div class="tier-price">$25<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></div>
-      <div class="tier-desc">Your name, org, and vocation listed. Contact info visible to verified members only.</div>
+      <div class="tier-desc">Your name, org, and vocation listed in the directory.</div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
     <div class="tier-card" id="tier-business" onclick="selectTier('business')">
       <div class="tier-icon">&#x1F3E2;</div>
       <div class="tier-name">Business Listing</div>
-      <div class="tier-price">$50<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></div>
-      <div class="tier-desc">Full member listing plus your business details displayed publicly in the directory.</div>
+      <div class="tier-price"><span id="biz-price-old" style="font-size:13px;font-weight:400;color:#9CA3AF;text-decoration:line-through;margin-right:4px">$75</span>$50<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></div>
+      <div class="tier-desc">Member listing plus your business details and a <strong>Request a Quote</strong> button. <strong>Founding rate</strong>: $50/yr locked for 2 years for the first 100 businesses (then $75/yr).</div>
+      <div class="tier-badge">&#10003; Selected</div>
+    </div>
+    <div class="tier-card" id="tier-featured" onclick="selectTier('featured')">
+      <div class="tier-icon">&#x2B50;</div>
+      <div class="tier-name">Featured Business</div>
+      <div class="tier-price">$199<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></div>
+      <div class="tier-desc">Everything in Business, plus top placement in your category, a Featured badge, and priority in the monthly new-listings email.</div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
   </div>
@@ -875,7 +882,7 @@ function updateSplitBox(){
   const org=getOrg($('primaryOrg').value);
   $('r-primary-label').textContent='All 15% goes to '+(org.short||'my primary organization');
   $('r-equal-label').textContent='Divide equally among all '+total+' organizations';
-  $('r-equal-sub').textContent='Each of the '+total+' organizations receives '+fmt(25*0.15/total)+'\u2013'+fmt(50*0.15/total)+'/yr depending on your tier.';
+  $('r-equal-sub').textContent='Each of the '+total+' organizations receives '+fmt(tierPrice('member')*0.15/total)+'\u2013'+fmt(tierPrice('featured')*0.15/total)+'/yr depending on your tier.';
   setSplit(S.divideSplit);
 }
 
@@ -1074,11 +1081,25 @@ function resetFocalBtns(key){
   });
 }
 
+// ── PRICING ───────────────────────────────────────────────────────────────
+// Set FOUNDING_OPEN=false once the first 100 business listings are sold.
+const FOUNDING_OPEN=true;
+const PRICES={member:25,business:FOUNDING_OPEN?50:75,featured:199};
+document.addEventListener('DOMContentLoaded',function(){var o=document.getElementById('biz-price-old');if(o&&!FOUNDING_OPEN)o.style.display='none';});
+function tierPrice(t){return PRICES[t]||25;}
+function tierName(t){return t==='featured'?'Featured Business':t==='business'?'Business':'Member';}
+function tierLabelFull(t){
+  if(t==='featured')return 'Featured Business Listing ($199/yr)';
+  if(t==='business')return FOUNDING_OPEN?'Business Listing ($50/yr founding rate)':'Business Listing ($75/yr)';
+  return 'Member Listing ($25/yr)';
+}
+
 // ── TIER ──────────────────────────────────────────────────────────────────
 function selectTier(t){
   S.listingTier=t;
   $('tier-member').classList.toggle('selected',t==='member');
   $('tier-business').classList.toggle('selected',t==='business');
+  $('tier-featured').classList.toggle('selected',t==='featured');
   renderContrib();
   renderReviewCard();
 }
@@ -1093,15 +1114,15 @@ function renderStep5(){
 }
 
 function renderContrib(){
-  const price=S.listingTier==='business'?50:25;
+  const price=tierPrice(S.listingTier);
   const total=price*0.15;
   // All orgs = primary + additional
   const allOrgs=[S.primaryOrg,...S.additionalOrgs].filter(Boolean);
   const n=allOrgs.length||1;
   const perOrg=S.divideSplit&&n>1?total/n:total;
   const org=getOrg(S.primaryOrg);
-  const tierIcon=S.listingTier==='business'?'&#x1F3E2;':'&#x1F3DB;&#xFE0F;';
-  const tierLabel=S.listingTier==='business'?'Business Listing':'Member Listing';
+  const tierIcon=S.listingTier==='featured'?'&#x2B50;':S.listingTier==='business'?'&#x1F3E2;':'&#x1F3DB;&#xFE0F;';
+  const tierLabel=tierName(S.listingTier)+' Listing';
 
   let perOrgHtml='';
   allOrgs.forEach(v=>{
@@ -1130,7 +1151,7 @@ function renderReviewCard(){
   const org=getOrg(S.primaryOrg);
   const acc=safeAccent(org);
   const allOrgs=[S.primaryOrg,...S.additionalOrgs].filter(Boolean);
-  const tierLabel=S.listingTier==='business'?'Business Listing':'Member Listing';
+  const tierLabel=tierName(S.listingTier)+' Listing';
 
   const badgeHtml=S.memberPhotoBase64
     ?`<img src="data:image/jpeg;base64,${S.memberPhotoBase64}" style="object-position:center ${S.memberFocal}">`
@@ -1218,7 +1239,7 @@ async function handleSubmit(){
     businessState:S.isMobile?(S.mobileBizState||''):S.businessState,
     businessZip:S.businessZip,businessEmail:S.businessEmail,website:S.website,
     availableFor:S.availableFor.join(', '),
-    listingTier:S.listingTier==='business'?'Business Listing ($50/yr)':'Member Listing ($25/yr)',
+    listingTier:tierLabelFull(S.listingTier),
     memberPhotoBase64:S.memberPhotoBase64,
     driversLicenseBase64:'',
     bizLogoBase64:S.bizLogoBase64,
@@ -1241,8 +1262,8 @@ function showConfirmation(){
   $('app').style.display='none';
   $('confirmation').style.display='block';
   const org=getOrg(S.primaryOrg);
-  const price=S.listingTier==='business'?50:25;
-  $('confirm-msg').innerHTML='Thank you, <strong>'+eh(S.firstName)+'</strong>. Your <strong>'+(S.listingTier==='business'?'Business':'Member')+' Listing</strong> has been submitted for verification.';
+  const price=tierPrice(S.listingTier);
+  $('confirm-msg').innerHTML='Thank you, <strong>'+eh(S.firstName)+'</strong>. Your <strong>'+tierName(S.listingTier)+' Listing</strong> has been submitted for verification.';
   $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>\u2460 '+eh(org.chapterLabel||'Chapter')+' administrator verifies member # <strong>'+eh(last4(S.memberNumber))+'</strong><br>\u2461 Payment of <strong>$'+price+'/year</strong> activates your listing<br>\u2462 <strong>'+fmt(price*0.15)+'/year</strong> contributed to '+eh(org.short||'your organization');
 }
 
