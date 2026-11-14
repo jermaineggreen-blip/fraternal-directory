@@ -295,7 +295,7 @@ input[type=file]{display:none}
       <div class="field">
         <label class="field-label" id="member-num-label">Member / ID Number *</label>
         <input id="memberNumber" type="text" placeholder="e.g., 4821"/>
-        <div class="field-hint">&#128274; Kept private. Your organization only sees the last 4 digits when verifying you, and it never appears in the public directory.</div>
+        <div class="field-hint">&#128274; Your own membership number, <strong>not</strong> your Temple, Lodge or Chapter number (that goes in the name box). Kept private. Your organization only sees the last 4 digits when verifying you, and it never appears in the public directory.</div>
       </div>
     </div>
     <div class="grid2">
@@ -581,7 +581,7 @@ input[type=file]{display:none}
 
 </div><!-- /card -->
 </div><!-- /body -->
-<div id="footer">Fraternal Vocational Directory &middot; Powered by Greenway International, Inc.</div>
+<div id="footer">Fraternal Vocational Directory</div>
 </div><!-- /app -->
 
 <!-- CONFIRMATION -->
@@ -619,6 +619,7 @@ const ALL_ORGS=[
 ];
 // Orgs marked pending:true stay hidden until their leadership approves. Remove the flag to show one.
 const ORG_LIST=ALL_ORGS.filter(o=>!o.pending);
+function orgName(v){const o=ALL_ORGS.find(x=>x.value===v);if(!o)return v||'';if(o.value==='aeaonms')return 'AEAONMS';if(o.value==='doi')return 'Daughters of AEAONMS';return o.label;}
 const REQUEST_ORG_URL='https://form.jotform.com/263007405643047';
 
 const US_STATES=['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC','International'];
@@ -815,10 +816,10 @@ function onOrgChange(){
     conf.style.cssText=`display:block;background:${o.primary}18;border:1px solid ${o.primary}40;color:${o.primary}`;
     conf.textContent=o.type+' \u2014 '+o.label;
   }else conf.style.display='none';
-  const numMap={Temple:'Temple Member Number *',Court:'Court Member Number *',Lodge:'Lodge Member Number *'};
-  const typeMap={Fraternity:'Chapter Roll Number *',Sorority:'Chapter Roll Number *'};
+  const numMap={Temple:'Your Personal Membership Number *',Court:'Your Personal Membership Number *',Lodge:'Your Personal Membership Number *'};
+  const typeMap={Fraternity:'Your Personal Membership Number *',Sorority:'Your Personal Membership Number *'};
   $('chapter-label').textContent=(o.chapterLabel||'Chapter')+' Name *';
-  $('member-num-label').textContent=numMap[o.chapterLabel]||typeMap[o.type]||'Member / ID Number *';
+  $('member-num-label').textContent=numMap[o.chapterLabel]||typeMap[o.type]||'Your Personal Membership Number *';
   $('chapterName').placeholder={Temple:'e.g., AKHi Temple No. 280',Court:'e.g., Nile Court No. 20',Lodge:'e.g., Mount Olive Lodge No. 4'}[o.chapterLabel]||'e.g., Alpha Chapter';
   S.additionalOrgs=S.additionalOrgs.filter(x=>x!==v);
   rebuildAddlGrid();
@@ -895,6 +896,7 @@ function toggleBiz(){
   $('biz-sw').classList.toggle('on',S.hasBusiness);
   $('biz-toggle').classList.toggle('on',S.hasBusiness);
   $('biz-section').style.display=S.hasBusiness?'block':'none';
+  selectTier(S.hasBusiness?'business':'member');
 }
 function toggleMobile(){
   S.isMobile=!S.isMobile;
@@ -1193,10 +1195,10 @@ async function handleSubmit(){
   btn.disabled=true;btn.textContent='Submitting\u2026';
 
   const payload={
-    primaryOrg:S.primaryOrg,chapterName:S.chapterName,memberNumber:S.memberNumber,memberNumberLast4:String(S.memberNumber||'').slice(-4),
+    primaryOrg:orgName(S.primaryOrg),chapterName:S.chapterName,memberNumber:S.memberNumber,memberNumberLast4:String(S.memberNumber||'').slice(-4),
     city:S.city,state:S.orgState,
     hasAdditionalOrgs:S.hasAdditionalOrgs,
-    additionalOrgs:S.additionalOrgs.join(', '),
+    additionalOrgs:S.additionalOrgs.map(orgName).join(', '),
     divideSplit:S.divideSplit?'Divide equally':'All to primary',
     firstName:S.firstName,lastName:S.lastName,phone:S.phone,email:S.email,
     veteranStatus:S.veteranStatus,
@@ -1222,7 +1224,7 @@ async function handleSubmit(){
     showConfirmation();
   }catch(err){
     errEl.style.display='block';
-    errEl.textContent='\u26A0\uFE0F Submission failed \u2014 check your connection and try again, or email info@greenway.org.';
+    errEl.textContent='\u26A0\uFE0F Submission failed \u2014 check your connection and try again in a few minutes.';
     btn.disabled=false;btn.textContent='Submit Listing \u2713';
   }
 }
