@@ -1,0 +1,255 @@
+{
+ "listings": [
+  {
+   "id": "d1",
+   "first": "Marcus",
+   "last": "Hollins",
+   "org": "AEAONMS",
+   "orgs": [
+    "Prince Hall Masons (F&AM)"
+   ],
+   "chapter": "Desert of Georgia",
+   "category": "Real Estate",
+   "title": "Licensed Real Estate Agent",
+   "years": 12,
+   "city": "Decatur",
+   "state": "GA",
+   "tier": "Business",
+   "bio": "Helping first-time buyers and veterans use their VA loan benefit. I walk every client through the numbers before they sign anything.",
+   "business": "Hollins Home Group",
+   "phone": "(404) 555-0142",
+   "email": "hello@example.com",
+   "website": "https://example.com",
+   "mobile": false,
+   "available": [
+    "Consultations",
+    "Speaking",
+    "Mentoring"
+   ]
+  },
+  {
+   "id": "d2",
+   "first": "Andrea",
+   "last": "Whitfield",
+   "org": "Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc.",
+   "orgs": [
+    "Eastern Star (Prince Hall)"
+   ],
+   "chapter": "Desert of Georgia",
+   "category": "Healthcare & Medicine",
+   "title": "Registered Nurse (RN)",
+   "years": 18,
+   "city": "Macon",
+   "state": "GA",
+   "tier": "Member",
+   "bio": "ICU nurse and health educator. Happy to talk with young members about nursing school and careers in healthcare.",
+   "business": "",
+   "phone": "",
+   "email": "",
+   "website": "",
+   "mobile": false,
+   "available": [
+    "Mentoring",
+    "Speaking"
+   ]
+  },
+  {
+   "id": "d3",
+   "first": "Terrence",
+   "last": "Boyd",
+   "org": "AEAONMS",
+   "orgs": [],
+   "chapter": "Desert of Georgia",
+   "category": "Construction & Skilled Trades",
+   "title": "Master Electrician",
+   "years": 22,
+   "city": "Columbus",
+   "state": "GA",
+   "tier": "Business",
+   "bio": "Residential and light commercial electrical. Panel upgrades, EV chargers, and generator hookups. Licensed and insured.",
+   "business": "Boyd Electric Services",
+   "phone": "(706) 555-0187",
+   "email": "office@example.com",
+   "website": "",
+   "mobile": true,
+   "available": [
+    "Hiring",
+    "Apprenticeships",
+    "Consultations"
+   ]
+  },
+  {
+   "id": "d4",
+   "first": "Denise",
+   "last": "Carrington",
+   "org": "Eastern Star (Prince Hall)",
+   "orgs": [],
+   "chapter": "Desert of Georgia",
+   "category": "Finance & Accounting",
+   "title": "CPA / Tax Preparer",
+   "years": 15,
+   "city": "Atlanta",
+   "state": "GA",
+   "tier": "Business",
+   "bio": "Tax preparation and bookkeeping for small businesses, churches, and nonprofits. Year-round support, not just in April.",
+   "business": "Carrington Tax & Advisory",
+   "phone": "(470) 555-0119",
+   "email": "info@example.com",
+   "website": "https://example.com",
+   "mobile": false,
+   "available": [
+    "Consultations",
+    "Workshops"
+   ]
+  },
+  {
+   "id": "d5",
+   "first": "Reginald",
+   "last": "Fair",
+   "org": "Prince Hall Masons (F&AM)",
+   "orgs": [
+    "AEAONMS"
+   ],
+   "chapter": "Desert of Georgia",
+   "category": "Military & Veterans Services",
+   "title": "Veterans Services Officer (VSO)",
+   "years": 9,
+   "city": "Savannah",
+   "state": "GA",
+   "tier": "Member",
+   "bio": "Army veteran. I help fellow veterans file claims and find the benefits they've earned.",
+   "business": "",
+   "phone": "",
+   "email": "",
+   "website": "",
+   "mobile": false,
+   "available": [
+    "Mentoring",
+    "Volunteering"
+   ]
+  },
+  {
+   "id": "d6",
+   "first": "Kendrick",
+   "last": "Lowe",
+   "org": "AEAONMS",
+   "orgs": [],
+   "chapter": "Desert of Georgia",
+   "category": "Barbering & Cosmetology",
+   "title": "Master Barber",
+   "years": 14,
+   "city": "Covington",
+   "state": "GA",
+   "tier": "Business",
+   "bio": "Classic cuts, fades, and beard work. Walk-ins welcome. Booth chairs open for licensed barbers.",
+   "business": "Lowe's Grooming Lounge",
+   "phone": "(678) 555-0164",
+   "email": "",
+   "website": "",
+   "mobile": false,
+   "available": [
+    "Hiring",
+    "Apprenticeships"
+   ]
+  },
+  {
+   "id": "d7",
+   "first": "Angela",
+   "last": "Pruitt",
+   "org": "Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc.",
+   "orgs": [],
+   "chapter": "Desert of Georgia",
+   "category": "Events, Food & Hospitality",
+   "title": "Caterer / Event Planner",
+   "years": 7,
+   "city": "Augusta",
+   "state": "GA",
+   "tier": "Business",
+   "bio": "Full-service catering for balls, banquets, and family events from 20 to 400 guests. Southern menu with tasting appointments.",
+   "business": "Pruitt Premier Catering",
+   "phone": "(762) 555-0133",
+   "email": "events@example.com",
+   "website": "https://example.com",
+   "mobile": true,
+   "available": [
+    "Consultations"
+   ]
+  },
+  {
+   "id": "d8",
+   "first": "Calvin",
+   "last": "Nesbitt",
+   "org": "Prince Hall Masons (F&AM)",
+   "orgs": [],
+   "chapter": "Desert of Georgia",
+   "category": "Legal & Law",
+   "title": "Attorney",
+   "years": 20,
+   "city": "Atlanta",
+   "state": "GA",
+   "tier": "Business",
+   "bio": "Wills, trusts, and estate planning. I also help small business owners form and protect their companies.",
+   "business": "Nesbitt Law, LLC",
+   "phone": "(404) 555-0108",
+   "email": "intake@example.com",
+   "website": "https://example.com",
+   "mobile": false,
+   "available": [
+    "Consultations",
+    "Workshops",
+    "Speaking"
+   ]
+  },
+  {
+   "id": "d9",
+   "first": "Sharon",
+   "last": "Ellis",
+   "org": "Eastern Star (Prince Hall)",
+   "orgs": [
+    "Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc."
+   ],
+   "chapter": "Desert of Georgia",
+   "category": "Education & Academia",
+   "title": "High School Counselor",
+   "years": 11,
+   "city": "Albany",
+   "state": "GA",
+   "tier": "Member",
+   "bio": "College and scholarship advising. I've helped hundreds of students file the FAFSA and find aid.",
+   "business": "",
+   "phone": "",
+   "email": "",
+   "website": "",
+   "mobile": false,
+   "available": [
+    "Mentoring",
+    "Workshops"
+   ]
+  },
+  {
+   "id": "d10",
+   "first": "Derrick",
+   "last": "Simmons",
+   "org": "AEAONMS",
+   "orgs": [
+    "Prince Hall Masons (F&AM)"
+   ],
+   "chapter": "Desert of Georgia",
+   "category": "Automotive",
+   "title": "Auto Mechanic / ASE Technician",
+   "years": 16,
+   "city": "Warner Robins",
+   "state": "GA",
+   "tier": "Business",
+   "bio": "Brakes, diagnostics, and preventive maintenance. Discount for members and veterans.",
+   "business": "Simmons Auto Care",
+   "phone": "(478) 555-0176",
+   "email": "",
+   "website": "",
+   "mobile": false,
+   "available": [
+    "Hiring"
+   ]
+  }
+ ]
+}

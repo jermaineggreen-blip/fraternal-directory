@@ -1,0 +1,26 @@
+name: Publish approved listings
+on:
+  schedule:
+    - cron: "*/30 11-22 * * *"   # every 30 min, about 6 AM–6 PM Eastern
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency: sync-listings
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Pull Active members from Airtable
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python scripts/sync_listings.py
+      - name: Commit if anything changed
+        run: |
+          git config user.name "FVD sync"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A listings.json img
+          git diff --cached --quiet || (git commit -m "Publish approved listings" && git push)

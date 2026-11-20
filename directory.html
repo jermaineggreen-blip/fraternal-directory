@@ -59,6 +59,7 @@ header{background:var(--primary);color:#fff}
 .who h3{font:700 17px Georgia,serif;color:var(--ink)}
 .who .t{font-size:13.5px;color:var(--primary);font-weight:600;margin-top:2px}
 .who .loc{font-size:12.5px;color:var(--muted);margin-top:2px}
+.tier.sample{background:#E5E7EB;color:#4B5563}
 .tier{align-self:flex-start;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:999px;background:var(--accent-lt);color:#7A5C00;white-space:nowrap}
 .biz{background:#F8F7F3;border-radius:10px;padding:10px 12px;font-size:13px}
 .biz b{display:block;font-size:14px;color:var(--ink)}
@@ -212,7 +213,7 @@ function card(l){
   return `<button class="card" type="button" data-id="${esc(l.id)}">
     <div class="top">${avatar(l)}
       <div class="who"><h3>${esc(l.first)} ${esc(l.last)}</h3><div class="t">${esc(l.title)}</div><div class="loc">${esc(loc(l))}${l.years ? ` · ${esc(l.years)} yrs` : ''}</div></div>
-      ${biz ? (isFeat(l) ? '<span class="tier feat">&#9733; Featured</span>' : '<span class="tier">Business</span>') : ''}
+      ${l.sample ? '<span class="tier sample">Sample</span>' : biz ? (isFeat(l) ? '<span class="tier feat">&#9733; Featured</span>' : '<span class="tier">Business</span>') : ''}
     </div>
     ${biz ? `<div class="biz bizrow">${l.logo ? `<img class="logo" src="${esc(l.logo)}" alt="" loading="lazy">` : ''}<div><b>${esc(l.business)}</b><span>${l.mobile ? 'Serves ' + esc(loc(l)) + ' area' : esc(loc(l))}</span></div></div>` : ''}
     <div class="orgs">${allOrgs(l).map((o,i)=>`<span class="org${i?'':' p'}">${esc(shortOrg(o))}</span>`).join('')}</div>
@@ -317,6 +318,7 @@ function boot(data){
   $('sBiz').textContent = ALL.filter(isBiz).length;
   $('sCities').textContent = uniq(ALL.map(loc)).length;
   $('demoNote').hidden = !data.demo;
+  if (data.demo && data.real) $('demoNote').innerHTML = '<b>Preview:</b> listings marked <b>Sample</b> show how the directory works. Every other listing is a verified member.';
   if (data.updated) $('upd').textContent = 'Updated ' + new Date(data.updated + 'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
   render();
 }
