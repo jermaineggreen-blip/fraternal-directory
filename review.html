@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Review listing · Fraternal Vocational Directory</title>
+<style>
+:root{--primary:#1F4788;--accent:#CC9900;--bg:#F4F1EA;--ink:#1A1A2E;--muted:#6B7280;--line:#E5E7EB}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:20px}
+.box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 24px;max-width:380px;width:100%;text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.06)}
+.k{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-size:22px;margin:6px 0 4px}
+p{color:var(--muted);margin:0 0 20px}
+button{display:block;width:100%;padding:16px;border:0;border-radius:12px;font-size:17px;font-weight:700;cursor:pointer;margin-top:10px}
+#ok{background:var(--primary);color:#fff}
+#hold{background:#fff;color:var(--ink);border:1px solid var(--line)}
+button:disabled{opacity:.5}
+.done{font-size:40px;margin-bottom:6px}
+</style>
+</head>
+<body>
+<main class="box" id="box">
+  <div class="k">Directory review</div>
+  <h1 id="who">New listing</h1>
+  <p>Tap once. The listing updates in Airtable right away.</p>
+  <button id="ok" type="button">✅ Approve</button>
+  <button id="hold" type="button">⏸ Hold</button>
+</main>
+<script>
+const HOOK = 'https://hooks.zapier.com/hooks/catch/23900090/liiqwl8Vf1YQg2QT/';
+const q = new URLSearchParams(location.search);
+const r = q.get('r') || '', k = q.get('k') || '', n = q.get('n') || '';
+const box = document.getElementById('box');
+if (n) document.getElementById('who').textContent = n;
+if (!/^rec[A-Za-z0-9]{14}$/.test(r) || k.length < 16) {
+  box.innerHTML = '<div class="done">⚠️</div><h1>Link not valid</h1><p>Open the listing in Airtable instead.</p>';
+}
+function send(a) {
+  document.querySelectorAll('button').forEach(b => b.disabled = true);
+  fetch(HOOK, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({r, k, a})})
+    .then(() => {
+      box.innerHTML = a === 'approve'
+        ? '<div class="done">✅</div><h1>Approved</h1><p>Charter listings go live on the directory within 30 minutes. Paid listings move to Verified and wait for payment.</p>'
+        : '<div class="done">⏸</div><h1>On hold</h1><p>The listing stays off the directory. Change it in Airtable anytime.</p>';
+    })
+    .catch(() => {
+      box.innerHTML = '<div class="done">⚠️</div><h1>Didn\'t go through</h1><p>Check your signal and tap the link again, or update Airtable directly.</p>';
+    });
+}
+document.getElementById('ok')?.addEventListener('click', () => send('approve'));
+document.getElementById('hold')?.addEventListener('click', () => send('hold'));
+</script>
+</body>
+</html>
