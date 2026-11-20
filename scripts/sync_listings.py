@@ -77,10 +77,16 @@ def split(v):
     return [p.strip() for p in re.split(r"[,\n;]+", str(v)) if p.strip()]
 
 
+HIDDEN_WORDS = ("alpha phi alpha", "alpha kappa alpha", "kappa alpha psi", "omega psi phi",
+                "delta sigma theta", "phi beta sigma", "zeta phi beta", "sigma gamma rho", "iota phi theta")
+
+
 def org_label(code):
     code = (code or "").strip()
-    if code.lower() in HIDDEN_ORGS:
+    if code.lower() in HIDDEN_ORGS or any(w in code.lower() for w in HIDDEN_WORDS):
         return None
+    if code.lower().startswith("daughters of aeaonms"):
+        return ORGS["doi"]
     return ORGS.get(code.lower(), code or None)
 
 
