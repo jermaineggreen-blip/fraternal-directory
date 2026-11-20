@@ -330,19 +330,19 @@ input[type=file]{display:none}
     </div>
     <div class="split-box" id="split-box">
       <div class="split-title">&#x1F49B; Contribution Distribution</div>
-      <div class="split-desc">15% of your annual fee goes to your organizations. How should it be split?</div>
+      <div class="split-desc">A share of future listing fees will support our organizations once approved by leadership. If that support is approved, how would you like your share directed?</div>
       <div class="radio-card selected" id="rc-primary" onclick="setSplit(false)">
         <div class="radio-dot"></div>
         <div>
-          <div class="radio-title" id="r-primary-label">All 15% goes to my primary organization</div>
-          <div class="radio-sub">Primary org receives the full contribution. Additional orgs are listed on your profile.</div>
+          <div class="radio-title" id="r-primary-label">All to my primary organization</div>
+          <div class="radio-sub">Your primary organization receives your full share. Additional orgs are listed on your profile.</div>
         </div>
       </div>
       <div class="radio-card" id="rc-equal" onclick="setSplit(true)">
         <div class="radio-dot"></div>
         <div>
           <div class="radio-title" id="r-equal-label">Divide equally among all my organizations</div>
-          <div class="radio-sub" id="r-equal-sub">Each organization receives an equal share of the 15%.</div>
+          <div class="radio-sub" id="r-equal-sub">Each organization receives an equal part of your share.</div>
         </div>
       </div>
     </div>
@@ -564,7 +564,7 @@ input[type=file]{display:none}
   </div>
 
   <div class="contrib-box">
-    <div class="contrib-hdr">&#x1F49B; Annual Contribution Breakdown</div>
+    <div class="contrib-hdr">&#x1F49B; Your Listing &amp; Organization Support</div>
     <div class="contrib-body" id="contrib-body"></div>
   </div>
 
@@ -880,9 +880,9 @@ function updateSplitBox(){
   const total=1+S.additionalOrgs.length;
   box.style.display=S.additionalOrgs.length>0?'block':'none';
   const org=getOrg($('primaryOrg').value);
-  $('r-primary-label').textContent='All 15% goes to '+(org.short||'my primary organization');
+  $('r-primary-label').textContent='All to '+(org.short||'my primary organization');
   $('r-equal-label').textContent='Divide equally among all '+total+' organizations';
-  $('r-equal-sub').textContent='Each of the '+total+' organizations receives '+fmt(tierPrice('member')*0.15/total)+'\u2013'+fmt(tierPrice('featured')*0.15/total)+'/yr depending on your tier.';
+  $('r-equal-sub').textContent='Each of the '+total+' organizations receives an equal part of your share.';
   setSplit(S.divideSplit);
 }
 
@@ -1123,6 +1123,7 @@ function renderStep5(){
   $('ready-notice').innerHTML='&#10003; Ready to submit. Your <strong>'+eh(org.chapterLabel||'chapter')+'</strong> administrator will verify member # <strong>'+eh(last4(S.memberNumber))+'</strong> before your listing goes live.';
 }
 
+const SUPPORT_TXT='A share of future listing fees will support our organizations once approved by leadership. Details will be shared before any fees are collected.';
 function renderContrib(){
   const price=tierPrice(S.listingTier);
   const total=price*0.15;
@@ -1148,11 +1149,9 @@ function renderContrib(){
 
   $('contrib-body').innerHTML=`
     <div class="c-row"><span>${tierIcon} ${tierLabel}</span><span class="val" style="font-weight:600">${fmt(price)}/yr</span></div>
-    <div class="c-row muted"><span>Total org contribution (15%)</span><span class="val">${fmt(total)}/yr</span></div>
-    ${allOrgs.length?`<div class="per-org-box">${perOrgHtml}</div>`:''}
     <div class="c-divider"></div>
     <div class="c-row total"><span>Your annual fee</span><span class="val">${isCharter(S.listingTier)?'$0 through '+CHARTER_END_TXT+', then '+fmt(price)+'/yr':fmt(price)+'/yr'}</span></div>
-    ${org.short?`<div class="contrib-note">${isCharter(S.listingTier)?eh(org.short)+' begins receiving '+fmt(S.divideSplit&&n>1?perOrg:total)+'/yr when you renew at '+fmt(price)+'/yr after the charter period.':eh(org.short)+' receives '+fmt(S.divideSplit&&n>1?perOrg:total)+'/yr while your listing is active.'}</div>`:''}
+    <div class="contrib-note">${SUPPORT_TXT}</div>
   `;
 }
 
@@ -1282,12 +1281,12 @@ function showConfirmation(){
     $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>'+step1
       +'\u2461 Once approved, your listing goes live <strong>free through '+CHARTER_END_TXT+'</strong> as a Charter Member. No payment is needed now.<br>'
       +'\u2462 Before the charter period ends we will email you about renewing at <strong>$'+price+'/year</strong>.<br>'
-      +'\u2463 When you renew, <strong>'+fmt(price*0.15)+'/year</strong> (15%) is contributed to '+eh(org.short||'your organization')+'.';
+      +'\u2463 '+SUPPORT_TXT;
   } else {
     $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>'+step1
       +'\u2461 Once approved, you will receive an email with a payment link for <strong>$'+price+'/year</strong>'+(founding?' (founding rate, locked for 2 years)':'')+'. You pay only after approval.<br>'
       +'\u2462 After payment your listing goes live'+(isBizTier?', with a Request a Quote button so customers can contact you without your email being shown':'')+'.<br>'
-      +'\u2463 <strong>'+fmt(price*0.15)+'/year</strong> (15%) is contributed to '+eh(org.short||'your organization')+'.';
+      +'\u2463 '+SUPPORT_TXT;
   }
 }
 
