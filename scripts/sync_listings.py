@@ -40,7 +40,7 @@ F = {
     "Business State": "fldr4Chpn4DAlhLGE", "Website": "fld1goJEotOelD7Q1",
     "Member Photo": "fldQpsc4aSS0w80CW", "Business Logo": "fldKJcz2zbCnbBrZ9",
     "Business Photo": "fld7Of5kfSTqytpPk", "Available For": "fldXzR0M9qHZ8LKZE",
-    "Listing Tier": "fldTWlHv31fX4zh16",
+    "Listing Tier": "fldTWlHv31fX4zh16", "Payment Status": "fldkbDxdCWAgZqGCE",
 }
 ID2NAME = {v: k for k, v in F.items()}
 HIDDEN_ORGS = {"apa", "aka", "kap", "opp", "dst", "pbs", "zpb", "sgr", "ipt"}
@@ -140,6 +140,8 @@ def to_listing(rec, keep):
         "bio": f.get("Professional Bio") or "",
         "available": split(f.get("Available For")),
         "photo": save_image(f.get("Member Photo"), rec["id"], "photo", keep),
+        "verified": True,
+        "charter": f.get("Payment Status") == "Charter (free)",
     }
     if has_biz:
         listing.update({
