@@ -1,6 +1,7 @@
 {
- "updated": "2026-10-28",
+ "updated": "2026-11-20",
  "demo": true,
+ "real": 0,
  "listings": [
   {
    "id": "d1",
@@ -27,7 +28,8 @@
     "Consultations",
     "Speaking",
     "Mentoring"
-   ]
+   ],
+   "sample": true
   },
   {
    "id": "d2",
@@ -53,7 +55,8 @@
    "available": [
     "Mentoring",
     "Speaking"
-   ]
+   ],
+   "sample": true
   },
   {
    "id": "d3",
@@ -78,7 +81,8 @@
     "Hiring",
     "Apprenticeships",
     "Consultations"
-   ]
+   ],
+   "sample": true
   },
   {
    "id": "d4",
@@ -102,7 +106,8 @@
    "available": [
     "Consultations",
     "Workshops"
-   ]
+   ],
+   "sample": true
   },
   {
    "id": "d5",
@@ -128,7 +133,8 @@
    "available": [
     "Mentoring",
     "Volunteering"
-   ]
+   ],
+   "sample": true
   },
   {
    "id": "d6",
@@ -152,7 +158,8 @@
    "available": [
     "Hiring",
     "Apprenticeships"
-   ]
+   ],
+   "sample": true
   },
   {
    "id": "d7",
@@ -175,7 +182,8 @@
    "mobile": true,
    "available": [
     "Consultations"
-   ]
+   ],
+   "sample": true
   },
   {
    "id": "d8",
@@ -200,7 +208,8 @@
     "Consultations",
     "Workshops",
     "Speaking"
-   ]
+   ],
+   "sample": true
   },
   {
    "id": "d9",
@@ -226,7 +235,8 @@
    "available": [
     "Mentoring",
     "Workshops"
-   ]
+   ],
+   "sample": true
   },
   {
    "id": "d10",
@@ -251,7 +261,8 @@
    "mobile": false,
    "available": [
     "Hiring"
-   ]
+   ],
+   "sample": true
   }
  ]
 }
