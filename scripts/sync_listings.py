@@ -26,6 +26,23 @@ ORGS = {
     "other": "Other Fraternal Organization",
     # Divine Nine stay hidden until each approves; they are never published here.
 }
+# Airtable field IDs (stable even if a column is renamed).
+F = {
+    "First Name": "fldiUgs2ExnPGS2xG", "Last Name": "fld6JtXIhdTuTvCRL",
+    "Status": "fldMyEAIigFjCZSLm", "Primary Organization": "fldLmSC9ojsM6hjsF",
+    "Chapter": "fldvaRF8yEuRCkwrw", "Additional Organizations": "flda5RjPfT4d1VYnR",
+    "City": "fldnGD4m5tQKLUGdh", "State": "fldO2kLS9anDkecc8",
+    "Occupation Category": "fldM0CzMwmWJkgi0W", "Occupation Title": "fldX4XFdYbR8rL8QC",
+    "Years in Field": "fldwGdb44DYlE1B5c", "Professional Bio": "fldG0Vq2C3rl5KWnd",
+    "Has Business": "fldoRATSNpxyAkiRz", "Is Mobile Business": "fldcpIrukntho9BPY",
+    "Business Name": "flddCeIU5jDHgCsEJ", "Business Phone": "fld4oG8uermmFBlbP",
+    "Business Email": "fld1KsSB2IiiOxooR", "Business City": "fldAo69YHXo9H1wO0",
+    "Business State": "fldr4Chpn4DAlhLGE", "Website": "fld1goJEotOelD7Q1",
+    "Member Photo": "fldQpsc4aSS0w80CW", "Business Logo": "fldKJcz2zbCnbBrZ9",
+    "Business Photo": "fld7Of5kfSTqytpPk", "Available For": "fldXzR0M9qHZ8LKZE",
+    "Listing Tier": "fldTWlHv31fX4zh16",
+}
+ID2NAME = {v: k for k, v in F.items()}
 HIDDEN_ORGS = {"apa", "aka", "kap", "opp", "dst", "pbs", "zpb", "sgr", "ipt"}
 
 
@@ -37,13 +54,16 @@ def api(url):
 
 def fetch_active():
     rows, offset = [], None
-    formula = "{Status}='Active'"
+    formula = "{%s}='Active'" % F["Status"]
     while True:
-        q = {"filterByFormula": formula, "pageSize": "100"}
+        q = [("filterByFormula", formula), ("pageSize", "100"), ("returnFieldsByFieldId", "true")]
+        q += [("fields[]", fid) for fid in F.values()]
         if offset:
-            q["offset"] = offset
+            q.append(("offset", offset))
         data = api(f"https://api.airtable.com/v0/{BASE}/{TABLE}?" + urllib.parse.urlencode(q))
-        rows += data.get("records", [])
+        for r in data.get("records", []):
+            r["fields"] = {ID2NAME.get(k, k): v for k, v in r["fields"].items()}
+            rows.append(r)
         offset = data.get("offset")
         if not offset:
             return rows
@@ -93,7 +113,7 @@ def to_listing(rec, keep):
         "last": (f.get("Last Name") or "").strip(),
         "org": org_label(f.get("Primary Organization")) or "Other Fraternal Organization",
         "orgs": orgs,
-        "chapter": f.get("Chapter / Temple / Lodge / Court") or "",
+        "chapter": f.get("Chapter") or "",
         "category": f.get("Occupation Category") or "",
         "title": f.get("Occupation Title") or "",
         "years": years,
