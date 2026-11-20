@@ -8,7 +8,7 @@ img/ because Airtable attachment links expire after a few hours.
 Never publishes personal email, personal phone, member numbers or addresses.
 Needs env AIRTABLE_TOKEN (read-only personal access token for the FVD base).
 """
-import json, os, re, sys, urllib.request, urllib.parse, datetime, hashlib
+import json, os, re, sys, urllib.request, urllib.parse, urllib.error, datetime, hashlib
 
 BASE = "appKGbm7nA88YKC7h"
 TABLE = "tbl96XAeUWUjPotOd"
@@ -47,9 +47,20 @@ HIDDEN_ORGS = {"apa", "aka", "kap", "opp", "dst", "pbs", "zpb", "sgr", "ipt"}
 
 
 def api(url):
-    req = urllib.request.Request(url, headers={"Authorization": "Bearer " + os.environ["AIRTABLE_TOKEN"]})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return json.load(r)
+    token = os.environ.get("AIRTABLE_TOKEN", "").strip().strip('"').strip("'")
+    if token.lower().startswith("bearer "):
+        token = token[7:].strip()
+    if not token.startswith("pat"):
+        sys.exit("AIRTABLE_TOKEN is missing or not an Airtable personal access token (should start with 'pat').")
+    req = urllib.request.Request(url, headers={"Authorization": "Bearer " + token})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return json.load(r)
+    except urllib.error.HTTPError as e:
+        hint = {401: "token rejected - recreate it and paste the full value",
+                403: "token lacks access - give it data.records:read and add the FVD base",
+                404: "base or table not found for this token - add the FVD base to the token"}.get(e.code, "")
+        sys.exit(f"Airtable said {e.code}: {hint}")
 
 
 def fetch_active():
