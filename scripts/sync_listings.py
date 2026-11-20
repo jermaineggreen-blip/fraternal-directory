@@ -54,16 +54,16 @@ def api(url):
 
 def fetch_active():
     rows, offset = [], None
-    formula = "{%s}='Active'" % F["Status"]
     while True:
-        q = [("filterByFormula", formula), ("pageSize", "100"), ("returnFieldsByFieldId", "true")]
+        q = [("pageSize", "100"), ("returnFieldsByFieldId", "true")]
         q += [("fields[]", fid) for fid in F.values()]
         if offset:
             q.append(("offset", offset))
         data = api(f"https://api.airtable.com/v0/{BASE}/{TABLE}?" + urllib.parse.urlencode(q))
         for r in data.get("records", []):
             r["fields"] = {ID2NAME.get(k, k): v for k, v in r["fields"].items()}
-            rows.append(r)
+            if r["fields"].get("Status") == "Active":
+                rows.append(r)
         offset = data.get("offset")
         if not offset:
             return rows
