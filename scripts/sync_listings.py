@@ -24,7 +24,13 @@ ORGS = {
     "oes": "Eastern Star (Prince Hall)",
     "doi": "Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc.",
     "other": "Other Fraternal Organization",
-    # Divine Nine stay hidden until each approves; they are never published here.
+    # Divine Nine: published BY NAME ONLY (text). No emblems anywhere until each approves
+    # emblem use in writing or becomes a partner.
+    "apa": "Alpha Phi Alpha Fraternity, Inc.", "aka": "Alpha Kappa Alpha Sorority, Inc.",
+    "kap": "Kappa Alpha Psi Fraternity, Inc.", "opp": "Omega Psi Phi Fraternity, Inc.",
+    "dst": "Delta Sigma Theta Sorority, Inc.", "pbs": "Phi Beta Sigma Fraternity, Inc.",
+    "zpb": "Zeta Phi Beta Sorority, Inc.", "sgr": "Sigma Gamma Rho Sorority, Inc.",
+    "ipt": "Iota Phi Theta Fraternity, Inc.",
 }
 # Airtable field IDs (stable even if a column is renamed).
 F = {
@@ -43,7 +49,7 @@ F = {
     "Listing Tier": "fldTWlHv31fX4zh16", "Payment Status": "fldkbDxdCWAgZqGCE",
 }
 ID2NAME = {v: k for k, v in F.items()}
-HIDDEN_ORGS = {"apa", "aka", "kap", "opp", "dst", "pbs", "zpb", "sgr", "ipt"}
+HIDDEN_ORGS = set()  # add a code here to hide an organization again
 
 
 def api(url):
@@ -88,8 +94,7 @@ def split(v):
     return [p.strip() for p in re.split(r"[,\n;]+", str(v)) if p.strip()]
 
 
-HIDDEN_WORDS = ("alpha phi alpha", "alpha kappa alpha", "kappa alpha psi", "omega psi phi",
-                "delta sigma theta", "phi beta sigma", "zeta phi beta", "sigma gamma rho", "iota phi theta")
+HIDDEN_WORDS = ()
 
 
 def org_label(code):

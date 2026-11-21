@@ -363,7 +363,7 @@ input[type=file]{display:none}
         <div class="img-placeholder"><div class="cam">&#128247;</div><div class="lbl">Click to<br>upload</div></div>
       </div>
       <div class="img-controls">
-        <div class="img-hint">A clear headshot works best. Appears on your member card in the directory.</div>
+        <div class="img-hint">A clear headshot works best. Appears on your member card in the directory. You may wear or show your own organization&rsquo;s letters or emblem in your photo.</div>
         <button class="img-btn" type="button" id="member-photo-btn" onclick="document.getElementById('memberPhotoInput').click()">Select Photo</button>
         <button class="img-rm" type="button" id="member-photo-rm" onclick="clearPhoto('member')">Remove</button>
         <div class="focal-row" id="member-focal-row">
@@ -617,21 +617,29 @@ const WEBHOOK_URL='https://hooks.zapier.com/hooks/catch/23900090/CnLybFy4NsGlMxl
 
 const ALL_ORGS=[
   {value:'aeaonms',label:'AEAONMS \u2013 Ancient Egyptian Arabic Order Nobles Mystic Shrine',short:'AEAONMS',badge:'<span style="font-size:8.5px;letter-spacing:0">AEAONMS</span>',type:'Shrine',primary:'#1B4D1B',accent:'#FFD700',chapterLabel:'Temple'},
-  {value:'apa',pending:true,label:'Alpha Phi Alpha Fraternity, Inc.',short:'\u0391\u03A6\u0391',type:'Fraternity',primary:'#1A1A1A',accent:'#C89B2A',chapterLabel:'Chapter'},
-  {value:'aka',pending:true,label:'Alpha Kappa Alpha Sorority, Inc.',short:'\u0391\u039A\u0391',type:'Sorority',primary:'#006B3C',accent:'#E8A0B4',chapterLabel:'Chapter'},
-  {value:'kap',pending:true,label:'Kappa Alpha Psi Fraternity, Inc.',short:'\u039A\u0391\u03A8',type:'Fraternity',primary:'#8B0000',accent:'#F0E6C8',chapterLabel:'Chapter'},
-  {value:'opp',pending:true,label:'Omega Psi Phi Fraternity, Inc.',short:'\u03A9\u03A8\u03A6',type:'Fraternity',primary:'#4B0082',accent:'#FFD700',chapterLabel:'Chapter'},
-  {value:'dst',pending:true,label:'Delta Sigma Theta Sorority, Inc.',short:'\u0394\u03A3\u0398',type:'Sorority',primary:'#8B0000',accent:'#C8C8C8',chapterLabel:'Chapter'},
-  {value:'pbs',pending:true,label:'Phi Beta Sigma Fraternity, Inc.',short:'\u03A6\u0392\u03A3',type:'Fraternity',primary:'#003087',accent:'#C8C8C8',chapterLabel:'Chapter'},
-  {value:'zpb',pending:true,label:'Zeta Phi Beta Sorority, Inc.',short:'\u0396\u03A6\u0392',type:'Sorority',primary:'#003087',accent:'#C8C8C8',chapterLabel:'Chapter'},
-  {value:'sgr',pending:true,label:'Sigma Gamma Rho Sorority, Inc.',short:'\u03A3\u0393\u03A1',type:'Sorority',primary:'#1565C0',accent:'#FFD700',chapterLabel:'Chapter'},
-  {value:'ipt',pending:true,label:'Iota Phi Theta Fraternity, Inc.',short:'\u0399\u03A6\u0398',type:'Fraternity',primary:'#6B3A2A',accent:'#D4AF37',chapterLabel:'Chapter'},
+  {value:'apa',emblem:false,label:'Alpha Phi Alpha Fraternity, Inc.',type:'Fraternity',chapterLabel:'Chapter',brand:{short:'\u0391\u03A6\u0391',primary:'#1A1A1A',accent:'#C89B2A'}},
+  {value:'aka',emblem:false,label:'Alpha Kappa Alpha Sorority, Inc.',type:'Sorority',chapterLabel:'Chapter',brand:{short:'\u0391\u039A\u0391',primary:'#006B3C',accent:'#E8A0B4'}},
+  {value:'kap',emblem:false,label:'Kappa Alpha Psi Fraternity, Inc.',type:'Fraternity',chapterLabel:'Chapter',brand:{short:'\u039A\u0391\u03A8',primary:'#8B0000',accent:'#F0E6C8'}},
+  {value:'opp',emblem:false,label:'Omega Psi Phi Fraternity, Inc.',type:'Fraternity',chapterLabel:'Chapter',brand:{short:'\u03A9\u03A8\u03A6',primary:'#4B0082',accent:'#FFD700'}},
+  {value:'dst',emblem:false,label:'Delta Sigma Theta Sorority, Inc.',type:'Sorority',chapterLabel:'Chapter',brand:{short:'\u0394\u03A3\u0398',primary:'#8B0000',accent:'#C8C8C8'}},
+  {value:'pbs',emblem:false,label:'Phi Beta Sigma Fraternity, Inc.',type:'Fraternity',chapterLabel:'Chapter',brand:{short:'\u03A6\u0392\u03A3',primary:'#003087',accent:'#C8C8C8'}},
+  {value:'zpb',emblem:false,label:'Zeta Phi Beta Sorority, Inc.',type:'Sorority',chapterLabel:'Chapter',brand:{short:'\u0396\u03A6\u0392',primary:'#003087',accent:'#C8C8C8'}},
+  {value:'sgr',emblem:false,label:'Sigma Gamma Rho Sorority, Inc.',type:'Sorority',chapterLabel:'Chapter',brand:{short:'\u03A3\u0393\u03A1',primary:'#1565C0',accent:'#FFD700'}},
+  {value:'ipt',emblem:false,label:'Iota Phi Theta Fraternity, Inc.',type:'Fraternity',chapterLabel:'Chapter',brand:{short:'\u0399\u03A6\u0398',primary:'#6B3A2A',accent:'#D4AF37'}},
   {value:'pha',label:'Prince Hall Masons (F&AM)',short:'PHA',type:'Masonic',primary:'#1F4788',accent:'#CC9900',chapterLabel:'Lodge'},
   {value:'oes',label:'Order of the Eastern Star (Prince Hall)',short:'OES',type:'Masonic Auxiliary',primary:'#8B0000',accent:'#C8C8C8',chapterLabel:'Chapter'},
   {value:'doi',label:'Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc.',short:'Daughters of AEAONMS',badge:'<span style="font-size:6.3px;letter-spacing:0;line-height:1.2;display:block;text-align:center">DAUGHTERS<br>AEAONMS</span>',type:'Shrine Auxiliary',primary:'#1B4D1B',accent:'#FFD700',chapterLabel:'Court'},
   {value:'other',label:'Other Fraternal Organization',short:'FVD',type:'Other',primary:'#1F4788',accent:'#CC9900',chapterLabel:'Chapter'},
 ];
-// Orgs marked pending:true stay hidden until their leadership approves. Remove the flag to show one.
+// Divine Nine: shown BY NAME ONLY. No Greek letters, colors, crest or emblem until that
+// organization approves emblem use in writing or signs on as a partner. Then set emblem:true.
+const SEAL_BADGE='<img src="brand/fvd-seal-512.jpg" alt="">';
+ALL_ORGS.forEach(o=>{
+  if(!o.brand)return;
+  if(o.emblem){Object.assign(o,o.brand);}
+  else{Object.assign(o,{short:o.label.replace(/ (Fraternity|Sorority), Inc\.$/,''),primary:'#1F4788',accent:'#CC9900',badge:SEAL_BADGE,nameOnly:true});}
+});
+const NAME_ONLY_NOTE='Listed by name only so members can identify their organization. This organization has not endorsed or partnered with the Fraternal Vocational Directory.';
 const ORG_LIST=ALL_ORGS.filter(o=>!o.pending);
 function orgName(v){const o=ALL_ORGS.find(x=>x.value===v);if(!o)return v||'';if(o.value==='aeaonms')return 'AEAONMS';if(o.value==='doi')return 'Daughters of AEAONMS';return o.label;}
 const REQUEST_ORG_URL='https://form.jotform.com/263007405643047';
@@ -828,7 +836,7 @@ function onOrgChange(){
   const conf=$('org-confirm');
   if(v){
     conf.style.cssText=`display:block;background:${o.primary}18;border:1px solid ${o.primary}40;color:${o.primary}`;
-    conf.textContent=o.type+' \u2014 '+o.label;
+    conf.textContent=o.type+' \u2014 '+o.label+(o.nameOnly?'. '+NAME_ONLY_NOTE:'');
   }else conf.style.display='none';
   const numMap={Temple:'Your Personal Membership Number *',Court:'Your Personal Membership Number *',Lodge:'Your Personal Membership Number *'};
   const typeMap={Fraternity:'Your Personal Membership Number *',Sorority:'Your Personal Membership Number *'};
