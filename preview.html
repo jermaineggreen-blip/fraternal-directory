@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Admin preview · Fraternal Vocational Directory</title>
+<link rel="icon" type="image/png" sizes="32x32" href="brand/fvd-seal-32.png">
+<style>
+:root{--bar:#111827;--ink:#fff;--mut:#9CA3AF;--on:#CC9900}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{display:flex;flex-direction:column;background:#E5E7EB;font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+#bar{background:var(--bar);color:var(--ink);padding:8px 10px 10px;flex:none}
+.row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.top{justify-content:space-between;margin-bottom:6px}
+.tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--on)}
+.tag small{color:var(--mut);letter-spacing:0;text-transform:none;font-weight:400;margin-left:6px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.tab{flex:none;border:1px solid #374151;background:#1F2937;color:#E5E7EB;border-radius:999px;padding:8px 13px;font:600 13px inherit;font-family:inherit;cursor:pointer;white-space:nowrap}
+.tab.on{background:var(--on);border-color:var(--on);color:#111827}
+.ctl{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ctl label{font-size:12px;color:var(--mut);display:flex;gap:5px;align-items:center}
+.ctl select{background:#1F2937;color:#fff;border:1px solid #374151;border-radius:8px;padding:6px 8px;font-size:13px;max-width:210px}
+.ctl .chk{color:#E5E7EB}
+.ctl button{background:#1F2937;color:#fff;border:1px solid #374151;border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer}
+#note{background:#FEF3C7;color:#78350F;font-size:12px;padding:6px 10px;flex:none;display:none}
+#stage{flex:1;min-height:0;display:flex;justify-content:center;overflow:auto;padding:0}
+#stage.phone{padding:12px 0}
+#frame{border:0;background:#fff;width:100%;height:100%}
+#stage.phone #frame{width:390px;max-width:100%;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div id="bar">
+  <div class="row top">
+    <div class="tag">Admin preview<small>Not linked anywhere. Nothing you do here is sent.</small></div>
+  </div>
+  <div class="tabs" id="tabs">
+    <button class="tab on" data-v="form" type="button">1 · Sign-up form</button>
+    <button class="tab" data-v="listing" type="button">2 · My listing</button>
+    <button class="tab" data-v="directory" type="button">3 · Directory</button>
+    <button class="tab" data-v="review" type="button">4 · Admin review</button>
+  </div>
+  <div class="ctl">
+    <label id="orgWrap">Organization <select id="org"></select></label>
+    <label id="tierWrap" class="hide">Listing type
+      <select id="tier"><option>Member</option><option>Business</option><option>Featured</option></select>
+    </label>
+    <button type="button" id="openCard" class="hide">Open card</button>
+    <button type="button" id="width">Phone width</button>
+  </div>
+</div>
+<div id="note"></div>
+<div id="stage"><iframe id="frame" title="Preview"></iframe></div>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const frame = $('frame'), stage = $('stage'), note = $('note');
+const NOTES = {
+  form: 'Preview mode: submitting is blocked. Nothing is sent to Zapier or Airtable.',
+  listing: 'This is a sample member, not a real person. It uses the real directory card, so it looks exactly like the live one.',
+  directory: 'This is the live directory page. Quote requests are blocked in preview.',
+  review: 'Sample review screen. Approve and Hold are blocked here and do not touch Airtable.'
+};
+let view = 'form', orgs = [], ready = false;
+
+// Read the real organization list from the live form so this page never drifts from it.
+const probe = document.createElement('iframe');
+probe.className = 'hide';
+probe.src = 'index.html';
+probe.onload = () => {
+  const w = probe.contentWindow;
+  orgs = w.eval('ALL_ORGS.map(o=>({value:o.value,label:o.label,primary:o.primary,accent:o.accent,short:o.short,nameOnly:!!o.nameOnly,brand:o.brand||null}))');
+  const sel = $('org');
+  sel.innerHTML = orgs.map(o => `<option value="${o.value}">${o.value === 'aeaonms' ? 'AEAONMS' : o.value === 'doi' ? 'Daughters of AEAONMS' : o.label.replace(/,? Inc\.$/, '')}${o.nameOnly ? ' (D9)' : ''}</option>`).join('');
+  readHash();
+  ready = true;
+  show(view);
+};
+document.body.appendChild(probe);
+
+function colors(o) {
+  const c = o;
+  const soft = ['#C8C8C8', '#F0E6C8', '#FAFAFA'].includes(c.accent) ? '#9CA3AF' : c.accent;
+  return { primary: c.primary, accent: soft, rawAccent: c.accent, letters: null, d9: false };
+}
+const curOrg = () => orgs.find(o => o.value === $('org').value) || orgs[0];
+
+function stub(w) {
+  try {
+    w.fetch = () => Promise.resolve({ ok: true, json: () => Promise.resolve({}) });
+    w.XMLHttpRequest.prototype.send = function () {};
+    w.navigator.sendBeacon = () => true;
+  } catch (e) {}
+}
+
+function show(v) {
+  view = v;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === v));
+  $('tierWrap').classList.toggle('hide', v !== 'listing');
+  $('openCard').classList.toggle('hide', v !== 'listing');
+  $('orgWrap').classList.toggle('hide', v === 'review' || v === 'directory');
+  note.textContent = NOTES[v]; note.style.display = 'block';
+  const src = { form: 'index.html', listing: 'directory.html', directory: 'directory.html',
+    review: 'review.html?r=recPREVIEW00000AA&k=preview-only-key-0000&n=Sample%20Member' }[v];
+  frame.onload = () => { stub(frame.contentWindow); apply(); };
+  frame.src = src;
+  writeHash();
+}
+
+function applyFormTheme(w, o) {
+  const c = colors(o);
+  w.eval('document.getElementById("primaryOrg").value=' + JSON.stringify(o.value) + '; onOrgChange();');
+  if (c.d9) {
+    const r = w.document.documentElement.style;
+    r.setProperty('--primary', c.primary); r.setProperty('--accent', c.accent);
+    w.document.getElementById('hdr').style.background = c.primary;
+    const b = w.document.getElementById('org-badge'); b.style.background = c.accent; b.style.color = c.primary;
+    b.innerHTML = '<span id="badge-text">' + c.letters + '</span>';
+  }
+}
+
+function sample(o, tier) {
+  const name = o.value === 'aeaonms' ? 'AEAONMS' : o.value === 'doi' ? 'Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc.' : o.label;
+  const biz = tier !== 'Member';
+  return { id: 'recPREVIEW00000AA', first: 'Jordan', last: 'Member', org: name, orgs: [], chapter: 'Your temple, lodge, court or chapter',
+    category: 'Barbering & Cosmetology', title: 'Your trade or title', years: 10, city: 'Atlanta', state: 'GA', tier,
+    bio: 'This is where your short bio appears. Members tell the community what they do and how they like to help.',
+    business: biz ? 'Your Business Name' : '', phone: biz ? '(404) 555-0100' : '', email: '', website: biz ? 'https://example.com' : '',
+    mobile: false, available: ['Consultations', 'Mentoring'], charter: true };
+}
+
+function apply() {
+  if (!ready) return;
+  const w = frame.contentWindow, o = curOrg();
+  try {
+    if (view === 'form') {
+      applyFormTheme(w, o);
+    } else if (view === 'listing') {
+      const t0 = Date.now();
+      (function wait() {
+        let n = 0; try { n = w.eval('ALL.length'); } catch (e) {}
+        if (!n && Date.now() - t0 < 6000) return setTimeout(wait, 150);
+        w.eval('ALL = ALL.filter(l => l.id !== "recPREVIEW00000AA")');
+        const c = colors(o), r = w.document.documentElement.style;
+        r.setProperty('--primary', c.primary); r.setProperty('--accent', c.accent);
+        w.eval('ALL.unshift(' + JSON.stringify(sample(o, $('tier').value)) + '); render();');
+        const g = w.document.getElementById('grid'); w.scrollTo(0, Math.max(0, g.getBoundingClientRect().top + w.scrollY - 70));
+      })();
+    } else if (view === 'review') {
+      w.send = a => {
+        w.document.getElementById('box').innerHTML = a === 'approve'
+          ? '<div class="done">✅</div><h1>Approved (preview)</h1><p>In real life, charter listings go live within 30 minutes. Nothing was sent.</p>'
+          : '<div class="done">⏸</div><h1>On hold (preview)</h1><p>In real life, the listing stays off the directory. Nothing was sent.</p>';
+      };
+    }
+  } catch (e) { console.warn('preview apply failed', e); }
+}
+
+function writeHash() { history.replaceState(null, '', '#v=' + view + '&o=' + $('org').value + '&t=' + $('tier').value + '&d9=0' + '&w=' + (stage.classList.contains('phone') ? 'p' : 'f')); }
+function readHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  if (p.get('o') && [...$('org').options].some(x => x.value === p.get('o'))) $('org').value = p.get('o');
+  if (['Member', 'Business', 'Featured'].includes(p.get('t'))) $('tier').value = p.get('t');
+  if (['form', 'listing', 'directory', 'review'].includes(p.get('v'))) view = p.get('v');
+  if (p.get('w') === 'p') { stage.classList.add('phone'); $('width').textContent = 'Full width'; }
+}
+
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => ready && show(t.dataset.v)));
+['org', 'tier'].forEach(id => $(id).addEventListener('change', () => {
+  writeHash();
+  if (view === 'listing' || view === 'form') apply();
+}));
+$('openCard').addEventListener('click', () => { try { frame.contentWindow.open('recPREVIEW00000AA'); } catch (e) {} });
+$('width').addEventListener('click', () => {
+  const p = stage.classList.toggle('phone');
+  $('width').textContent = p ? 'Full width' : 'Phone width';
+  writeHash();
+});
+</script>
+</body>
+</html>

@@ -631,13 +631,13 @@ const ALL_ORGS=[
   {value:'doi',label:'Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc.',short:'Daughters of AEAONMS',badge:'<span style="font-size:6.3px;letter-spacing:0;line-height:1.2;display:block;text-align:center">DAUGHTERS<br>AEAONMS</span>',type:'Shrine Auxiliary',primary:'#1B4D1B',accent:'#FFD700',chapterLabel:'Court'},
   {value:'other',label:'Other Fraternal Organization',short:'FVD',type:'Other',primary:'#1F4788',accent:'#CC9900',chapterLabel:'Chapter'},
 ];
-// Divine Nine: shown BY NAME ONLY. No Greek letters, colors, crest or emblem until that
-// organization approves emblem use in writing or signs on as a partner. Then set emblem:true.
+// Divine Nine: Jermaine approved organization COLORS on the form (Nov 21). Still NO Greek letters,
+// crest or emblem until that organization approves in writing or signs on as a partner. Then set emblem:true.
 const SEAL_BADGE='<img src="brand/fvd-seal-512.jpg" alt="">';
 ALL_ORGS.forEach(o=>{
   if(!o.brand)return;
   if(o.emblem){Object.assign(o,o.brand);}
-  else{Object.assign(o,{short:o.label.replace(/ (Fraternity|Sorority), Inc\.$/,''),primary:'#1F4788',accent:'#CC9900',badge:SEAL_BADGE,nameOnly:true});}
+  else{Object.assign(o,{short:o.label.replace(/ (Fraternity|Sorority), Inc\.$/,''),primary:o.brand.primary,accent:o.brand.accent,badge:SEAL_BADGE,nameOnly:true});}
 });
 const NAME_ONLY_NOTE='Listed by name only so members can identify their organization. This organization has not endorsed or partnered with the Fraternal Vocational Directory. Endorsement pending.';
 const ORG_LIST=ALL_ORGS.filter(o=>!o.pending);
