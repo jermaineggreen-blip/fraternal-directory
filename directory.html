@@ -337,7 +337,10 @@ function boot(data){
   ALL = (data.listings||[]).slice().sort((a,b) => (!!a.sample-!!b.sample) || (isFeat(b)-isFeat(a)) || (isBiz(b)-isBiz(a)) || (a.last||'').localeCompare(b.last||''));
   const uniq = a => [...new Set(a.filter(Boolean))].sort();
   fill($('fCat'), uniq(ALL.map(l=>l.category)));
-  fill($('fOrg'), uniq(ALL.flatMap(allOrgs)));
+  // Always offer every organization the directory supports, even before anyone has listed under it.
+  const ORG_NAMES = ['AEAONMS','Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc.','Eastern Star (Prince Hall)','Prince Hall Masons (F&AM)','Alpha Phi Alpha Fraternity, Inc.','Alpha Kappa Alpha Sorority, Inc.','Kappa Alpha Psi Fraternity, Inc.','Omega Psi Phi Fraternity, Inc.','Delta Sigma Theta Sorority, Inc.','Phi Beta Sigma Fraternity, Inc.','Zeta Phi Beta Sorority, Inc.','Sigma Gamma Rho Sorority, Inc.','Iota Phi Theta Fraternity, Inc.','Other Fraternal Organization'];
+  const orgOpts = ORG_NAMES.concat(uniq(ALL.flatMap(allOrgs)).filter(o => !ORG_NAMES.includes(o)));
+  fill($('fOrg'), orgOpts);
   fill($('fCity'), uniq(ALL.map(loc)));
   fill($('fChap'), uniq(ALL.map(l=>l.chapter)));
   // Count real members only; if there are none yet, count the samples and say so.
