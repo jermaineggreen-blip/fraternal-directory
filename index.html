@@ -639,7 +639,7 @@ ALL_ORGS.forEach(o=>{
   if(o.emblem){Object.assign(o,o.brand);}
   else{Object.assign(o,{short:o.label.replace(/ (Fraternity|Sorority), Inc\.$/,''),primary:'#1F4788',accent:'#CC9900',badge:SEAL_BADGE,nameOnly:true});}
 });
-const NAME_ONLY_NOTE='Listed by name only so members can identify their organization. This organization has not endorsed or partnered with the Fraternal Vocational Directory.';
+const NAME_ONLY_NOTE='Listed by name only so members can identify their organization. This organization has not endorsed or partnered with the Fraternal Vocational Directory. Endorsement pending.';
 const ORG_LIST=ALL_ORGS.filter(o=>!o.pending);
 function orgName(v){const o=ALL_ORGS.find(x=>x.value===v);if(!o)return v||'';if(o.value==='aeaonms')return 'AEAONMS';if(o.value==='doi')return 'Daughters of AEAONMS';return o.label;}
 const REQUEST_ORG_URL='https://form.jotform.com/263007405643047';
