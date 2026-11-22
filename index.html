@@ -268,7 +268,14 @@ input[type=file]{display:none}
 .pt small{display:block;font-size:11px;line-height:1.35;color:#4B5563}
 .pnote{margin-top:10px;font-size:12px;color:#6B7280;line-height:1.45;text-align:center}
 @media(max-width:520px){.pgrid{grid-template-columns:1fr}.pt{text-align:left;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 10px}.pt small{grid-column:1/-1}.pt .pp{margin:0}}
+.noprice .price-only{display:none!important}
+html:not(.noprice) .free-only{display:none!important}
 </style>
+<script>
+/* PRICE SWITCH: false = prices hidden (all listings free through Mar 31, 2027). Change to true to show prices again. */
+var FVD_SHOW_PRICES=false;
+if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
+</script>
 </head>
 <body>
 <div id="app">
@@ -297,12 +304,12 @@ input[type=file]{display:none}
 <!-- BODY -->
 <div id="body">
 <div class="pstrip" id="pricing">
-  <h3>Simple pricing</h3>
+  <h3><span class="price-only">Simple pricing</span><span class="free-only">Choose your listing type</span></h3>
   <div class="psub">Pick your listing type when you sign up. Every listing is reviewed before it goes live.</div>
   <div class="pgrid">
-    <div class="pt"><b>Member</b><span class="pp">Free</span><small>Free through Mar 31, 2027, then $25/yr. Name, photo, organization, trade, city, private messages.</small></div>
-    <div class="pt"><b>Business</b><span class="pp"><s>$75</s>$50/yr</span><small>Founding rate for the first 100, locked 2 years. Adds business name, logo, Call, Website and Request a Quote buttons.</small></div>
-    <div class="pt feat"><b>&#9733; Featured</b><span class="pp">$99/yr</span><small>Launch price. Adds top spot in your category, first on the opening screen and a gold Featured badge.</small></div>
+    <div class="pt"><b>Member</b><span class="pp">Free</span><small>Free through Mar 31, 2027<span class="price-only">, then $25/yr</span>. Name, photo, organization, trade, city, private messages.</small></div>
+    <div class="pt"><b>Business</b><span class="pp"><span class="price-only"><s>$75</s>$50/yr</span><span class="free-only">Free</span></span><small><span class="price-only">Founding rate for the first 100, locked 2 years.</span><span class="free-only">Charter offer, free through Mar 31, 2027.</span> Adds business name, logo, Call, Website and Request a Quote buttons.</small></div>
+    <div class="pt feat"><b>&#9733; Featured</b><span class="pp"><span class="price-only">$99/yr</span><span class="free-only">Free</span></span><small><span class="price-only">Launch price.</span><span class="free-only">Charter offer, free through Mar 31, 2027.</span> Adds top spot in your category, first on the opening screen and a gold Featured badge.</small></div>
   </div>
   <div class="pnote">No fees are collected before Mar 31, 2027.</div>
 </div>
@@ -579,21 +586,21 @@ input[type=file]{display:none}
       <div class="tier-icon">&#x1F3DB;&#xFE0F;</div>
       <div class="tier-name">Member Listing</div>
       <div class="tier-price" id="member-price">Free<span style="font-size:12px;font-weight:400;color:#9CA3AF"> through Mar 31, 2027</span></div>
-      <div class="tier-desc" id="member-desc">Charter offer: free through March 31, 2027, then $25/yr.<br>&#10003; Your name, photo, organization, trade and city<br>&#10003; Found by trade and city search<br>&#10003; Private <strong>Send a Message</strong> button (your email and phone stay hidden)</div>
+      <div class="tier-desc" id="member-desc">Charter offer: free through March 31, 2027<span class="price-only">, then $25/yr</span>.<br>&#10003; Your name, photo, organization, trade and city<br>&#10003; Found by trade and city search<br>&#10003; Private <strong>Send a Message</strong> button (your email and phone stay hidden)</div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
     <div class="tier-card" id="tier-business" onclick="selectTier('business')">
       <div class="tier-icon">&#x1F3E2;</div>
       <div class="tier-name">Business Listing</div>
-      <div class="tier-price"><span id="biz-price-old" style="font-size:13px;font-weight:400;color:#9CA3AF;text-decoration:line-through;margin-right:4px">$75</span>$50<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></div>
-      <div class="tier-desc">Everything in Member, plus:<br>&#10003; Business name, logo and photo<br>&#10003; <strong>Call</strong>, <strong>Website</strong> and <strong>Request a Quote</strong> buttons<br>&#10003; Shows in the &ldquo;Businesses&rdquo; filter, ahead of member-only listings<br><strong>Founding rate</strong>: $50/yr locked for 2 years for the first 100 businesses (then $75/yr).</div>
+      <div class="tier-price"><span class="price-only"><span id="biz-price-old" style="font-size:13px;font-weight:400;color:#9CA3AF;text-decoration:line-through;margin-right:4px">$75</span>$50<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></span><span class="free-only">Free<span style="font-size:12px;font-weight:400;color:#9CA3AF"> through Mar 31, 2027</span></span></div>
+      <div class="tier-desc">Everything in Member, plus:<br>&#10003; Business name, logo and photo<br>&#10003; <strong>Call</strong>, <strong>Website</strong> and <strong>Request a Quote</strong> buttons<br>&#10003; Shows in the &ldquo;Businesses&rdquo; filter, ahead of member-only listings<br><span class="price-only"><strong>Founding rate</strong>: $50/yr locked for 2 years for the first 100 businesses (then $75/yr).</span><span class="free-only"><strong>Charter offer</strong>: free through March 31, 2027.</span></div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
     <div class="tier-card" id="tier-featured" onclick="selectTier('featured')">
       <div class="tier-icon">&#x2B50;</div>
       <div class="tier-name">Featured Business</div>
-      <div class="tier-price">$99<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></div>
-      <div class="tier-desc">Everything in Business, plus:<br>&#10003; Top spot in your category and first on the directory&rsquo;s opening screen<br>&#10003; Gold &#9733; Featured badge and gold-bordered card<br>&#10003; Your business photo shown right on your card<br><strong>Launch price</strong>: $99/yr.</div>
+      <div class="tier-price"><span class="price-only">$99<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></span><span class="free-only">Free<span style="font-size:12px;font-weight:400;color:#9CA3AF"> through Mar 31, 2027</span></span></div>
+      <div class="tier-desc">Everything in Business, plus:<br>&#10003; Top spot in your category and first on the directory&rsquo;s opening screen<br>&#10003; Gold &#9733; Featured badge and gold-bordered card<br>&#10003; Your business photo shown right on your card<br><span class="price-only"><strong>Launch price</strong>: $99/yr.</span><span class="free-only"><strong>Charter offer</strong>: free through March 31, 2027.</span></div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
   </div>
@@ -1158,7 +1165,8 @@ const PRICES={member:25,business:FOUNDING_OPEN?50:75,featured:99};
 // Charter period: Member listings are free through this date, then renew at the Member price.
 const CHARTER_END_ISO='2027-03-31', CHARTER_END_TXT='March 31, 2027';
 function charterOpen(){return new Date()<=new Date(CHARTER_END_ISO+'T23:59:59');}
-function isCharter(t){return t==='member'&&charterOpen();}
+// While prices are hidden (FVD_SHOW_PRICES=false) every listing type is a free charter listing.
+function isCharter(t){return (t==='member'||!FVD_SHOW_PRICES)&&charterOpen();}
 document.addEventListener('DOMContentLoaded',function(){
   var o=document.getElementById('biz-price-old');if(o&&!FOUNDING_OPEN)o.style.display='none';
   if(!charterOpen()){
@@ -1168,6 +1176,7 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 function tierPrice(t){return PRICES[t]||25;}
 function tierName(t){return t==='featured'?'Featured Business':t==='business'?'Business':'Member';}
+// NOTE: this label is what gets sent to Zapier/Airtable. Do not edit it; it must keep matching the Airtable tier choices.
 function tierLabelFull(t){
   if(t==='featured')return 'Featured Business Listing ($99/yr)';
   if(t==='business')return FOUNDING_OPEN?'Business Listing ($50/yr founding rate)':'Business Listing ($75/yr)';
@@ -1212,15 +1221,15 @@ function renderContrib(){
     const share=S.divideSplit&&n>1?perOrg:(isPrimary?total:0);
     const pct=S.divideSplit&&n>1?(100/n):(isPrimary?100:0);
     const badge=isPrimary?'<span class="primary-badge">Primary</span>':'';
-    const valStr=share>0?fmt(share)+'/yr ('+pct.toFixed(1)+'%)':'Listed only';
+    const valStr=share>0?(FVD_SHOW_PRICES?fmt(share)+'/yr ('+pct.toFixed(1)+'%)':(+pct.toFixed(1))+'% of the organizations\u2019 share'):'Listed only';
     const color=share>0?'#D97706':'#9CA3AF';
     perOrgHtml+=`<div class="per-org-row"><span>${eh(o.short||v)}${badge}</span><span style="font-weight:700;color:${color}">${valStr}</span></div>`;
   });
 
   $('contrib-body').innerHTML=`
-    <div class="c-row"><span>${tierIcon} ${tierLabel}</span><span class="val" style="font-weight:600">${fmt(price)}/yr</span></div>
+    <div class="c-row"><span>${tierIcon} ${tierLabel}</span><span class="val" style="font-weight:600">${FVD_SHOW_PRICES?fmt(price)+'/yr':'Free'}</span></div>
     <div class="c-divider"></div>
-    <div class="c-row total"><span>Your annual fee</span><span class="val">${isCharter(S.listingTier)?'$0 through '+CHARTER_END_TXT+', then '+fmt(price)+'/yr':fmt(price)+'/yr'}</span></div>
+    <div class="c-row total"><span>Your annual fee</span><span class="val">${isCharter(S.listingTier)?(FVD_SHOW_PRICES?'$0 through '+CHARTER_END_TXT+', then '+fmt(price)+'/yr':'Free through '+CHARTER_END_TXT):fmt(price)+'/yr'}</span></div>
     <div class="contrib-note">${SUPPORT_TXT}</div>
   `;
 }
@@ -1364,7 +1373,7 @@ function showConfirmation(){
   if(charter){
     $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>'+step1
       +'\u2461 Once approved, your listing goes live <strong>free through '+CHARTER_END_TXT+'</strong> as a Charter Member. No payment is needed now.<br>'
-      +'\u2462 Before the charter period ends we will email you about renewing at <strong>$'+price+'/year</strong>.<br>'
+      +'\u2462 Before the charter period ends we will email you about '+(FVD_SHOW_PRICES?'renewing at <strong>$'+price+'/year</strong>':'your renewal options')+'.<br>'
       +'\u2463 '+SUPPORT_TXT;
   } else {
     $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>'+step1
