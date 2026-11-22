@@ -340,6 +340,22 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
         <div class="field-hint">&#128274; Your own membership number, <strong>not</strong> your Temple, Lodge or Chapter number (that goes in the name box). Kept private. Your organization only sees the last 4 digits when verifying you, and it never appears in the public directory.</div>
       </div>
     </div>
+    <!-- Dues card (optional, added Nov 22, 2026) -->
+    <div class="img-uploader" id="dues-uploader">
+      <label class="field-label">Dues Card Photo (optional, recommended)</label>
+      <div class="img-upload-row">
+        <div class="img-zone" id="dues-card-zone" style="width:130px;height:84px;border-radius:8px" onclick="document.getElementById('duesCardInput').click()">
+          <img id="dues-card-preview" alt="Dues card"/>
+          <div class="img-placeholder"><div class="cam">&#129706;</div><div class="lbl">Click to<br>upload</div></div>
+        </div>
+        <div>
+          <div class="img-hint">&#128274; A photo of your current dues card speeds up verification. It is stored privately, seen only by the directory reviewer, never shown in the directory, and <strong>deleted as soon as you are verified</strong>. Listings without a dues card may need extra verification and may be removed if membership cannot be confirmed.</div>
+          <button class="img-btn" type="button" id="dues-card-btn" onclick="document.getElementById('duesCardInput').click()">Select Photo</button>
+          <button class="img-rm" type="button" id="dues-card-rm" onclick="clearPhoto('dues-card')">Remove</button>
+        </div>
+      </div>
+      <input type="file" id="duesCardInput" accept="image/*" onchange="handlePhoto(this,'dues-card')"/>
+    </div>
     <div class="grid2">
       <div class="field">
         <label class="field-label">City *</label>
@@ -662,6 +678,12 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
     <h2 class="confirm-title">Submission Received!</h2>
     <p class="confirm-msg" id="confirm-msg"></p>
     <div class="confirm-steps" id="confirm-steps"></div>
+    <div class="invite-box" style="margin:18px 0 6px;padding:14px;border:1.5px dashed #D1D5DB;border-radius:10px;font-family:sans-serif;text-align:center">
+      <div style="font-weight:700;margin-bottom:4px">Invite members to join</div>
+      <div style="font-size:13px;color:#6B7280;margin-bottom:10px">Know a brother or sister with a trade or business? Send them the sign-up link.</div>
+      <button class="img-btn" type="button" id="btn-invite" style="display:inline-block" onclick="inviteMembers()">&#128279; Invite Members</button>
+      <div id="invite-note" style="font-size:12px;color:#059669;margin-top:8px;display:none">Link copied. Paste it into a text or email.</div>
+    </div>
     <button class="btn-again" type="button" onclick="location.reload()">Submit Another Listing</button>
   </div>
 </div>
@@ -736,7 +758,7 @@ const S={
   primaryOrg:'',chapterName:'',memberNumber:'',city:'',orgState:'',
   hasAdditionalOrgs:false,additionalOrgs:[],divideSplit:false,
   firstName:'',lastName:'',phone:'',email:'',veteranStatus:'',
-  memberPhotoBase64:'',memberFocal:'center',
+  memberPhotoBase64:'',memberFocal:'center',duesCardBase64:'',
   driversLicenseBase64:'',
   vocCategory:'',vocTitle:'',yearsInField:'',bio:'',
   hasBusiness:false,isMobile:false,
@@ -1025,13 +1047,21 @@ function handlePhoto(input,key){
 const IMG_SPECS={
   'member':   {w:600, h:600, fit:'cover',   type:'image/jpeg', q:0.85},
   'biz-photo':{w:1200,h:675, fit:'cover',   type:'image/jpeg', q:0.82},
-  'biz-logo': {w:500, h:500, fit:'contain', type:'image/png'}
+  'biz-logo': {w:500, h:500, fit:'contain', type:'image/png'},
+  'dues-card':{max:1400, fit:'scale', type:'image/jpeg', q:0.8}
 };
 function standardizeImage(key,src,focal){
   const spec=IMG_SPECS[key];
   return new Promise((resolve,reject)=>{
     const img=new Image();
     img.onload=()=>{
+      if(spec.fit==='scale'){
+        // Dues card: keep the whole card, just shrink so the upload stays small.
+        const sc=Math.min(1,spec.max/Math.max(img.naturalWidth,img.naturalHeight));
+        const c2=document.createElement('canvas');c2.width=Math.round(img.naturalWidth*sc);c2.height=Math.round(img.naturalHeight*sc);
+        const x2=c2.getContext('2d');x2.fillStyle='#fff';x2.fillRect(0,0,c2.width,c2.height);x2.drawImage(img,0,0,c2.width,c2.height);
+        resolve(c2.toDataURL(spec.type,spec.q));return;
+      }
       const c=document.createElement('canvas');c.width=spec.w;c.height=spec.h;
       const ctx=c.getContext('2d');ctx.imageSmoothingQuality='high';
       const iw=img.naturalWidth,ih=img.naturalHeight;
@@ -1069,6 +1099,12 @@ function applyPhoto(key,dataUrl){
       const org=getOrg($('primaryOrg').value);
       badge.style.background=org.accent;badge.style.color=org.primary;
       badge.innerHTML=`<img src="${dataUrl}" style="object-position:center center">`;
+    }else if(key==='dues-card'){
+      S.duesCardBase64=b64;
+      $('dues-card-zone').classList.add('has-preview');
+      $('dues-card-preview').src=dataUrl;$('dues-card-preview').style.objectFit='contain';
+      $('dues-card-btn').textContent='Change Photo';
+      $('dues-card-rm').style.display='block';
     }else if(key==='biz-logo'){
       S.bizLogoBase64=b64;
       $('biz-logo-zone').classList.add('has-preview');
@@ -1102,6 +1138,13 @@ function clearPhoto(key){
     $('org-badge').style.background=org.accent;
     $('org-badge').style.color=org.primary;
     $('org-badge').innerHTML=`<span id="badge-text">${org.badge||org.short||'FVD'}</span>`;
+  }else if(key==='dues-card'){
+    S.duesCardBase64='';
+    $('dues-card-zone').classList.remove('has-preview');
+    $('dues-card-preview').src='';
+    $('dues-card-btn').textContent='Select Photo';
+    $('dues-card-rm').style.display='none';
+    $('duesCardInput').value='';
   }else if(key==='biz-logo'){
     S.bizLogoBase64='';S.bizLogoFocal='center';
     $('biz-logo-zone').classList.remove('has-preview');
@@ -1349,6 +1392,8 @@ async function handleSubmit(){
     listingTier:tierLabelFull(S.listingTier),
     memberPhotoBase64:S.memberPhotoBase64,
     driversLicenseBase64:'',
+    duesCardBase64:S.duesCardBase64||'',
+    duesCardProvided:S.duesCardBase64?'Yes':'No',
     bizLogoBase64:S.bizLogoBase64,
     bizPhotoBase64:S.bizPhotoBase64,
     marksAttestation:'Yes \u2013 '+new Date().toLocaleString('en-US',{timeZone:'America/New_York'})+' ET',
@@ -1366,6 +1411,18 @@ async function handleSubmit(){
   }
 }
 
+// Invite link (added Nov 22, 2026). Uses the phone's share sheet when available, otherwise copies the link.
+const INVITE_URL='https://jermaineggreen-blip.github.io/fraternal-directory/index.html';
+const INVITE_TXT='Are you a member? List your trade or business on the Fraternal Vocational Directory so we can hire each other first. Free through March 31, 2027 \u2014 and possibly longer: ';
+function inviteMembers(){
+  const note=$('invite-note');
+  if(navigator.share){navigator.share({title:'Fraternal Vocational Directory',text:INVITE_TXT,url:INVITE_URL}).catch(()=>{});return;}
+  const t=INVITE_TXT+INVITE_URL;
+  const done=()=>{note.style.display='block';};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,()=>{window.prompt('Copy this invite:',t);});}
+  else{window.prompt('Copy this invite:',t);}
+}
+
 function showConfirmation(){
   $('app').style.display='none';
   $('confirmation').style.display='block';
@@ -1375,7 +1432,8 @@ function showConfirmation(){
   const founding=S.listingTier==='business'&&FOUNDING_OPEN;
   const charter=isCharter(S.listingTier);
   $('confirm-msg').innerHTML='Thank you, <strong>'+eh(S.firstName)+'</strong>. Your <strong>'+tierName(S.listingTier)+' Listing</strong> has been received. <strong>Your listing is not live yet and nothing is due today.</strong> A confirmation is on its way to <strong>'+eh(S.email)+'</strong> (check your spam folder if you do not see it).';
-  const step1='\u2460 We verify your membership (member # <strong>'+eh(last4(S.memberNumber))+'</strong>) within 2\u20133 business days.<br>';
+  const step1='\u2460 We verify your membership (member # <strong>'+eh(last4(S.memberNumber))+'</strong>) within 2\u20133 business days.'
+    +(S.duesCardBase64?' Your dues card photo is kept private and deleted as soon as you are verified.':' Because no dues card was uploaded, we may contact you for extra verification. Listings we cannot verify may be removed.')+'<br>';
   if(charter){
     $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>'+step1
       +'\u2461 Once approved, your listing goes live <strong>free through '+CHARTER_END_TXT+'</strong> as a Charter Member. No payment is needed now.<br>'
