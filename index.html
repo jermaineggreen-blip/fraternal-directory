@@ -302,7 +302,7 @@ input[type=file]{display:none}
     <div class="grid2">
       <div class="field">
         <label class="field-label">City *</label>
-        <input id="city" type="text" placeholder="Atlanta"/>
+        <input id="city" type="text" placeholder="e.g., Atlanta"/>
       </div>
       <div class="field">
         <label class="field-label">State *</label>
@@ -517,7 +517,7 @@ input[type=file]{display:none}
     </div>
     <div id="mobile-address" style="display:none">
       <div class="grid2">
-        <div class="field"><label class="field-label">Service Area City *</label><input id="mobileBizCity" type="text" placeholder="Atlanta"/></div>
+        <div class="field"><label class="field-label">Service Area City *</label><input id="mobileBizCity" type="text" placeholder="e.g., Atlanta"/></div>
         <div class="field"><label class="field-label">State *</label><select id="mobileBizState"><option value="">Select…</option></select></div>
       </div>
     </div>
@@ -545,7 +545,7 @@ input[type=file]{display:none}
       <div class="tier-icon">&#x1F3DB;&#xFE0F;</div>
       <div class="tier-name">Member Listing</div>
       <div class="tier-price" id="member-price">Free<span style="font-size:12px;font-weight:400;color:#9CA3AF"> through Mar 31, 2027</span></div>
-      <div class="tier-desc" id="member-desc">Charter Member offer: your name, org, and vocation listed free through March 31, 2027, then $25/yr.</div>
+      <div class="tier-desc" id="member-desc">Charter Member offer: your name, org, and vocation listed free through March 31, 2027, then $25/yr. Includes a private <strong>Send a Message</strong> button.</div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
     <div class="tier-card" id="tier-business" onclick="selectTier('business')">
@@ -1117,7 +1117,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var o=document.getElementById('biz-price-old');if(o&&!FOUNDING_OPEN)o.style.display='none';
   if(!charterOpen()){
     var mp=document.getElementById('member-price');if(mp)mp.innerHTML='$25<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span>';
-    var md=document.getElementById('member-desc');if(md)md.textContent='Your name, org, and vocation listed in the directory.';
+    var md=document.getElementById('member-desc');if(md)md.textContent='Your name, org, and vocation listed in the directory, with a private Send a Message button.';
   }
 });
 function tierPrice(t){return PRICES[t]||25;}
@@ -1309,7 +1309,7 @@ function showConfirmation(){
   } else {
     $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>'+step1
       +'\u2461 Once approved, you will receive an email with a payment link for <strong>$'+price+'/year</strong>'+(founding?' (founding rate, locked for 2 years)':'')+'. You pay only after approval.<br>'
-      +'\u2462 After payment your listing goes live'+(isBizTier?', with a Request a Quote button so customers can contact you without your email being shown':'')+'.<br>'
+      +'\u2462 After payment your listing goes live'+(isBizTier?', with a Request a Quote button so customers can contact you without your email being shown':', with a private Send a Message button so members can reach you without your email being shown')+'.<br>'
       +'\u2463 '+SUPPORT_TXT;
   }
 }
