@@ -47,6 +47,7 @@ F = {
     "Member Photo": "fldQpsc4aSS0w80CW", "Business Logo": "fldKJcz2zbCnbBrZ9",
     "Business Photo": "fld7Of5kfSTqytpPk", "Available For": "fldXzR0M9qHZ8LKZE",
     "Listing Tier": "fldTWlHv31fX4zh16", "Payment Status": "fldkbDxdCWAgZqGCE",
+    "Verification Method": "fld1cRo2FN3oMEkfP",
 }
 ID2NAME = {v: k for k, v in F.items()}
 HIDDEN_ORGS = set()  # add a code here to hide an organization again
@@ -146,6 +147,8 @@ def to_listing(rec, keep):
         "available": split(f.get("Available For")),
         "photo": save_image(f.get("Member Photo"), rec["id"], "photo", keep),
         "verified": True,
+        # Member vouch (Nov 22, 2026): public badge only; the voucher's identity is never published.
+        "referral": f.get("Verification Method") == "Member vouch",
         "charter": f.get("Payment Status") == "Charter (free)",
     }
     if has_biz:
