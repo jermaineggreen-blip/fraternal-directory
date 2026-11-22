@@ -43,9 +43,21 @@ body{display:flex;flex-direction:column;background:#E5E7EB;font:14px/1.4 system-
     <button class="tab" data-v="listing" type="button">2 · My listing</button>
     <button class="tab" data-v="directory" type="button">3 · Directory</button>
     <button class="tab" data-v="review" type="button">4 · Admin review</button>
+    <button class="tab" data-v="vouch" type="button">5 · Voucher page</button>
   </div>
   <div class="ctl">
     <label id="orgWrap">Organization <select id="org"></select></label>
+    <label id="stepWrap">Form page
+      <select id="step">
+        <option value="1">1 · Organizations</option>
+        <option value="2">2 · Your information</option>
+        <option value="3">3 · Vocation</option>
+        <option value="4">4 · Business details</option>
+        <option value="5">5 · Tier &amp; review</option>
+        <option value="done">Submitted screen</option>
+      </select>
+    </label>
+    <label id="vouchWrap"><input type="checkbox" id="vouchOpen"> Show vouch box</label>
     <label id="tierWrap" class="hide">Listing type
       <select id="tier"><option>Member</option><option>Business</option><option>Featured</option></select>
     </label>
@@ -64,7 +76,8 @@ const NOTES = {
   form: 'Preview mode: submitting is blocked. Nothing is sent to Zapier or Airtable.',
   listing: 'This is a sample member, not a real person. It uses the real directory card, so it looks exactly like the live one.',
   directory: 'This is the live directory page. Quote requests are blocked in preview.',
-  review: 'Sample review screen. Approve and Hold are blocked here and do not touch Airtable.'
+  review: 'Sample review screen. Approve and Hold are blocked here and do not touch Airtable.',
+  vouch: 'What a voucher sees after tapping the link in their email. Yes and No are blocked here.'
 };
 let view = 'form', orgs = [], ready = false;
 
@@ -103,10 +116,13 @@ function show(v) {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === v));
   $('tierWrap').classList.toggle('hide', v !== 'listing');
   $('openCard').classList.toggle('hide', v !== 'listing');
-  $('orgWrap').classList.toggle('hide', v === 'review' || v === 'directory');
+  $('orgWrap').classList.toggle('hide', v === 'review' || v === 'directory' || v === 'vouch');
+  $('stepWrap').classList.toggle('hide', v !== 'form');
+  $('vouchWrap').classList.toggle('hide', v !== 'form');
   note.textContent = NOTES[v]; note.style.display = 'block';
   const src = { form: 'index.html', listing: 'directory.html', directory: 'directory.html',
-    review: 'review.html?r=recPREVIEW00000AA&k=preview-only-key-0000&n=Sample%20Member' }[v];
+    review: 'review.html?r=recPREVIEW00000AA&k=preview-only-key-0000&n=Sample%20Member',
+    vouch: 'vouch.html?v=recPREVIEW00000AA&k=preview-only-key-0000&n=Jordan%20Member&o=AEAONMS' }[v];
   frame.onload = () => { stub(frame.contentWindow); apply(); };
   frame.src = src;
   writeHash();
@@ -140,6 +156,7 @@ function apply() {
   try {
     if (view === 'form') {
       applyFormTheme(w, o);
+      goFormStep(w);
     } else if (view === 'listing') {
       const t0 = Date.now();
       (function wait() {
@@ -151,6 +168,12 @@ function apply() {
         w.eval('ALL.unshift(' + JSON.stringify(sample(o, $('tier').value)) + '); render();');
         const g = w.document.getElementById('grid'); w.scrollTo(0, Math.max(0, g.getBoundingClientRect().top + w.scrollY - 70));
       })();
+    } else if (view === 'vouch') {
+      w.send = a => {
+        w.document.getElementById('box').innerHTML = a === 'yes'
+          ? '<div class="done">✅</div><h1>Thank you (preview)</h1><p>In real life the vouch is recorded and you get the one-tap approve email. Nothing was sent.</p>'
+          : '<div class="done">👍</div><h1>Thanks (preview)</h1><p>In real life the member is asked for a dues card. Nothing was sent.</p>';
+      };
     } else if (view === 'review') {
       w.send = a => {
         w.document.getElementById('box').innerHTML = a === 'approve'
@@ -161,16 +184,36 @@ function apply() {
   } catch (e) { console.warn('preview apply failed', e); }
 }
 
+// Admin: jump straight to any form page with sample answers, no validation, nothing sent.
+function goFormStep(w) {
+  const st = $('step').value;
+  w.eval(`S.firstName='Jordan';S.lastName='Member';S.email='jordan@example.com';S.phone='(404) 555-0100';
+    S.chapterName='Your temple, lodge, court or chapter';S.memberNumber='12345678';S.city='Atlanta';S.orgState='GA';
+    S.vocCategory='Barbering & Cosmetology';S.vocTitle='Master Barber';S.yearsInField='10';
+    S.bio='This is where your short bio appears.';S.listingTier=S.listingTier||'member';`);
+  const vb = w.document.getElementById('vouchToggle');
+  if (vb) { vb.checked = $('vouchOpen').checked; w.eval('toggleVouch()'); }
+  if (st === 'done') {
+    w.eval(`S.vouchRequested=${$('vouchOpen').checked};S.voucherName='Sample Voucher';showConfirmation();`);
+  } else {
+    w.document.getElementById('app').style.display = '';
+    w.document.getElementById('confirmation').style.display = 'none';
+    w.eval('showStep(' + Number(st) + ')');
+  }
+  w.scrollTo(0, 0);
+}
+
 function writeHash() { history.replaceState(null, '', '#v=' + view + '&o=' + $('org').value + '&t=' + $('tier').value + '&d9=0' + '&w=' + (stage.classList.contains('phone') ? 'p' : 'f')); }
 function readHash() {
   const p = new URLSearchParams(location.hash.slice(1));
   if (p.get('o') && [...$('org').options].some(x => x.value === p.get('o'))) $('org').value = p.get('o');
   if (['Member', 'Business', 'Featured'].includes(p.get('t'))) $('tier').value = p.get('t');
-  if (['form', 'listing', 'directory', 'review'].includes(p.get('v'))) view = p.get('v');
+  if (['form', 'listing', 'directory', 'review', 'vouch'].includes(p.get('v'))) view = p.get('v');
   if (p.get('w') === 'p') { stage.classList.add('phone'); $('width').textContent = 'Full width'; }
 }
 
 document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => ready && show(t.dataset.v)));
+['step', 'vouchOpen'].forEach(id => $(id).addEventListener('change', () => { if (view === 'form') { try { goFormStep(frame.contentWindow); } catch (e) {} } }));
 ['org', 'tier'].forEach(id => $(id).addEventListener('change', () => {
   writeHash();
   if (view === 'listing' || view === 'form') apply();
