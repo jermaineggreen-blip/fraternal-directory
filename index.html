@@ -405,7 +405,7 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
         <div class="img-placeholder"><div class="cam">&#128247;</div><div class="lbl">Click to<br>upload</div></div>
       </div>
       <div class="img-controls">
-        <div class="img-hint">A clear headshot works best. Appears on your member card in the directory. You may wear or show your own organization&rsquo;s letters or emblem in your photo.</div>
+        <div class="img-hint">A clear headshot works best. Appears on your member card in the directory. You may show your own organization&rsquo;s name, letters or emblem on your listing if you are a member in good standing.</div>
         <button class="img-btn" type="button" id="member-photo-btn" onclick="document.getElementById('memberPhotoInput').click()">Select Photo</button>
         <button class="img-rm" type="button" id="member-photo-rm" onclick="clearPhoto('member')">Remove</button>
         <div class="focal-row" id="member-focal-row">
@@ -618,6 +618,10 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
   <label style="display:flex;gap:10px;align-items:flex-start;margin:14px 0;font-family:sans-serif;font-size:13px;line-height:1.5;color:#374151;cursor:pointer">
     <input type="checkbox" id="consent" style="margin-top:3px;flex:none"/>
     <span>I confirm I am a member of the organization(s) I listed, the information I provided is accurate, and I agree to have my listing published as described. I have read the <a href="terms.html" target="_blank" rel="noopener">Terms</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span>
+  </label>
+  <label style="display:flex;gap:10px;align-items:flex-start;margin:0 0 14px;font-family:sans-serif;font-size:13px;line-height:1.5;color:#374151;cursor:pointer">
+    <input type="checkbox" id="marksConsent" style="margin-top:3px;flex:none"/>
+    <span>I am a member in good standing and have the right to display my organization's marks.</span>
   </label>
 
   <div id="nav-step5">
@@ -1322,6 +1326,7 @@ async function handleSubmit(){
   const errEl=$('submit-error');
   errEl.style.display='none';
   if(!$('consent').checked){errEl.textContent='Please check the box confirming your membership and agreeing to the Terms and Privacy Policy.';errEl.style.display='block';return;}
+  if(!$('marksConsent').checked){errEl.textContent='Please check the box confirming you are a member in good standing with the right to display your organization\u2019s marks.';errEl.style.display='block';return;}
   const btn=$('btn-submit');
   btn.disabled=true;btn.textContent='Submitting\u2026';
 
@@ -1346,6 +1351,7 @@ async function handleSubmit(){
     driversLicenseBase64:'',
     bizLogoBase64:S.bizLogoBase64,
     bizPhotoBase64:S.bizPhotoBase64,
+    marksAttestation:'Yes \u2013 '+new Date().toLocaleString('en-US',{timeZone:'America/New_York'})+' ET',
   };
 
   try{
