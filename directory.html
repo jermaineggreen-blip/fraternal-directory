@@ -273,6 +273,7 @@ function open(id){
   if (biz && tel) acts.push(`<a class="act pri" href="tel:${esc(tel)}">Call</a>`);
   if (biz) acts.push(`<button class="act${acts.length?'':' pri'}" type="button" id="qBtn">Request a Quote</button>`);
   if (biz && l.website) acts.push(`<a class="act" href="${esc(l.website)}" target="_blank" rel="noopener">Website</a>`);
+  if (!biz) acts.push(`<button class="act pri" type="button" id="qBtn">Send a Message</button>`);
   $('sheet').innerHTML = `
     <button class="x" id="close" aria-label="Close">×</button>
     <div class="top">${avatar(l)}<div class="who"><h3 id="dName">${esc(l.first)} ${esc(l.last)}</h3><div class="t">${esc(l.title)}</div><div class="loc">${esc(l.category)}</div>
@@ -294,16 +295,17 @@ function open(id){
 
 function showQuote(l){
   const host = $('qHost'); if (!host) return;
+  const biz = isBiz(l);
   host.innerHTML = `<form class="qform" id="qForm" novalidate>
-    <h4>Request a quote from ${esc(l.business)}</h4>
-    <p class="sub">Your message goes to the business by email. Your contact details are shared only with them.</p>
+    <h4>${biz ? 'Request a quote from ' + esc(l.business) : 'Send a message to ' + esc(l.first)}</h4>
+    <p class="sub">${biz ? 'Your message goes to the business by email. Your contact details are shared only with them.' : 'Your message goes to ' + esc(l.first) + ' by email. Their contact details stay private. Your name and email are shared only with them.'}</p>
     <label for="qName">Your name *</label><input id="qName" autocomplete="name" maxlength="120" required>
     <label for="qEmail">Your email *</label><input id="qEmail" type="email" autocomplete="email" maxlength="200" required>
     <label for="qPhone">Phone (optional)</label><input id="qPhone" type="tel" autocomplete="tel" maxlength="40">
-    <label for="qMsg">What do you need? *</label><textarea id="qMsg" maxlength="2000" placeholder="Describe the job, timing, and location."></textarea>
+    <label for="qMsg">${biz ? 'What do you need?' : 'Your message'} *</label><textarea id="qMsg" maxlength="2000" placeholder="${biz ? 'Describe the job, timing, and location.' : 'Say who you are and why you are reaching out.'}"></textarea>
     <div class="hp" aria-hidden="true"><label>Website</label><input id="qHp" tabindex="-1" autocomplete="off"></div>
     <div class="err" id="qErr" hidden></div>
-    <button class="act pri" type="submit" id="qSend">Send request</button>
+    <button class="act pri" type="submit" id="qSend">${biz ? 'Send request' : 'Send message'}</button>
     <p class="note">The Fraternal Vocational Directory does not endorse or guarantee any member's work.</p>
   </form>`;
   $('qName').focus();
@@ -312,18 +314,20 @@ function showQuote(l){
     const name=$('qName').value.trim(), email=$('qEmail').value.trim(), phone=$('qPhone').value.trim(), message=$('qMsg').value.trim();
     const err=$('qErr'); err.hidden=true;
     if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || message.length < 10) {
-      err.textContent='Please enter your name, a valid email, and a short description (at least 10 characters).'; err.hidden=false; return;
+      err.textContent='Please enter your name, a valid email, and a short message (at least 10 characters).'; err.hidden=false; return;
     }
     if (!/^rec[A-Za-z0-9]{14}$/.test(l.id)) {
-      err.textContent='This is a sample listing, so requests are turned off. Quotes work on live listings.'; err.hidden=false; return;
+      err.textContent='This is a sample listing, so messages are turned off. They work on live listings.'; err.hidden=false; return;
     }
     const btn=$('qSend'); btn.disabled=true; btn.textContent='Sending...';
     try {
       await fetch(QUOTE_WEBHOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
         body:JSON.stringify({listingId:l.id,name,email,phone,message,website_url:$('qHp').value})});
-      host.innerHTML='<div class="qdone"><b>Request sent.</b><br>'+esc(l.business)+' will reply to you directly by email. A confirmation is on its way to '+esc(email)+'.</div>';
+      host.innerHTML = biz
+        ? '<div class="qdone"><b>Request sent.</b><br>'+esc(l.business)+' will reply to you directly by email. A confirmation is on its way to '+esc(email)+'.</div>'
+        : '<div class="qdone"><b>Message sent.</b><br>If '+esc(l.first)+' chooses to reply, it will come to '+esc(email)+'. A confirmation is on its way.</div>';
     } catch(e) {
-      btn.disabled=false; btn.textContent='Send request';
+      btn.disabled=false; btn.textContent=biz ? 'Send request' : 'Send message';
       err.textContent='Could not send. Check your connection and try again.'; err.hidden=false;
     }
   };
