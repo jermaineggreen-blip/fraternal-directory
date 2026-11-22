@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Vouch for a member · Fraternal Vocational Directory</title><link rel="icon" type="image/png" sizes="32x32" href="brand/fvd-seal-32.png"><link rel="icon" type="image/png" sizes="192x192" href="brand/fvd-seal-192.png"><link rel="apple-touch-icon" href="brand/fvd-seal-180.png"><meta property="og:site_name" content="Fraternal Vocational Directory"><meta property="og:title" content="Vouch for a member – Fraternal Vocational Directory"><meta property="og:description" content="Find and hire verified members of our fraternal organizations."><meta property="og:image" content="https://jermaineggreen-blip.github.io/fraternal-directory/brand/fvd-wordmark-1200.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="1200"><meta name="twitter:card" content="summary_large_image">
+<style>
+:root{--primary:#1F4788;--accent:#CC9900;--bg:#F4F1EA;--ink:#1A1A2E;--muted:#6B7280;--line:#E5E7EB}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:20px}
+.box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 24px;max-width:420px;width:100%;text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.06)}
+.k{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-size:22px;margin:6px 0 4px}
+p{color:var(--muted);margin:0 0 20px}
+button{display:block;width:100%;padding:16px;border:0;border-radius:12px;font-size:17px;font-weight:700;cursor:pointer;margin-top:10px}
+#yes{background:var(--primary);color:#fff}
+#hold{background:#fff;color:var(--ink);border:1px solid var(--line)}
+button:disabled{opacity:.5}
+.done{font-size:40px;margin-bottom:6px}
+ul{text-align:left;color:var(--ink);font-size:14px;margin:0 0 18px 18px;padding:0}li{margin-bottom:6px}
+#no{background:#fff;color:var(--ink);border:1px solid var(--line)}
+</style>
+</head>
+<body>
+<main class="box" id="box">
+  <img src="brand/fvd-seal-512.jpg" alt="Fraternal Vocational Directory official seal" width="88" height="88" style="display:block;width:88px;height:88px;border-radius:12px;margin:0 auto 10px">
+  <div class="k">Member vouch</div>
+  <h1 id="who">Vouch for a member</h1>
+  <p id="ask">Is this person a current member in good standing of your organization?</p>
+  <ul>
+    <li>Vouch only if you <strong>personally know</strong> they are a current member in good standing.</li>
+    <li>You are confirming <strong>membership only</strong>, not the quality of their work or business.</li>
+    <li>Your name stays private. Their listing shows &ldquo;Verified (member referral).&rdquo;</li>
+    <li>You can vouch for up to 5 members per year.</li>
+    <li>If someone you vouch for is found not to be a member, you lose the ability to vouch and FVD may review your listing.</li>
+  </ul>
+  <button id="yes" type="button">&#9989; Yes, I vouch</button>
+  <button id="no" type="button">No, I can&rsquo;t</button>
+  <p style="font-size:12px;margin:14px 0 0">Questions? fraternalvocationaldirectory@gmail.com</p>
+</main>
+<script>
+const HOOK = 'https://hooks.zapier.com/hooks/catch/23900090/VeLprBnCyziPnLEB/';
+const q = new URLSearchParams(location.search);
+const v = q.get('v') || '', k = q.get('k') || '', n = q.get('n') || '', o = q.get('o') || '';
+const box = document.getElementById('box');
+if (n) document.getElementById('who').textContent = 'Vouch for ' + n;
+if (n && o) document.getElementById('ask').textContent = 'Is ' + n + ' a current member in good standing of ' + o + '?';
+if (!/^rec[A-Za-z0-9]{14}$/.test(v) || k.length < 16) {
+  box.innerHTML = '<div class="done">&#9888;&#65039;</div><h1>Link not valid</h1><p>Please use the link in your email, or write to fraternalvocationaldirectory@gmail.com.</p>';
+}
+function send(a) {
+  document.querySelectorAll('button').forEach(b => b.disabled = true);
+  fetch(HOOK, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({v, k, a})})
+    .then(() => {
+      box.innerHTML = a === 'yes'
+        ? '<div class="done">&#9989;</div><h1>Thank you</h1><p>Your vouch was recorded. Your name stays private. You will get a short confirmation email.</p>'
+        : '<div class="done">&#128077;</div><h1>Thanks for letting us know</h1><p>We will ask the member to verify another way. Your answer stays private.</p>';
+    })
+    .catch(() => {
+      box.innerHTML = '<div class="done">&#9888;&#65039;</div><h1>Didn\'t go through</h1><p>Check your signal and tap the link in your email again.</p>';
+    });
+}
+document.getElementById('yes')?.addEventListener('click', () => send('yes'));
+document.getElementById('no')?.addEventListener('click', () => send('no'));
+</script>
+</body>
+</html>

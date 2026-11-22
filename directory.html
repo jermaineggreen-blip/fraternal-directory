@@ -258,7 +258,7 @@ const shortOrg = o => o.startsWith('Daughters of AEAONMS') ? 'Daughters of AEAON
 
 function badges(l){
   if (l.sample) return '<div class="badges"><span class="bdg s">Sample listing</span></div>';
-  return `<div class="badges"><span class="bdg v">✓ Verified member</span>${l.charter ? '<span class="bdg c">★ Charter Member</span>' : ''}</div>`;
+  return `<div class="badges"><span class="bdg v">${l.referral ? '✓ Verified (member referral)' : '✓ Verified member'}</span>${l.charter ? '<span class="bdg c">★ Charter Member</span>' : ''}</div>`;
 }
 
 function avatar(l){ return `<div class="av">${l.photo ? `<img src="${esc(l.photo)}" alt="">` : esc(initials(l))}</div>`; }
