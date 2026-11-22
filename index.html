@@ -24,6 +24,8 @@ html,body{min-height:100%;background:var(--bg);font-family:Georgia,serif;-webkit
 .prog-labels{display:flex;margin-bottom:7px}
 .prog-label{flex:1;text-align:center;font-family:sans-serif;font-size:9px;letter-spacing:.05em;
   text-transform:uppercase;color:rgba(255,255,255,.35);transition:color .3s}
+.prog-label .ps{display:none}
+@media(max-width:520px){.prog-label .pf{display:none}.prog-label .ps{display:inline}.prog-label{font-size:10px;letter-spacing:.03em}}
 .prog-label.done,.prog-label.active{color:var(--accent)}
 .prog-label.active{font-weight:700}
 .prog-track{height:3px;background:rgba(255,255,255,.18);border-radius:2px;margin-bottom:-1px}
@@ -282,11 +284,11 @@ input[type=file]{display:none}
       </div>
     </div>
     <div class="prog-labels">
-      <div class="prog-label active" data-n="1">Organizations</div>
-      <div class="prog-label" data-n="2">Member Info</div>
-      <div class="prog-label" data-n="3">Vocation</div>
-      <div class="prog-label" data-n="4">Business</div>
-      <div class="prog-label" data-n="5">Tier &amp; Review</div>
+      <div class="prog-label active" data-n="1"><span class="pf">Organizations</span><span class="ps">Orgs</span></div>
+      <div class="prog-label" data-n="2"><span class="pf">Member Info</span><span class="ps">You</span></div>
+      <div class="prog-label" data-n="3"><span class="pf">Vocation</span><span class="ps">Trade</span></div>
+      <div class="prog-label" data-n="4"><span class="pf">Business</span><span class="ps">Business</span></div>
+      <div class="prog-label" data-n="5"><span class="pf">Tier &amp; Review</span><span class="ps">Review</span></div>
     </div>
     <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
   </div>
