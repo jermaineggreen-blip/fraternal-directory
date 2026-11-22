@@ -219,6 +219,14 @@ input[type=file]{display:none}
 .btn-back:hover{border-color:#9CA3AF}
 .btn-next{border:none;background:var(--primary);color:#fff;font-weight:700;padding:10px 26px}
 .btn-next:disabled{background:#D1D5DB;color:#9CA3AF;cursor:not-allowed}
+.prev-btn{border:1.5px solid var(--primary);background:#fff;color:var(--primary);font:600 14px sans-serif;border-radius:999px;padding:10px 18px;cursor:pointer;min-height:44px}
+#prev-modal{display:none;position:fixed;inset:0;background:rgba(17,24,39,.55);z-index:50;align-items:flex-end;justify-content:center;padding:12px}
+#prev-modal.open{display:flex}
+.prev-box{background:#fff;border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow:auto;padding:16px}
+.prev-hd{display:flex;justify-content:space-between;align-items:center;font-family:Georgia,serif;font-size:18px;color:var(--primary)}
+.prev-x{border:none;background:none;font-size:28px;line-height:1;cursor:pointer;color:#6B7280;min-width:44px;min-height:44px}
+.prev-note{font:13px/1.5 sans-serif;color:#6B7280;margin:4px 0 12px}
+@media(min-width:640px){#prev-modal{align-items:center}}
 .btn-submit{border:none;background:var(--primary);color:#fff;font-weight:700;padding:11px 28px;font-size:14px;border-radius:8px;cursor:pointer;transition:background .3s}
 .btn-submit:disabled{background:#9CA3AF;cursor:not-allowed}
 .field-err{color:#B91C1C;font-family:sans-serif;font-size:13px;font-weight:600;margin:6px 0 2px}.has-err{border-color:#DC2626!important;box-shadow:0 0 0 2px rgba(220,38,38,.2)}
@@ -545,21 +553,21 @@ input[type=file]{display:none}
       <div class="tier-icon">&#x1F3DB;&#xFE0F;</div>
       <div class="tier-name">Member Listing</div>
       <div class="tier-price" id="member-price">Free<span style="font-size:12px;font-weight:400;color:#9CA3AF"> through Mar 31, 2027</span></div>
-      <div class="tier-desc" id="member-desc">Charter Member offer: your name, org, and vocation listed free through March 31, 2027, then $25/yr. Includes a private <strong>Send a Message</strong> button.</div>
+      <div class="tier-desc" id="member-desc">Charter offer: free through March 31, 2027, then $25/yr.<br>&#10003; Your name, photo, organization, trade and city<br>&#10003; Found by trade and city search<br>&#10003; Private <strong>Send a Message</strong> button (your email and phone stay hidden)</div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
     <div class="tier-card" id="tier-business" onclick="selectTier('business')">
       <div class="tier-icon">&#x1F3E2;</div>
       <div class="tier-name">Business Listing</div>
       <div class="tier-price"><span id="biz-price-old" style="font-size:13px;font-weight:400;color:#9CA3AF;text-decoration:line-through;margin-right:4px">$75</span>$50<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></div>
-      <div class="tier-desc">Member listing plus your business details and a <strong>Request a Quote</strong> button. <strong>Founding rate</strong>: $50/yr locked for 2 years for the first 100 businesses (then $75/yr).</div>
+      <div class="tier-desc">Everything in Member, plus:<br>&#10003; Business name, logo and photo<br>&#10003; <strong>Call</strong>, <strong>Website</strong> and <strong>Request a Quote</strong> buttons<br>&#10003; Shows in the &ldquo;Businesses&rdquo; filter, ahead of member-only listings<br><strong>Founding rate</strong>: $50/yr locked for 2 years for the first 100 businesses (then $75/yr).</div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
     <div class="tier-card" id="tier-featured" onclick="selectTier('featured')">
       <div class="tier-icon">&#x2B50;</div>
       <div class="tier-name">Featured Business</div>
-      <div class="tier-price">$199<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></div>
-      <div class="tier-desc">Everything in Business, plus top placement in your category, a Featured badge, and priority in the monthly new-listings email.</div>
+      <div class="tier-price">$99<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></div>
+      <div class="tier-desc">Everything in Business, plus:<br>&#10003; Top spot in your category and first on the directory&rsquo;s opening screen<br>&#10003; Gold &#9733; Featured badge and gold-bordered card<br>&#10003; Your business photo shown right on your card<br><strong>Launch price</strong>: $99/yr.</div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
   </div>
@@ -593,9 +601,20 @@ input[type=file]{display:none}
   <span class="step-counter" id="step-counter">Step 1 of 5</span>
   <button class="btn btn-next" type="button" id="btn-next" onclick="goNext()">Continue &#8594;</button>
 </div>
+<div id="prev-wrap" style="display:none;text-align:center;padding:0 0 14px">
+  <button type="button" class="prev-btn" onclick="openPreview()">&#128065; Preview my listing</button>
+</div>
 
 </div><!-- /card -->
 </div><!-- /body -->
+<div id="prev-modal" role="dialog" aria-modal="true" aria-labelledby="prev-title" onclick="if(event.target===this)closePreview()">
+  <div class="prev-box">
+    <div class="prev-hd"><b id="prev-title">Your listing so far</b><button type="button" class="prev-x" onclick="closePreview()" aria-label="Close preview">&times;</button></div>
+    <p class="prev-note">This is a preview only. Nothing is submitted until you finish Step 5. Your member number shows only the last 4 digits here and is never shown publicly.</p>
+    <div id="prev-body"></div>
+    <button type="button" class="btn btn-next" style="width:100%;margin-top:14px" onclick="closePreview()">Keep editing</button>
+  </div>
+</div>
 <div id="footer">Fraternal Vocational Directory &middot; <a href="faq.html" style="color:#9CA3AF">FAQ</a> &middot; <a href="terms.html" style="color:#9CA3AF">Terms</a> &middot; <a href="privacy.html" style="color:#9CA3AF">Privacy</a></div>
 </div><!-- /app -->
 
@@ -764,6 +783,7 @@ function showStep(n){
   else $('btn-back').style.visibility='hidden';
   $('step-counter').textContent='Step '+n+' of 5';
   if(n===5)renderStep5();
+  $('prev-wrap').style.display=(n>=2&&n<=4)?'block':'none';
   currentStep=n;
 }
 
@@ -1108,7 +1128,7 @@ function resetFocalBtns(key){
 // ── PRICING ───────────────────────────────────────────────────────────────
 // Set FOUNDING_OPEN=false once the first 100 business listings are sold.
 const FOUNDING_OPEN=true;
-const PRICES={member:25,business:FOUNDING_OPEN?50:75,featured:199};
+const PRICES={member:25,business:FOUNDING_OPEN?50:75,featured:99};
 // Charter period: Member listings are free through this date, then renew at the Member price.
 const CHARTER_END_ISO='2027-03-31', CHARTER_END_TXT='March 31, 2027';
 function charterOpen(){return new Date()<=new Date(CHARTER_END_ISO+'T23:59:59');}
@@ -1117,13 +1137,13 @@ document.addEventListener('DOMContentLoaded',function(){
   var o=document.getElementById('biz-price-old');if(o&&!FOUNDING_OPEN)o.style.display='none';
   if(!charterOpen()){
     var mp=document.getElementById('member-price');if(mp)mp.innerHTML='$25<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span>';
-    var md=document.getElementById('member-desc');if(md)md.textContent='Your name, org, and vocation listed in the directory, with a private Send a Message button.';
+    var md=document.getElementById('member-desc');if(md)md.innerHTML='&#10003; Your name, photo, organization, trade and city<br>&#10003; Found by trade and city search<br>&#10003; Private <strong>Send a Message</strong> button (your email and phone stay hidden)';
   }
 });
 function tierPrice(t){return PRICES[t]||25;}
 function tierName(t){return t==='featured'?'Featured Business':t==='business'?'Business':'Member';}
 function tierLabelFull(t){
-  if(t==='featured')return 'Featured Business Listing ($199/yr)';
+  if(t==='featured')return 'Featured Business Listing ($99/yr)';
   if(t==='business')return FOUNDING_OPEN?'Business Listing ($50/yr founding rate)':'Business Listing ($75/yr)';
   return 'Member Listing ($25/yr)';
 }
@@ -1246,6 +1266,20 @@ function renderReviewCard(){
       </div>
     </div>`;
 }
+
+// ── PREVIEW MY LISTING (steps 2–4) ──
+function openPreview(){
+  renderReviewCard();
+  $('prev-body').innerHTML=$('review-card').innerHTML;
+  $('prev-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+  const x=document.querySelector('.prev-x');if(x)x.focus();
+}
+function closePreview(){
+  $('prev-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('prev-modal')&&$('prev-modal').classList.contains('open'))closePreview();});
 
 // ── SUBMIT ─────────────────────────────────────────────────────────────────
 async function handleSubmit(){

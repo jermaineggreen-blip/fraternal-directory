@@ -121,6 +121,7 @@ footer a{color:var(--primary)}
 .qform button.act{width:100%;margin-top:12px;cursor:pointer;font:inherit;font-weight:700}
 .qdone{background:#DCFCE7;color:#166534;border-radius:10px;padding:14px;font-size:14px;line-height:1.5;margin-top:18px}
 .tier.feat{background:var(--accent);color:var(--primary)}
+.card.feat{border:2px solid var(--accent);box-shadow:0 4px 16px rgba(201,162,39,.18)}
 .badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
 .bdg{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;white-space:nowrap}
 .bdg.v{background:#DCFCE7;color:#166534}
@@ -232,11 +233,13 @@ function avatar(l){ return `<div class="av">${l.photo ? `<img src="${esc(l.photo
 
 function card(l){
   const biz = isBiz(l);
-  return `<button class="card" type="button" data-id="${esc(l.id)}">
+  const feat = !l.sample && isFeat(l);
+  return `<button class="card${feat ? ' feat' : ''}" type="button" data-id="${esc(l.id)}">
     <div class="top">${avatar(l)}
       <div class="who"><h3>${esc(l.first)} ${esc(l.last)}</h3><div class="t">${esc(l.title)}</div><div class="loc">${esc(loc(l))}${l.years ? ` · ${esc(l.years)} yrs` : ''}</div>${badges(l)}</div>
       ${l.sample ? '' : biz ? (isFeat(l) ? '<span class="tier feat">&#9733; Featured</span>' : '<span class="tier">Business</span>') : ''}
     </div>
+    ${feat && l.bizPhoto ? `<img class="bizphoto" src="${esc(l.bizPhoto)}" alt="${esc(l.business)}" loading="lazy">` : ''}
     ${biz ? `<div class="biz bizrow">${l.logo ? `<img class="logo" src="${esc(l.logo)}" alt="" loading="lazy">` : ''}<div><b>${esc(l.business)}</b><span>${l.mobile ? 'Serves ' + esc(loc(l)) + ' area' : esc(loc(l))}</span></div></div>` : ''}
     <div class="orgs">${allOrgs(l).map((o,i)=>`<span class="org${i?'':' p'}">${esc(shortOrg(o))}</span>`).join('')}</div>
   </button>`;
