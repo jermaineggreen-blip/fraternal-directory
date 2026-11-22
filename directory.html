@@ -229,7 +229,7 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
   <div class="wrap in2">
     <div>
       <h3>Want your organization to partner with us?</h3>
-      <p>Members may list their fraternity, sorority, lodge, or auxiliary by name. Listing a name does not mean that organization has endorsed or partnered with this directory. An organization&rsquo;s emblem is used by the directory only with its written approval or as a partner. Members may show their own letters or emblem in their personal photo.</p>
+      <p>Members may list their fraternity, sorority, lodge, or auxiliary by name. Listing a name does not mean that organization has endorsed or partnered with this directory. An organization&rsquo;s emblem is used by the directory only with its written approval or as a partner. Verified members may show their own organization&rsquo;s name, letters or emblem on their own listing after confirming they are a member in good standing. Every listing has a Report button, and we remove any content an organization objects to within 48 hours.</p>
     </div>
     <a class="act pri reqbtn" href="https://form.jotform.com/263007405643047" target="_blank" rel="noopener">Request your organization</a>
   </div>
@@ -263,6 +263,14 @@ function badges(l){
 
 function avatar(l){ return `<div class="av">${l.photo ? `<img src="${esc(l.photo)}" alt="">` : esc(initials(l))}</div>`; }
 
+function endorseOrgs(l){ const o = allOrgs(l); return o.length ? o.join(', ') : 'No organization'; }
+function reportHref(l){
+  const who = (l.first+' '+l.last).trim();
+  const sub = 'Report listing: '+who+' ('+l.id+')';
+  const body = 'Listing: '+who+' ('+l.id+')\nPage: '+location.href.split('#')[0]+'\n\nWhat is wrong with this listing?\n\nAre you contacting us on behalf of an organization? If yes, which one and your role:\n';
+  return 'mailto:fraternalvocationaldirectory@gmail.com?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body);
+}
+
 function card(l){
   const biz = isBiz(l);
   const feat = !l.sample && isFeat(l);
@@ -274,6 +282,7 @@ function card(l){
     ${feat && l.bizPhoto ? `<img class="bizphoto" src="${esc(l.bizPhoto)}" alt="${esc(l.business)}" loading="lazy">` : ''}
     ${biz ? `<div class="biz bizrow">${l.logo ? `<img class="logo" src="${esc(l.logo)}" alt="" loading="lazy">` : ''}<div><b>${esc(l.business)}</b><span>${l.mobile ? 'Serves ' + esc(loc(l)) + ' area' : esc(loc(l))}</span></div></div>` : ''}
     <div class="orgs">${allOrgs(l).map((o,i)=>`<span class="org${i?'':' p'}">${esc(shortOrg(o))}</span>`).join('')}</div>
+    <div class="note" style="font-size:11px;margin-top:6px;color:#6b7280">Listed by the member &middot; not endorsed by any organization</div>
   </button>`;
 }
 
@@ -320,7 +329,9 @@ function open(id){
     ${l.chapter ? `<div class="sec"><h4>Temple, lodge, court or chapter</h4><p>${esc(l.chapter)}</p></div>` : ''}
     <div class="sec"><h4>Organizations</h4><div class="orgs">${allOrgs(l).map((o,i)=>`<span class="org${i?'':' p'}">${esc(o)}${i?'':' · primary'}</span>`).join('')}</div></div>
     ${l.years ? `<div class="sec"><h4>Experience</h4><p>${esc(l.years)} years in the field</p></div>` : ''}
+    <p class="note" style="margin-top:10px">Listed by the member. ${esc(endorseOrgs(l))} ${allOrgs(l).length>1?'have':'has'} not endorsed or partnered with the Fraternal Vocational Directory.</p>
     ${acts.length ? `<div class="actions">${acts.join('')}</div><div id="qHost"></div>` : `<p class="note">This member has a personal listing. Ask for an introduction through your temple, lodge, or chapter.</p>`}
+    <p class="note" style="text-align:center;margin-top:14px"><a href="${reportHref(l)}" style="color:#6b7280">&#9873; Report this listing</a></p>
   `;
   $('scrim').classList.add('open');
   document.body.style.overflow = 'hidden';
