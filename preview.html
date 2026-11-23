@@ -19,6 +19,7 @@ body{display:flex;flex-direction:column;background:#E5E7EB;font:14px/1.4 system-
 .tag small{color:var(--mut);letter-spacing:0;text-transform:none;font-weight:400;margin-left:6px}
 .tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
 .tab{flex:none;border:1px solid #374151;background:#1F2937;color:#E5E7EB;border-radius:999px;padding:8px 13px;font:600 13px inherit;font-family:inherit;cursor:pointer;white-space:nowrap}
+.lnk{flex:none;border:1px solid #CC9900;background:#1F2937;color:#FCD34D;border-radius:999px;padding:8px 13px;font:600 13px system-ui,sans-serif;text-decoration:none;white-space:nowrap}
 .tab.on{background:var(--on);border-color:var(--on);color:#111827}
 .ctl{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .ctl label{font-size:12px;color:var(--mut);display:flex;gap:5px;align-items:center}
@@ -63,6 +64,8 @@ body{display:flex;flex-direction:column;background:#E5E7EB;font:14px/1.4 system-
     </label>
     <button type="button" id="openCard" class="hide">Open card</button>
     <button type="button" id="width">Phone width</button>
+    <a class="lnk" id="pendingLink" href="https://airtable.com/appKGbm7nA88YKC7h/tbl96XAeUWUjPotOd/viwCWy3YTpVaxzfcO" target="_blank" rel="noopener" title="Opens the Members table in Airtable (sign-in required)">Waiting for review</a>
+    <a class="lnk" id="publishLink" href="https://github.com/jermaineggreen-blip/fraternal-directory/actions/workflows/sync-listings.yml" target="_blank" rel="noopener" title="Opens GitHub; tap Run workflow to refresh the site now (sign-in required)">Publish now</a>
   </div>
 </div>
 <div id="note"></div>
@@ -75,7 +78,7 @@ const frame = $('frame'), stage = $('stage'), note = $('note');
 const NOTES = {
   form: 'Preview mode: submitting is blocked. Nothing is sent to Zapier or Airtable.',
   listing: 'This is a sample member, not a real person. It uses the real directory card, so it looks exactly like the live one.',
-  directory: 'This is the live directory page. Quote requests are blocked in preview.',
+  directory: 'This is the live directory page. Quote requests are blocked in preview. Tap a real member card to see Manage links (Airtable sign-in required). To hide a member, set Status to Hold; set it back to Active to show them again.',
   review: 'Sample review screen. Approve and Hold are blocked here and do not touch Airtable.',
   vouch: 'What a voucher sees after tapping the link in their email. Yes and No are blocked here.'
 };
@@ -123,7 +126,7 @@ function show(v) {
   const src = { form: 'index.html', listing: 'directory.html', directory: 'directory.html',
     review: 'review.html?r=recPREVIEW00000AA&k=preview-only-key-0000&n=Sample%20Member',
     vouch: 'vouch.html?v=recPREVIEW00000AA&k=preview-only-key-0000&n=Jordan%20Member&o=AEAONMS' }[v];
-  frame.onload = () => { stub(frame.contentWindow); apply(); };
+  frame.onload = () => { stub(frame.contentWindow); hookAdmin(frame.contentWindow); apply(); };
   frame.src = src;
   writeHash();
 }
@@ -182,6 +185,48 @@ function apply() {
       };
     }
   } catch (e) { console.warn('preview apply failed', e); }
+}
+
+// Admin links on directory cards (preview only). Links only; every change happens in
+// Airtable or GitHub after you sign in there, so nothing here can change data by itself.
+const AT_BASE = 'https://airtable.com/appKGbm7nA88YKC7h';
+function hookAdmin(w) {
+  if (view !== 'directory' && view !== 'listing') return;
+  const t0 = Date.now();
+  (function wait() {
+    if (typeof w.open !== 'function' || !w.document.getElementById('sheet')) {
+      if (Date.now() - t0 < 6000) return setTimeout(wait, 150);
+      return;
+    }
+    if (w.__fvdAdmin) return;
+    w.__fvdAdmin = true;
+    const orig = w.open;
+    w.open = function (id) {
+      const r = orig.apply(this, arguments);
+      try { addAdminBox(w, id); } catch (e) { console.warn('admin box failed', e); }
+      return r;
+    };
+  })();
+}
+function addAdminBox(w, id) {
+  const sheet = w.document.getElementById('sheet');
+  if (!sheet) return;
+  let l = null; try { l = w.eval('ALL.find(x => x.id === ' + JSON.stringify(id) + ')'); } catch (e) {}
+  const real = l && !l.sample && /^rec[A-Za-z0-9]{14}$/.test(id) && id !== 'recPREVIEW00000AA';
+  const name = l ? ((l.first || '') + ' ' + (l.last || '')).trim() : '';
+  const esc = x => String(x).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const btn = 'display:block;margin:6px 0;padding:11px 14px;border-radius:10px;border:1.5px solid #1F4788;color:#1F4788;background:#fff;font:600 14px sans-serif;text-decoration:none;text-align:center';
+  const box = w.document.createElement('div');
+  box.style.cssText = 'margin-top:16px;padding:12px;border:2px dashed #CC9900;border-radius:12px;background:#FFFBEA';
+  box.innerHTML = '<div style="font:700 12px sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#7A5C00;margin-bottom:6px">Admin (preview only)</div>' +
+    (real
+      ? '<a style="' + btn + '" href="' + AT_BASE + '/tbl96XAeUWUjPotOd/' + id + '" target="_blank" rel="noopener">Manage ' + esc(name || 'member') + ' in Airtable</a>' +
+        '<a style="' + btn + '" href="' + AT_BASE + '/tblTH6uLrvo8sE5R5/viwiHj6gp0VTthJTA" target="_blank" rel="noopener">Messages and quotes (search: ' + esc(name || id) + ')</a>' +
+        '<a style="' + btn + '" href="' + AT_BASE + '/tbl96XAeUWUjPotOd/viwCWy3YTpVaxzfcO" target="_blank" rel="noopener">Waiting for review (sort by Status)</a>' +
+        '<a style="' + btn + '" href="https://github.com/jermaineggreen-blip/fraternal-directory/actions/workflows/sync-listings.yml" target="_blank" rel="noopener">Publish now (tap Run workflow)</a>' +
+        '<p style="font:12px/1.5 sans-serif;color:#6B7280;margin:6px 0 0">To hide this member, set Status to <b>Hold</b>. Set it back to <b>Active</b> to show them again. Changes show after the next refresh (up to 30 minutes) or right away with Publish now.</p>'
+      : '<p style="font:13px/1.5 sans-serif;color:#6B7280;margin:0">Sample listing. It is not in Airtable, so there is nothing to manage.</p>');
+  sheet.appendChild(box);
 }
 
 // Admin: jump straight to any form page with sample answers, no validation, nothing sent.
