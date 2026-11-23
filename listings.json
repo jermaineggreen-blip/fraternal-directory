@@ -1,7 +1,7 @@
 {
- "updated": "2026-11-22",
+ "updated": "2026-11-23",
  "demo": true,
- "real": 2,
+ "real": 4,
  "listings": [
   {
    "id": "rec4SHUtRKP7wcvJg",
@@ -52,6 +52,62 @@
     "Networking"
    ],
    "photo": "img/recXmOYSWBUcH7ECI-photo-0310c91f.jpg",
+   "verified": true,
+   "referral": false,
+   "charter": true,
+   "business": "",
+   "phone": "",
+   "email": "",
+   "website": "",
+   "mobile": false
+  },
+  {
+   "id": "recKQGsPeRrvlreYu",
+   "first": "Jermaine",
+   "last": "Green",
+   "org": "Prince Hall Masons (F&AM)",
+   "orgs": [
+    "AEAONMS"
+   ],
+   "chapter": "True Level",
+   "category": "Barbering & Cosmetology",
+   "title": "Master Barber",
+   "years": "20+",
+   "city": "Atlanta",
+   "state": "GA",
+   "tier": "Member",
+   "bio": "",
+   "available": [
+    "Speaking / Teaching"
+   ],
+   "photo": "",
+   "verified": true,
+   "referral": false,
+   "charter": true,
+   "business": "",
+   "phone": "",
+   "email": "",
+   "website": "",
+   "mobile": false
+  },
+  {
+   "id": "recILCHeBMqGBnqPB",
+   "first": "Dexter",
+   "last": "Meadows",
+   "org": "AEAONMS",
+   "orgs": [],
+   "chapter": "AKHi",
+   "category": "Other",
+   "title": "Other / Not Listed Above",
+   "years": "20+",
+   "city": "Athens",
+   "state": "GA",
+   "tier": "Member",
+   "bio": "Sales",
+   "available": [
+    "Networking"
+   ],
+   "photo": "",
    "verified": true,
    "referral": false,
    "charter": true,
