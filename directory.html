@@ -145,6 +145,9 @@ img.badge.seal{width:52px;height:52px;object-fit:cover;padding:0;background:none
 .pt .pp{display:block;font:700 20px Georgia,serif;color:#1F4788;margin:4px 0 2px}
 .pt .pp s{font-size:13px;color:#6B7280;font-weight:400;margin-right:3px}
 .pt small{display:block;font-size:11px;line-height:1.35;color:#4B5563}
+.pt.tt{font:inherit;cursor:pointer;width:100%}
+.pt.tt.on{border-color:#1F4788;box-shadow:0 0 0 2px #1F4788;background:#EEF3FB}
+.pt.feat.tt.on{border-color:#CC9900;box-shadow:0 0 0 2px #CC9900;background:#FBF3D9}
 .pnote{margin-top:10px;font-size:12px;color:#6B7280;line-height:1.45;text-align:center}
 @media(max-width:520px){.pgrid{grid-template-columns:1fr}.pt{text-align:left;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 10px}.pt small{grid-column:1/-1}.pt .pp{margin:0}}
 .noprice .price-only{display:none!important}
@@ -176,21 +179,21 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
       <div class="trust" aria-label="How the directory works">
         <div><b>✓ Members only</b>Every listing is a fraternal member. Your chapter confirms your member number before you go live, and the number is never shown.</div>
         <div><b>✓ Every listing reviewed</b>Nothing goes live until it is approved.</div>
-        <div><b>✓ Private contact</b>Personal email and phone are never shown. Members and businesses get messages through the directory.</div>
+        <div><b>✓ Private contact</b>Personal email and phone are never shown. Businesses get requests directly. Members are told when someone wants to hire them.</div>
       </div>
     </div>
   </div>
 </header>
 
 <div class="wrap" style="margin:16px auto"><div class="pstrip" id="pricing">
-  <h3><span class="price-only">Simple pricing</span><span class="free-only">Choose your listing type</span></h3>
-  <div class="psub">Pick your listing type when you sign up. Every listing is reviewed before it goes live.</div>
+  <h3>Find a Member. Find Your Pro.</h3>
+  <div class="psub">Tap one to narrow the list, then search by trade, city or organization.</div>
   <div class="pgrid">
-    <div class="pt"><b>Member</b><span class="pp">Free</span><small>Free through Mar 31, 2027<span class="price-only">, then $25/yr</span>. Name, photo, organization, trade, city, private messages.</small></div>
-    <div class="pt"><b>Business</b><span class="pp"><span class="price-only"><s>$75</s>$50/yr</span><span class="free-only">Free</span></span><small><span class="price-only">Founding rate for the first 100, locked 2 years.</span><span class="free-only">Charter offer, free through Mar 31, 2027.</span> Adds business name, logo, Call, Website and Request a Quote buttons.</small></div>
-    <div class="pt feat"><b>&#9733; Featured</b><span class="pp"><span class="price-only">$99/yr</span><span class="free-only">Free</span></span><small><span class="price-only">Launch price.</span><span class="free-only">Charter offer, free through Mar 31, 2027.</span> Adds top spot in your category, first on the opening screen and a gold Featured badge.</small></div>
+    <button class="pt tt" type="button" data-type="member"><b>Members</b><span class="pp" id="cMem">0</span><small>Verified members by trade. Tap a card to let them know you want to hire them.</small></button>
+    <button class="pt tt" type="button" data-type="biz"><b>Businesses</b><span class="pp" id="cBiz">0</span><small>Call, email, visit the website or request a quote directly.</small></button>
+    <button class="pt feat tt" type="button" data-type="elite"><b>&#9733; Business Elite</b><span class="pp" id="cElite">0</span><small>Top-rated spot in every trade. First to get referrals.</small></button>
   </div>
-  <div class="pnote">No fees are collected before Mar 31, 2027.</div>
+  <div class="pnote" id="tNote">Showing everyone. <a href="index.html" style="color:#1F4788;font-weight:600">Get listed: join free or list your business</a></div>
 </div>
 </div>
 <div class="searchbox">
@@ -204,7 +207,6 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
       <select id="fOrg" aria-label="Organization"><option value="">All organizations</option></select>
       <select id="fCity" aria-label="City"><option value="">All cities</option></select>
       <select id="fChap" aria-label="Temple, lodge, court or chapter"><option value="">All temples, lodges &amp; courts</option></select>
-      <button class="chip" id="fBiz" type="button">Businesses only</button>
     </div>
     <div class="meta"><span id="count"></span><button class="clear" id="clear" type="button" hidden>Clear filters</button></div>
   </div>
@@ -245,7 +247,7 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
 
 <script>
 const FALLBACK = {"updated": "2026-10-28", "demo": true, "listings": [{"id": "d1", "first": "Marcus", "last": "Hollins", "org": "AEAONMS", "orgs": ["Prince Hall Masons (F&AM)"], "chapter": "Desert of Georgia", "category": "Real Estate", "title": "Licensed Real Estate Agent", "years": 12, "city": "Decatur", "state": "GA", "tier": "Business", "bio": "Helping first-time buyers and veterans use their VA loan benefit. I walk every client through the numbers before they sign anything.", "business": "Hollins Home Group", "phone": "(404) 555-0142", "email": "hello@example.com", "website": "https://example.com", "mobile": false, "available": ["Consultations", "Speaking", "Mentoring"]}, {"id": "d2", "first": "Andrea", "last": "Whitfield", "org": "Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc.", "orgs": ["Eastern Star (Prince Hall)"], "chapter": "Desert of Georgia", "category": "Healthcare & Medicine", "title": "Registered Nurse (RN)", "years": 18, "city": "Macon", "state": "GA", "tier": "Member", "bio": "ICU nurse and health educator. Happy to talk with young members about nursing school and careers in healthcare.", "business": "", "phone": "", "email": "", "website": "", "mobile": false, "available": ["Mentoring", "Speaking"]}, {"id": "d3", "first": "Terrence", "last": "Boyd", "org": "AEAONMS", "orgs": [], "chapter": "Desert of Georgia", "category": "Construction & Skilled Trades", "title": "Master Electrician", "years": 22, "city": "Columbus", "state": "GA", "tier": "Business", "bio": "Residential and light commercial electrical. Panel upgrades, EV chargers, and generator hookups. Licensed and insured.", "business": "Boyd Electric Services", "phone": "(706) 555-0187", "email": "office@example.com", "website": "", "mobile": true, "available": ["Hiring", "Apprenticeships", "Consultations"]}, {"id": "d4", "first": "Denise", "last": "Carrington", "org": "Eastern Star (Prince Hall)", "orgs": [], "chapter": "Desert of Georgia", "category": "Finance & Accounting", "title": "CPA / Tax Preparer", "years": 15, "city": "Atlanta", "state": "GA", "tier": "Business", "bio": "Tax preparation and bookkeeping for small businesses, churches, and nonprofits. Year-round support, not just in April.", "business": "Carrington Tax & Advisory", "phone": "(470) 555-0119", "email": "info@example.com", "website": "https://example.com", "mobile": false, "available": ["Consultations", "Workshops"]}, {"id": "d5", "first": "Reginald", "last": "Fair", "org": "Prince Hall Masons (F&AM)", "orgs": ["AEAONMS"], "chapter": "Desert of Georgia", "category": "Military & Veterans Services", "title": "Veterans Services Officer (VSO)", "years": 9, "city": "Savannah", "state": "GA", "tier": "Member", "bio": "Army veteran. I help fellow veterans file claims and find the benefits they've earned.", "business": "", "phone": "", "email": "", "website": "", "mobile": false, "available": ["Mentoring", "Volunteering"]}, {"id": "d6", "first": "Kendrick", "last": "Lowe", "org": "AEAONMS", "orgs": [], "chapter": "Desert of Georgia", "category": "Barbering & Cosmetology", "title": "Master Barber", "years": 14, "city": "Covington", "state": "GA", "tier": "Business", "bio": "Classic cuts, fades, and beard work. Walk-ins welcome. Booth chairs open for licensed barbers.", "business": "Lowe's Grooming Lounge", "phone": "(678) 555-0164", "email": "", "website": "", "mobile": false, "available": ["Hiring", "Apprenticeships"]}, {"id": "d7", "first": "Angela", "last": "Pruitt", "org": "Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc.", "orgs": [], "chapter": "Desert of Georgia", "category": "Events, Food & Hospitality", "title": "Caterer / Event Planner", "years": 7, "city": "Augusta", "state": "GA", "tier": "Business", "bio": "Full-service catering for balls, banquets, and family events from 20 to 400 guests. Southern menu with tasting appointments.", "business": "Pruitt Premier Catering", "phone": "(762) 555-0133", "email": "events@example.com", "website": "https://example.com", "mobile": true, "available": ["Consultations"]}, {"id": "d8", "first": "Calvin", "last": "Nesbitt", "org": "Prince Hall Masons (F&AM)", "orgs": [], "chapter": "Desert of Georgia", "category": "Legal & Law", "title": "Attorney", "years": 20, "city": "Atlanta", "state": "GA", "tier": "Business", "bio": "Wills, trusts, and estate planning. I also help small business owners form and protect their companies.", "business": "Nesbitt Law, LLC", "phone": "(404) 555-0108", "email": "intake@example.com", "website": "https://example.com", "mobile": false, "available": ["Consultations", "Workshops", "Speaking"]}, {"id": "d9", "first": "Sharon", "last": "Ellis", "org": "Eastern Star (Prince Hall)", "orgs": ["Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc."], "chapter": "Desert of Georgia", "category": "Education & Academia", "title": "High School Counselor", "years": 11, "city": "Albany", "state": "GA", "tier": "Member", "bio": "College and scholarship advising. I've helped hundreds of students file the FAFSA and find aid.", "business": "", "phone": "", "email": "", "website": "", "mobile": false, "available": ["Mentoring", "Workshops"]}, {"id": "d10", "first": "Derrick", "last": "Simmons", "org": "AEAONMS", "orgs": ["Prince Hall Masons (F&AM)"], "chapter": "Desert of Georgia", "category": "Automotive", "title": "Auto Mechanic / ASE Technician", "years": 16, "city": "Warner Robins", "state": "GA", "tier": "Business", "bio": "Brakes, diagnostics, and preventive maintenance. Discount for members and veterans.", "business": "Simmons Auto Care", "phone": "(478) 555-0176", "email": "", "website": "", "mobile": false, "available": ["Hiring"]}]};
-let ALL = [], state = {q:'',cat:'',org:'',city:'',chap:'',biz:false};
+let ALL = [], state = {q:'',cat:'',org:'',city:'',chap:'',biz:false,type:''};
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const initials = l => ((l.first||'')[0]||'') + ((l.last||'')[0]||'');
@@ -258,7 +260,7 @@ const shortOrg = o => o.startsWith('Daughters of AEAONMS') ? 'Daughters of AEAON
 
 function badges(l){
   if (l.sample) return '<div class="badges"><span class="bdg s">Sample listing</span></div>';
-  return `<div class="badges"><span class="bdg v">${l.referral ? '✓ Verified (member referral)' : '✓ Verified member'}</span>${l.charter ? '<span class="bdg c">★ Charter Member</span>' : ''}</div>`;
+  return `<div class="badges"><span class="bdg v">${isBiz(l) ? '✓ Verified Business' : l.referral ? '✓ Verified (member referral)' : '✓ Verified member'}</span>${l.charter ? '<span class="bdg c">★ Charter Member</span>' : ''}</div>`;
 }
 
 function avatar(l){ return `<div class="av">${l.photo ? `<img src="${esc(l.photo)}" alt="">` : esc(initials(l))}</div>`; }
@@ -277,7 +279,7 @@ function card(l){
   return `<button class="card${feat ? ' feat' : ''}" type="button" data-id="${esc(l.id)}">
     <div class="top">${avatar(l)}
       <div class="who"><h3>${esc(l.first)} ${esc(l.last)}</h3><div class="t">${esc(l.title)}</div><div class="loc">${esc(loc(l))}${l.years ? ` · ${esc(l.years)} yrs` : ''}</div>${badges(l)}</div>
-      ${l.sample ? '' : biz ? (isFeat(l) ? '<span class="tier feat">&#9733; Featured</span>' : '<span class="tier">Business</span>') : ''}
+      ${l.sample ? '' : biz ? (isFeat(l) ? '<span class="tier feat">&#9733; Elite</span>' : '<span class="tier">Business</span>') : ''}
     </div>
     ${feat && l.bizPhoto ? `<img class="bizphoto" src="${esc(l.bizPhoto)}" alt="${esc(l.business)}" loading="lazy">` : ''}
     ${biz ? `<div class="biz bizrow">${l.logo ? `<img class="logo" src="${esc(l.logo)}" alt="" loading="lazy">` : ''}<div><b>${esc(l.business)}</b><span>${l.mobile ? 'Serves ' + esc(loc(l)) + ' area' : esc(loc(l))}</span></div></div>` : ''}
@@ -293,7 +295,9 @@ function render(){
     if (state.org && !allOrgs(l).includes(state.org)) return false;
     if (state.city && loc(l) !== state.city) return false;
     if (state.chap && (l.chapter||'') !== state.chap) return false;
-    if (state.biz && !isBiz(l)) return false;
+    if (state.type === 'member' && isBiz(l)) return false;
+    if (state.type === 'biz' && !isBiz(l)) return false;
+    if (state.type === 'elite' && !isFeat(l)) return false;
     if (q) {
       const hay = [l.first,l.last,l.title,l.category,l.business,l.city,l.chapter,l.bio,...allOrgs(l),...(l.available||[])].join(' ').toLowerCase();
       return q.split(/\s+/).every(w => hay.includes(w));
@@ -301,12 +305,15 @@ function render(){
     return true;
   });
   $('grid').innerHTML = list.length ? list.map(card).join('') :
-    `<div class="empty"><b>No members found</b>Try a different trade or clear your filters.<br><a href="index.html" style="color:var(--primary);font-weight:600;display:inline-block;margin-top:10px">Get Listed</a> &middot; <a href="https://form.jotform.com/263007405643047" target="_blank" rel="noopener" style="color:var(--primary);font-weight:600;display:inline-block;margin-top:10px">Don\'t see your organization? Request it</a></div>`;
-  $('count').textContent = `${list.length} ${list.length===1?'member':'members'}`;
-  const active = state.q||state.cat||state.org||state.city||state.chap||state.biz;
+    `<div class="empty"><b>${state.type==='elite'?'No Business Elite listings yet':state.type==='biz'?'No businesses found':'No members found'}</b>${state.type==='elite'||state.type==='biz'?'Be the first in your trade.':'Try a different trade or clear your filters.'}<br><a href="index.html" style="color:var(--primary);font-weight:600;display:inline-block;margin-top:10px">Get Listed</a> &middot; <a href="https://form.jotform.com/263007405643047" target="_blank" rel="noopener" style="color:var(--primary);font-weight:600;display:inline-block;margin-top:10px">Don\'t see your organization? Request it</a></div>`;
+  $('count').textContent = `${list.length} ${list.length===1?'listing':'listings'}`;
+  const active = state.q||state.cat||state.org||state.city||state.chap||state.type;
   $('clear').hidden = !active;
   ['fCat','fOrg','fCity','fChap'].forEach(id => $(id).classList.toggle('on', !!$(id).value));
-  $('fBiz').classList.toggle('on', state.biz);
+  document.querySelectorAll('.pt.tt').forEach(b => b.classList.toggle('on', b.dataset.type === state.type));
+  const TN = {member:'Showing members only.', biz:'Showing all businesses (Business and Business Elite).', elite:'Showing Business Elite only.'};
+  $('tNote').innerHTML = (TN[state.type] || 'Showing everyone.') + (state.type ? ' <a href="#" id="tAll" style="color:#1F4788;font-weight:600">Show everyone</a>' : ' <a href="index.html" style="color:#1F4788;font-weight:600">Get listed: join free or list your business</a>');
+  const ta = $('tAll'); if (ta) ta.onclick = e => { e.preventDefault(); state.type=''; render(); };
 }
 
 function open(id){
@@ -317,7 +324,7 @@ function open(id){
   if (biz && tel) acts.push(`<a class="act pri" href="tel:${esc(tel)}">Call</a>`);
   if (biz) acts.push(`<button class="act${acts.length?'':' pri'}" type="button" id="qBtn">Request a Quote</button>`);
   if (biz && l.website) acts.push(`<a class="act" href="${esc(l.website)}" target="_blank" rel="noopener">Website</a>`);
-  if (!biz) acts.push(`<button class="act pri" type="button" id="qBtn">Send a Message</button>`);
+  if (!biz) acts.push(`<button class="act pri" type="button" id="qBtn">Want to hire ${esc(l.first)}? Let them know</button>`);
   $('sheet').innerHTML = `
     <button class="x" id="close" aria-label="Close">×</button>
     <div class="top">${avatar(l)}<div class="who"><h3 id="dName">${esc(l.first)} ${esc(l.last)}</h3><div class="t">${esc(l.title)}</div><div class="loc">${esc(l.category)}</div>
@@ -339,9 +346,37 @@ function open(id){
   const qb = $('qBtn'); if (qb) qb.onclick = () => showQuote(l);
 }
 
+function showHire(l){
+  const host = $('qHost'); if (!host) return;
+  host.innerHTML = `<form class="qform" id="hForm" novalidate>
+    <h4>Let ${esc(l.first)} know you want to hire them</h4>
+    <p class="sub">${esc(l.first)} has a free member listing, so they don't take requests directly. We'll tell them someone wants to hire them as a ${esc(l.title)}. If they open a Business listing, your request goes to them right away.</p>
+    <label for="hName">Your name *</label><input id="hName" autocomplete="name" maxlength="120">
+    <label for="hEmail">Your email *</label><input id="hEmail" type="email" autocomplete="email" maxlength="200">
+    <label for="hMsg">What do you need? *</label><textarea id="hMsg" maxlength="1000" placeholder="Describe the job, timing, and location."></textarea>
+    <div class="err" id="hErr" hidden></div>
+    <button class="act pri" type="submit">Let ${esc(l.first)} know</button>
+  </form>`;
+  $('hName').focus();
+  $('hForm').onsubmit = ev => {
+    ev.preventDefault();
+    const name=$('hName').value.trim(), email=$('hEmail').value.trim(), msg=$('hMsg').value.trim(), err=$('hErr'); err.hidden=true;
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || msg.length < 10) { err.textContent='Please enter your name, a valid email, and what you need (at least 10 characters).'; err.hidden=false; return; }
+    if (!/^rec[A-Za-z0-9]{14}$/.test(l.id)) { err.textContent='This is a sample listing, so requests are turned off.'; err.hidden=false; return; }
+    fetch(QUOTE_WEBHOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({listingId:l.id,name,email,phone:'',message:msg,website_url:''})}).catch(()=>{});
+    const near = ALL.filter(x => !x.sample && isBiz(x) && x.category === l.category).sort((a,b) => (isFeat(b)-isFeat(a)) || ((b.state===l.state)-(a.state===l.state))).slice(0,3);
+    host.innerHTML = `<div class="qdone"><b>We let ${esc(l.first)} know.</b><br>If they open a Business listing, we'll send them your request. A confirmation is on its way to ${esc(email)}.</div>
+      <div class="sec"><h4>${near.length ? 'Businesses in this trade' : 'No businesses in this trade yet'}</h4>
+      ${near.map(b => `<button class="act" type="button" data-go="${esc(b.id)}" style="width:100%;margin-top:6px;text-align:left">${isFeat(b)?'&#9733; ':''}${esc(b.business||b.first+' '+b.last)} · ${esc(loc(b))}</button>`).join('')}
+      <button class="act${near.length?'':' pri'}" type="button" id="seeBiz" style="width:100%;margin-top:8px">See all businesses</button></div>`;
+    host.querySelectorAll('[data-go]').forEach(b => b.onclick = () => open(b.dataset.go));
+    $('seeBiz').onclick = () => { close(); state.type = 'biz'; render(); };
+  };
+}
 function showQuote(l){
   const host = $('qHost'); if (!host) return;
   const biz = isBiz(l);
+  if (!biz) return showHire(l);
   host.innerHTML = `<form class="qform" id="qForm" novalidate>
     <h4>${biz ? 'Request a quote from ' + esc(l.business) : 'Send a message to ' + esc(l.first)}</h4>
     <p class="sub">${biz ? 'Your message goes to the business by email. Your contact details are shared only with them.' : 'Your message goes to ' + esc(l.first) + ' by email. Their contact details stay private. Your name and email are shared only with them.'}</p>
@@ -398,6 +433,9 @@ function boot(data){
   $('sMembers').textContent = base.length;
   if (!real.length) $('sMembersL').textContent = 'Sample listings';
   $('sBiz').textContent = base.filter(isBiz).length;
+  $('cMem').textContent = base.filter(l => !isBiz(l)).length;
+  $('cBiz').textContent = base.filter(isBiz).length;
+  $('cElite').textContent = base.filter(isFeat).length;
   $('sCities').textContent = uniq(base.map(loc)).length;
   $('demoNote').hidden = !data.demo;
   if (data.demo && data.real) $('demoNote').innerHTML = '<b>Preview:</b> listings marked <b>Sample</b> show how the directory works. Every other listing is a verified member.';
@@ -410,8 +448,8 @@ $('fCat').onchange = e => { state.cat = e.target.value; render(); };
 $('fOrg').onchange = e => { state.org = e.target.value; render(); };
 $('fCity').onchange = e => { state.city = e.target.value; render(); };
 $('fChap').onchange = e => { state.chap = e.target.value; render(); };
-$('fBiz').onclick = () => { state.biz = !state.biz; render(); };
-$('clear').onclick = () => { state = {q:'',cat:'',org:'',city:'',chap:'',biz:false}; $('q').value=''; ['fCat','fOrg','fCity','fChap'].forEach(id=>$(id).value=''); render(); };
+document.querySelectorAll('.pt.tt').forEach(b => b.onclick = () => { state.type = state.type === b.dataset.type ? '' : b.dataset.type; render(); try{ $('grid').scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){} });
+$('clear').onclick = () => { state = {q:'',cat:'',org:'',city:'',chap:'',biz:false,type:''}; $('q').value=''; ['fCat','fOrg','fCity','fChap'].forEach(id=>$(id).value=''); render(); };
 $('grid').addEventListener('click', e => { const c = e.target.closest('.card'); if (c) open(c.dataset.id); });
 $('scrim').addEventListener('click', e => { if (e.target.id === 'scrim') close(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });

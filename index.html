@@ -270,6 +270,19 @@ input[type=file]{display:none}
 @media(max-width:520px){.pgrid{grid-template-columns:1fr}.pt{text-align:left;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 10px}.pt small{grid-column:1/-1}.pt .pp{margin:0}}
 .noprice .price-only{display:none!important}
 html:not(.noprice) .free-only{display:none!important}
+
+/* F6 path chooser (test copy) */
+.path-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.path-card{padding:16px;border:2px solid #E5E7EB;border-radius:12px;cursor:pointer;background:#fff;font-family:sans-serif;transition:all .2s}
+.path-card.selected{border-color:var(--primary);background:rgba(31,71,136,.06)}
+.path-card h4{font-size:15px;color:#1A1A2E;margin-bottom:4px}
+.path-card .pp{font-weight:800;font-size:17px;color:var(--primary);margin-bottom:6px}
+.path-card ul{list-style:none;font-size:12px;color:#4B5563;line-height:1.6}
+.path-card.locked{display:none}
+.test-banner{background:#B91C1C;color:#fff;font:700 13px sans-serif;text-align:center;padding:8px}
+body.path-member .biz-only{display:none!important}
+body.path-business .member-only{display:none!important}
+@media(max-width:520px){.path-grid{grid-template-columns:1fr}}
 </style>
 <script>
 /* PRICE SWITCH: false = prices hidden (all listings free through Mar 31, 2027). Change to true to show prices again. */
@@ -294,7 +307,7 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
       <div class="prog-label active" data-n="1"><span class="pf">Organizations</span><span class="ps">Orgs</span></div>
       <div class="prog-label" data-n="2"><span class="pf">Member Info</span><span class="ps">You</span></div>
       <div class="prog-label" data-n="3"><span class="pf">Vocation</span><span class="ps">Trade</span></div>
-      <div class="prog-label" data-n="4"><span class="pf">Business</span><span class="ps">Business</span></div>
+      <div class="prog-label biz-only" data-n="4"><span class="pf">Business</span><span class="ps">Business</span></div>
       <div class="prog-label" data-n="5"><span class="pf">Tier &amp; Review</span><span class="ps">Review</span></div>
     </div>
     <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
@@ -307,9 +320,9 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
   <h3><span class="price-only">Simple pricing</span><span class="free-only">Choose your listing type</span></h3>
   <div class="psub">Pick your listing type when you sign up. Every listing is reviewed before it goes live.</div>
   <div class="pgrid">
-    <div class="pt"><b>Member</b><span class="pp">Free</span><small>Free through Mar 31, 2027<span class="price-only">, then $25/yr</span>. Name, photo, organization, trade, city, private messages.</small></div>
-    <div class="pt"><b>Business</b><span class="pp"><span class="price-only"><s>$75</s>$50/yr</span><span class="free-only">Free</span></span><small><span class="price-only">Founding rate for the first 100, locked 2 years.</span><span class="free-only">Charter offer, free through Mar 31, 2027.</span> Adds business name, logo, Call, Website and Request a Quote buttons.</small></div>
-    <div class="pt feat"><b>&#9733; Featured</b><span class="pp"><span class="price-only">$99/yr</span><span class="free-only">Free</span></span><small><span class="price-only">Launch price.</span><span class="free-only">Charter offer, free through Mar 31, 2027.</span> Adds top spot in your category, first on the opening screen and a gold Featured badge.</small></div>
+    <div class="pt" role="button" tabindex="0" onclick="pickTile('member')" style="cursor:pointer"><b>Join the Network</b><span class="pp">Free</span><small>Always free. Verified badge, search every business, hear when someone wants to hire you.</small></div>
+    <div class="pt" role="button" tabindex="0" onclick="pickTile('business')" style="cursor:pointer"><b>List Your Business</b><span class="pp"><span class="price-only"><s>$75</s>$50/yr</span><span class="free-only">Free</span></span><small><span class="price-only">Founding rate for the first 100, locked 2 years.</span><span class="free-only">Charter offer, free through Mar 31, 2027.</span> Adds business name, logo, Call, Website and Request a Quote buttons.</small></div>
+    <div class="pt feat" role="button" tabindex="0" onclick="pickTile('featured')" style="cursor:pointer"><b>&#9733; Business Elite</b><span class="pp"><span class="price-only">$99/yr</span><span class="free-only">Free</span></span><small><span class="price-only">Launch price.</span><span class="free-only">Charter offer, free through Mar 31, 2027.</span> Top of your trade, its own Elite tab, gold card with your work photo, and first in line for member referrals.</small></div>
   </div>
   <div class="pnote">No fees are collected before Mar 31, 2027.</div>
 </div>
@@ -317,7 +330,22 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
 
 <!-- ═══ STEP 1 ═══ -->
 <div class="step active" id="step-1">
-  <h2 class="step-heading">Your Organizations</h2>
+  <h2 class="step-heading">What kind of listing?</h2>
+  <p class="step-sub">Pick one. You can change it any time before you submit.</p>
+  <div class="path-grid">
+    <div class="path-card" id="path-member" onclick="choosePath('member')">
+      <h4>&#x1F3DB;&#xFE0F; Join the Network</h4>
+      <div class="pp">Free</div>
+      <ul><li>&#10003; Verified Member badge with your trade, city and organization</li><li>&#10003; Search and request quotes from every business</li><li>&#10003; We tell you when someone wants to hire you</li><li>&#10007; No public phone, email or website</li></ul>
+    </div>
+    <div class="path-card" id="path-business" onclick="choosePath('business')">
+      <h4>&#x1F3E2; List Your Business</h4>
+      <div class="pp">Free through Mar 31, 2027</div>
+      <ul><li>&#10003; Public <strong>Call</strong>, <strong>Email</strong>, <strong>Website</strong> and <strong>Request a Quote</strong></li><li>&#10003; Logo, work photo, address or service area</li><li>&#10003; Requests come straight to you, listed ahead of members</li><li>&#10003; Verified Business badge</li></ul>
+    </div>
+  </div>
+  <div id="path-err"></div>
+  <h2 class="step-heading" style="margin-top:6px">Your Organizations</h2>
   <p class="step-sub">Select your primary organization first. Add additional memberships below.</p>
 
   <div class="primary-box">
@@ -482,7 +510,7 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
     </select>
     <div style="font-family:sans-serif;font-size:11px;color:#6B7280;margin-top:4px">Optional. Used only so members can honor and connect with one another. It is not shown publicly.</div>
   </div>
-  <div class="notice notice-warn">&#128274; <strong>Privacy:</strong> Personal contact details are visible to verified members only. Public listings show your name, organization, and occupation.</div>
+  <div class="notice notice-warn">&#128274; <strong>Privacy:</strong> Your personal phone and email are never shown on your listing. We use them only to verify you and to tell you when someone wants to hire you.</div>
 </div>
 
 <!-- ═══ STEP 3 ═══ -->
@@ -506,14 +534,18 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
     <textarea id="bio" maxlength="200" placeholder="Briefly describe your expertise or what you offer…" oninput="document.getElementById('bio-count').textContent=this.value.length+'/200'"></textarea>
     <div class="char-count"><span id="bio-count">0/200</span></div>
   </div>
+  <div class="field">
+    <label class="field-label">I'm Open To&hellip; <span style="font-weight:400;color:#9CA3AF">(select all that apply)</span></label>
+    <div class="cb-grid" id="avail-grid"></div>
+  </div>
 </div>
 
 <!-- ═══ STEP 4 ═══ -->
 <div class="step" id="step-4">
   <h2 class="step-heading">Business &amp; Professional Details</h2>
-  <p class="step-sub">Own a business? Add it so brothers and sisters can find you.</p>
+  <p class="step-sub">This is what customers see and use to reach you: business name, phone, address or service area, email and website.</p>
 
-  <div class="toggle-wrap" id="biz-toggle" onclick="toggleBiz()">
+  <div class="toggle-wrap" id="biz-toggle" onclick="toggleBiz()" style="display:none">
     <div class="toggle-sw" id="biz-sw"><div class="toggle-knob"></div></div>
     <div class="toggle-text">
       <div class="toggle-title">I have a business or professional practice</div>
@@ -611,10 +643,6 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
     </div>
   </div>
 
-  <div class="field">
-    <label class="field-label">I'm Open To&hellip; <span style="font-weight:400;color:#9CA3AF">(select all that apply)</span></label>
-    <div class="cb-grid" id="avail-grid"></div>
-  </div>
 </div>
 
 <!-- ═══ STEP 5 ═══ -->
@@ -623,26 +651,27 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
   <p class="step-sub">Pick your annual listing type, then review your directory card.</p>
 
   <label class="field-label">Annual Listing Tier *</label>
+  <div class="notice notice-ok member-only" style="margin-bottom:12px">Want customers to call, email or request a quote? <a href="#" onclick="choosePath('business');showStep(4);return false" style="font-weight:700;color:var(--primary)">Switch to a Business Listing</a>.</div>
   <div class="tier-grid">
-    <div class="tier-card selected" id="tier-member" onclick="selectTier('member')">
+    <div class="tier-card selected member-only" id="tier-member" onclick="selectTier('member')">
       <div class="tier-icon">&#x1F3DB;&#xFE0F;</div>
       <div class="tier-name">Member Listing</div>
-      <div class="tier-price" id="member-price">Free<span style="font-size:12px;font-weight:400;color:#9CA3AF"> through Mar 31, 2027</span></div>
-      <div class="tier-desc" id="member-desc">Charter offer: free through March 31, 2027<span class="price-only">, then $25/yr</span>.<br>&#10003; Your name, photo, organization, trade and city<br>&#10003; Found by trade and city search<br>&#10003; Private <strong>Send a Message</strong> button (your email and phone stay hidden)</div>
+      <div class="tier-price" id="member-price">Free<span style="font-size:12px;font-weight:400;color:#9CA3AF"> always</span></div>
+      <div class="tier-desc" id="member-desc">&#10003; Verified Member badge with your trade, city and organization<br>&#10003; Search and request quotes from every business<br>&#10003; We tell you when someone wants to hire you (your email and phone stay hidden)</div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
-    <div class="tier-card" id="tier-business" onclick="selectTier('business')">
+    <div class="tier-card biz-only" id="tier-business" onclick="selectTier('business')">
       <div class="tier-icon">&#x1F3E2;</div>
       <div class="tier-name">Business Listing</div>
       <div class="tier-price"><span class="price-only"><span id="biz-price-old" style="font-size:13px;font-weight:400;color:#9CA3AF;text-decoration:line-through;margin-right:4px">$75</span>$50<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></span><span class="free-only">Free<span style="font-size:12px;font-weight:400;color:#9CA3AF"> through Mar 31, 2027</span></span></div>
       <div class="tier-desc">Everything in Member, plus:<br>&#10003; Business name, logo and photo<br>&#10003; <strong>Call</strong>, <strong>Website</strong> and <strong>Request a Quote</strong> buttons<br>&#10003; Shows in the &ldquo;Businesses&rdquo; filter, ahead of member-only listings<br><span class="price-only"><strong>Founding rate</strong>: $50/yr locked for 2 years for the first 100 businesses (then $75/yr).</span><span class="free-only"><strong>Charter offer</strong>: free through March 31, 2027.</span></div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
-    <div class="tier-card" id="tier-featured" onclick="selectTier('featured')">
+    <div class="tier-card biz-only" id="tier-featured" onclick="selectTier('featured')">
       <div class="tier-icon">&#x2B50;</div>
-      <div class="tier-name">Featured Business</div>
+      <div class="tier-name">&#9733; Business Elite</div>
       <div class="tier-price"><span class="price-only">$99<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></span><span class="free-only">Free<span style="font-size:12px;font-weight:400;color:#9CA3AF"> through Mar 31, 2027</span></span></div>
-      <div class="tier-desc">Everything in Business, plus:<br>&#10003; Top spot in your category and first on the directory&rsquo;s opening screen<br>&#10003; Gold &#9733; Featured badge and gold-bordered card<br>&#10003; Your business photo shown right on your card<br><span class="price-only"><strong>Launch price</strong>: $99/yr.</span><span class="free-only"><strong>Charter offer</strong>: free through March 31, 2027.</span></div>
+      <div class="tier-desc">Everything in Business, plus:<br>&#10003; <strong>Top of your trade</strong> in every search<br>&#10003; Your own <strong>Business Elite</strong> tab on the directory<br>&#10003; Gold card with your work photo right on it<br>&#10003; <strong>First in line for referrals</strong>: when someone wants to hire a member in your trade, we show you first<br><span class="price-only"><strong>Launch price</strong>: $99/yr.</span><span class="free-only"><strong>Charter offer</strong>: free through March 31, 2027.</span></div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
   </div>
@@ -854,27 +883,56 @@ function updateTheme(v){
   }
 }
 
+
+// ── F6 PATH (test copy) ───────────────────────────────────────────────────
+var PATH='';
+function choosePath(p){
+  PATH=p;
+  document.body.classList.toggle('path-member',p==='member');
+  document.body.classList.toggle('path-business',p==='business');
+  $('path-member').classList.toggle('selected',p==='member');
+  $('path-business').classList.toggle('selected',p==='business');
+  S.hasBusiness=(p==='business');
+  $('biz-section').style.display=S.hasBusiness?'block':'none';
+  $('biz-sw').classList.toggle('on',S.hasBusiness);
+  $('biz-toggle').classList.toggle('on',S.hasBusiness);
+  if(p==='member')selectTier('member');
+  else if(S.listingTier==='member'||!S.listingTier)selectTier('business');
+  var pe=$('path-err');if(pe)pe.innerHTML='';
+  if(currentStep)showStep(currentStep);
+}
+function pickTile(t){
+  choosePath(t==='member'?'member':'business');
+  if(t!=='member')selectTier(t);
+  try{$('path-'+(t==='member'?'member':'business')).scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}
+}
+function stepsFor(){return PATH==='member'?[1,2,3,5]:[1,2,3,4,5];}
 // ── STEPS ─────────────────────────────────────────────────────────────────
 function showStep(n){
   document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
   $('step-'+n).classList.add('active');
   document.querySelectorAll('.prog-label').forEach(el=>{
     const i=parseInt(el.dataset.n);
-    el.className='prog-label'+(i<n?' done':i===n?' active':'');
+    el.className='prog-label'+(i===4?' biz-only':'')+(i<n?' done':i===n?' active':'');
   });
-  $('prog-fill').style.width=((n-1)/4*100)+'%';
+  var _st=stepsFor(),_i=Math.max(0,_st.indexOf(n)),_tot=_st.length;
+  $('prog-fill').style.width=(_i/(_tot-1)*100)+'%';
   $('nav').style.display=n===5?'none':'flex';
   $('nav-step5').style.display=n===5?'flex':'none';
   if(n>1)$('btn-back').style.visibility='visible';
   else $('btn-back').style.visibility='hidden';
-  $('step-counter').textContent='Step '+n+' of 5';
+  $('step-counter').textContent='Step '+(_i+1)+' of '+_tot;
+  var _sc5=document.querySelector('#nav-step5 .step-counter');if(_sc5)_sc5.textContent='Step '+_tot+' of '+_tot;
   if(n===5)renderStep5();
   $('prev-wrap').style.display=(n>=2&&n<=4)?'block':'none';
   currentStep=n;
 }
 
-function goNext(){if(validate(currentStep)){syncState();showStep(currentStep+1);}}
-function goBack(){clearErr();syncState();showStep(currentStep-1);}
+function goNext(){
+  if(currentStep===1&&!PATH){var pe=$('path-err');pe.innerHTML='<div class="field-err" role="alert">Choose Member Listing or Business Listing first.</div>';try{$('path-member').scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}return;}
+  if(validate(currentStep)){syncState();var st=stepsFor();showStep(st[st.indexOf(currentStep)+1]);}
+}
+function goBack(){clearErr();syncState();var st=stepsFor();showStep(st[Math.max(0,st.indexOf(currentStep)-1)]);}
 
 // Inline error messages (replaces browser pop-up alerts, which are easy to miss on phones)
 function clearErr(){document.querySelectorAll('.field-err').forEach(e=>e.remove());document.querySelectorAll('.has-err').forEach(e=>e.classList.remove('has-err'));}
@@ -1253,11 +1311,11 @@ document.addEventListener('DOMContentLoaded',function(){
   var o=document.getElementById('biz-price-old');if(o&&!FOUNDING_OPEN)o.style.display='none';
   if(!charterOpen()){
     var mp=document.getElementById('member-price');if(mp)mp.innerHTML='$25<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span>';
-    var md=document.getElementById('member-desc');if(md)md.innerHTML='&#10003; Your name, photo, organization, trade and city<br>&#10003; Found by trade and city search<br>&#10003; Private <strong>Send a Message</strong> button (your email and phone stay hidden)';
+    var md=document.getElementById('member-desc');if(md)md.innerHTML='&#10003; Verified Member badge with your trade, city and organization<br>&#10003; Search and request quotes from every business<br>&#10003; We tell you when someone wants to hire you (your email and phone stay hidden)';
   }
 });
 function tierPrice(t){return PRICES[t]||25;}
-function tierName(t){return t==='featured'?'Featured Business':t==='business'?'Business':'Member';}
+function tierName(t){return t==='featured'?'Business Elite':t==='business'?'Business':'Member';}
 // NOTE: this label is what gets sent to Zapier/Airtable. Do not edit it; it must keep matching the Airtable tier choices.
 function tierLabelFull(t){
   if(t==='featured')return 'Featured Business Listing ($99/yr)';
@@ -1408,6 +1466,7 @@ async function handleSubmit(){
   const btn=$('btn-submit');
   btn.disabled=true;btn.textContent='Submitting\u2026';
 
+  if(PATH==='member'){S.hasBusiness=false;['businessName','businessPhone','businessStreet','businessCity','businessState','businessZip','mobileBizCity','mobileBizState','businessEmail','website'].forEach(k=>{S[k]='';});S.bizLogoBase64='';S.bizPhotoBase64='';S.isMobile=false;}
   const payload={
     primaryOrg:orgName(S.primaryOrg),chapterName:S.chapterName,memberNumber:S.memberNumber,memberNumberLast4:String(S.memberNumber||'').slice(-4),
     veteranStatus:S.veteranStatus||'',
