@@ -1,7 +1,7 @@
 {
  "updated": "2026-11-26",
  "demo": false,
- "real": 8,
+ "real": 9,
  "listings": [
   {
    "id": "rec4SHUtRKP7wcvJg",
@@ -223,6 +223,34 @@
    "tier": "Member",
    "bio": "",
    "available": [
+    "Networking"
+   ],
+   "photo": "",
+   "verified": true,
+   "referral": false,
+   "charter": true,
+   "business": "",
+   "phone": "",
+   "email": "",
+   "website": "",
+   "mobile": false
+  },
+  {
+   "id": "recSupTIC6c2kD618",
+   "first": "Arthaniel",
+   "last": "Turner",
+   "org": "AEAONMS",
+   "orgs": [],
+   "chapter": "AL-Karim 242",
+   "category": "Military & Veterans Services",
+   "title": "Retired Military Enlisted",
+   "years": "20+",
+   "city": "Newnan",
+   "state": "GA",
+   "tier": "Member",
+   "bio": "",
+   "available": [
+    "Hire / Referrals",
     "Networking"
    ],
    "photo": "",
