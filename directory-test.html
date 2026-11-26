@@ -209,7 +209,6 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
       <select id="fOrg" aria-label="Organization"><option value="">All organizations</option></select>
       <select id="fCity" aria-label="City"><option value="">All cities</option></select>
       <select id="fChap" aria-label="Temple, lodge, court or chapter"><option value="">All temples, lodges &amp; courts</option></select>
-      <button class="chip" id="fBiz" type="button">Businesses only</button>
     </div>
     <div class="meta"><span id="count"></span><button class="clear" id="clear" type="button" hidden>Clear filters</button></div>
   </div>
@@ -298,7 +297,6 @@ function render(){
     if (state.org && !allOrgs(l).includes(state.org)) return false;
     if (state.city && loc(l) !== state.city) return false;
     if (state.chap && (l.chapter||'') !== state.chap) return false;
-    if (state.biz && !isBiz(l)) return false;
     if (state.type === 'member' && isBiz(l)) return false;
     if (state.type === 'biz' && !isBiz(l)) return false;
     if (state.type === 'elite' && !isFeat(l)) return false;
@@ -314,7 +312,6 @@ function render(){
   const active = state.q||state.cat||state.org||state.city||state.chap||state.biz||state.type;
   $('clear').hidden = !active;
   ['fCat','fOrg','fCity','fChap'].forEach(id => $(id).classList.toggle('on', !!$(id).value));
-  $('fBiz').classList.toggle('on', state.biz);
   document.querySelectorAll('.pt.tt').forEach(b => b.classList.toggle('on', b.dataset.type === state.type));
   const TN = {member:'Showing members only.', biz:'Showing all businesses (Business and Business Elite).', elite:'Showing Business Elite only.'};
   $('tNote').innerHTML = (TN[state.type] || 'Showing everyone.') + (state.type ? ' <a href="#" id="tAll" style="color:#1F4788;font-weight:600">Show everyone</a>' : ' <a href="signup-test.html" style="color:#1F4788;font-weight:600">Get listed: join free or list your business</a>');
@@ -452,7 +449,6 @@ $('fCat').onchange = e => { state.cat = e.target.value; render(); };
 $('fOrg').onchange = e => { state.org = e.target.value; render(); };
 $('fCity').onchange = e => { state.city = e.target.value; render(); };
 $('fChap').onchange = e => { state.chap = e.target.value; render(); };
-$('fBiz').onclick = () => { state.biz = !state.biz; render(); };
 document.querySelectorAll('.pt.tt').forEach(b => b.onclick = () => { state.type = state.type === b.dataset.type ? '' : b.dataset.type; render(); try{ $('grid').scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){} });
 $('clear').onclick = () => { state = {q:'',cat:'',org:'',city:'',chap:'',biz:false,type:''}; $('q').value=''; ['fCat','fOrg','fCity','fChap'].forEach(id=>$(id).value=''); render(); };
 $('grid').addEventListener('click', e => { const c = e.target.closest('.card'); if (c) open(c.dataset.id); });
