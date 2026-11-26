@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TEST COPY — FVD Directory</title><link rel="icon" type="image/png" sizes="32x32" href="brand/fvd-seal-32.png"><link rel="icon" type="image/png" sizes="192x192" href="brand/fvd-seal-192.png"><link rel="apple-touch-icon" href="brand/fvd-seal-180.png"><meta property="og:site_name" content="Fraternal Vocational Directory"><meta property="og:title" content="Member Directory – Fraternal Vocational Directory"><meta property="og:description" content="Find and hire verified members of our fraternal organizations."><meta property="og:image" content="https://jermaineggreen-blip.github.io/fraternal-directory/brand/fvd-wordmark-1200.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="1200"><meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Find and hire verified members of our fraternal organizations — professionals, tradespeople, and business owners.">
+<style>
+:root{--primary:#1F4788;--primary-dk:#163564;--accent:#CC9900;--accent-lt:#F5E6B8;--bg:#F4F1EA;--card:#fff;--ink:#1A1A2E;--muted:#6B7280;--line:#E5E7EB}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.serif{font-family:Georgia,serif}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+
+/* Header */
+header{background:var(--primary);color:#fff}
+.bar{display:flex;align-items:center;gap:12px;padding:16px 0}
+.badge{width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--primary);display:flex;align-items:center;justify-content:center;font:800 11px Georgia,serif;letter-spacing:.04em;flex-shrink:0;box-shadow:0 0 0 3px rgba(255,255,255,.15)}
+.brand{flex:1;min-width:0}
+.eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+.brand h1{font:700 18px Georgia,serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.join{background:var(--accent);color:var(--primary);border:0;border-radius:8px;padding:10px 14px;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap}
+.join:hover{background:#e0ac10}
+.hero{padding:18px 0 26px}
+.hero h2{font:700 26px/1.2 Georgia,serif;max-width:620px}
+.hero p{margin-top:8px;font-size:15px;opacity:.82;max-width:560px;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:20px}
+.stat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px}
+.stat b{display:block;font:700 22px Georgia,serif;color:var(--accent)}
+.stat span{font-size:11px;opacity:.75;letter-spacing:.02em}
+
+/* Search */
+.searchbox{position:sticky;top:0;z-index:5;background:var(--bg);padding:14px 0 10px;border-bottom:1px solid var(--line)}
+.q{position:relative}
+.q input{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:13px 14px 13px 42px;font-size:16px;background:#fff;color:var(--ink);outline:none}
+.q input:focus{border-color:var(--primary)}
+.q svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.filters{display:flex;gap:8px;margin-top:10px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filters select{flex-shrink:0;border:1.5px solid var(--line);border-radius:999px;padding:8px 30px 8px 12px;font-size:13px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236B7280' fill='none' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 12px center;-webkit-appearance:none;appearance:none;color:var(--ink);max-width:220px}
+.filters select.on{border-color:var(--primary);background-color:rgba(31,71,136,.07);color:var(--primary);font-weight:600}
+.chip{flex-shrink:0;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font-size:13px;color:var(--ink)}
+.chip.on{border-color:var(--primary);background:var(--primary);color:#fff}
+.meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13px;color:var(--muted)}
+.clear{background:none;border:0;color:var(--primary);font-weight:600;font-size:13px}
+
+.demo{margin:14px 0 0;background:var(--accent-lt);border:1px solid #E9D28A;color:#6B5200;border-radius:8px;padding:9px 12px;font-size:12.5px;line-height:1.45}
+
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;padding:16px 0 40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:left;display:flex;flex-direction:column;gap:12px;transition:box-shadow .2s,transform .2s;width:100%}
+.card:hover{box-shadow:0 6px 20px rgba(31,71,136,.10);transform:translateY(-1px)}
+.top{display:flex;gap:12px;align-items:center}
+.av{width:52px;height:52px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font:700 17px Georgia,serif;flex-shrink:0;overflow:hidden}
+.av img{width:100%;height:100%;object-fit:cover}
+.who{min-width:0;flex:1}
+.who h3{font:700 17px Georgia,serif;color:var(--ink)}
+.who .t{font-size:13.5px;color:var(--primary);font-weight:600;margin-top:2px}
+.who .loc{font-size:12.5px;color:var(--muted);margin-top:2px}
+.tier.sample{background:#E5E7EB;color:#4B5563}
+.tier{align-self:flex-start;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:999px;background:var(--accent-lt);color:#7A5C00;white-space:nowrap}
+.biz{background:#F8F7F3;border-radius:10px;padding:10px 12px;font-size:13px}
+.biz b{display:block;font-size:14px;color:var(--ink)}
+.biz span{color:var(--muted)}
+.orgs{display:flex;flex-wrap:wrap;gap:6px}
+.org{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:3px 8px;color:#374151;background:#fff}
+.org.p{border-color:rgba(31,71,136,.35);color:var(--primary);font-weight:600}
+.empty{grid-column:1/-1;text-align:center;padding:50px 16px;color:var(--muted)}
+.empty b{display:block;font:700 18px Georgia,serif;color:var(--ink);margin-bottom:6px}
+
+/* Detail sheet */
+.scrim{position:fixed;inset:0;background:rgba(15,23,42,.5);display:none;z-index:20;align-items:flex-end;justify-content:center}
+.scrim.open{display:flex}
+.sheet{background:#fff;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;border-radius:18px 18px 0 0;padding:20px 18px 28px;animation:up .22s ease-out}
+@media(min-width:640px){.scrim{align-items:center}.sheet{border-radius:18px}}
+@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.x{float:right;background:#F3F4F6;border:0;border-radius:50%;width:34px;height:34px;font-size:18px;color:#374151}
+.sheet .top{margin-top:4px}
+.sheet .av{width:64px;height:64px;font-size:21px}
+.sec{margin-top:18px}
+.sec h4{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.sec p{font-size:14.5px;line-height:1.55;color:#1F2937}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12.5px;background:rgba(31,71,136,.07);color:var(--primary);border-radius:6px;padding:4px 9px;font-weight:600}
+.actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:20px}
+.act{display:flex;align-items:center;justify-content:center;gap:6px;border-radius:10px;padding:12px;font-weight:700;font-size:14px;text-decoration:none;border:1.5px solid var(--primary);color:var(--primary);background:#fff}
+.act.pri{background:var(--primary);color:#fff}
+.verified{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#166534;background:#DCFCE7;border-radius:999px;padding:3px 9px;font-weight:600;margin-top:6px}
+.note{font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.5}
+
+/* Footer */
+.give{background:#fff;border-top:1px solid var(--line);padding:26px 0}
+.give .in{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.give .pct{font:700 40px Georgia,serif;color:var(--accent)}
+.give h3{font:700 18px Georgia,serif;color:var(--primary)}
+.give p{font-size:14px;color:var(--muted);line-height:1.5;max-width:560px;margin-top:4px}
+footer{padding:22px 0 34px;text-align:center;font-size:12px;color:var(--muted)}
+footer a{color:var(--primary)}
+
+@media(max-width:520px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .hero h2{font-size:23px}
+  .brand h1{font-size:16px}
+  .join{padding:9px 11px;font-size:12px}
+}
+.reqsec{background:var(--primary);color:#fff;padding:24px 0}.in2{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}.reqsec h3{font:700 19px Georgia,serif;color:#fff}.reqsec p{font-size:14px;opacity:.85;line-height:1.5;max-width:560px;margin-top:4px}.reqbtn{background:var(--accent)!important;border-color:var(--accent)!important;color:var(--primary)!important;white-space:nowrap}
+.bizrow{display:flex;gap:10px;align-items:center}.logo{width:44px;height:44px;border-radius:8px;background:#fff;border:1px solid var(--line);object-fit:contain;padding:3px;flex-shrink:0}
+.bizphoto{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;margin-top:16px;background:#F3F4F6;display:block}
+.av img{aspect-ratio:1/1}
+.qform{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}
+.qform h4{font:700 16px Georgia,serif;color:var(--ink);margin-bottom:4px}
+.qform p.sub{font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.45}
+.qform label{display:block;font-size:12px;font-weight:700;color:#374151;margin:10px 0 4px}
+.qform input,.qform textarea{width:100%;border:1.5px solid #D1D5DB;border-radius:10px;padding:11px 12px;font:inherit;font-size:15px;background:#fff}
+.qform textarea{min-height:96px;resize:vertical}
+.qform input:focus,.qform textarea:focus{outline:2px solid var(--primary);border-color:var(--primary)}
+.qform .hp{position:absolute;left:-9999px;height:0;overflow:hidden}
+.qform .err{color:#B91C1C;font-size:13px;margin-top:8px}
+.qform button.act{width:100%;margin-top:12px;cursor:pointer;font:inherit;font-weight:700}
+.qdone{background:#DCFCE7;color:#166534;border-radius:10px;padding:14px;font-size:14px;line-height:1.5;margin-top:18px}
+.tier.feat{background:var(--accent);color:var(--primary)}
+.card.feat{border:2px solid var(--accent);box-shadow:0 4px 16px rgba(201,162,39,.18)}
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.bdg{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.bdg.v{background:#DCFCE7;color:#166534}
+.bdg.c{background:var(--accent-lt);color:#7A5C00;border:1px solid #E9D28A}
+.bdg.s{background:#E5E7EB;color:#4B5563}
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+.trust div{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.4;color:rgba(255,255,255,.9)}
+.trust b{display:block;font-size:13.5px;color:#fff;margin-bottom:2px}
+@media(max-width:520px){.trust{grid-template-columns:1fr;gap:8px}.trust div{padding:9px 12px}}
+img.badge.seal{width:52px;height:52px;object-fit:cover;padding:0;background:none;border-radius:10px}
+.give .seal{width:96px;height:96px;border-radius:14px;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+
+/* Pricing strip */
+.pstrip{margin:0 0 16px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:16px 14px;box-shadow:0 2px 14px rgba(0,0,0,.06)}
+.pstrip h3{font:700 17px Georgia,serif;color:#1F4788;margin-bottom:2px}
+.pstrip .psub{font-size:13px;color:#6B7280;margin-bottom:12px}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pt{border:1px solid #E5E7EB;border-radius:10px;padding:10px 8px;text-align:center;background:#FAFAF7}
+.pt.feat{border-color:#CC9900;background:#FBF3D9}
+.pt b{display:block;font-size:12px;letter-spacing:.03em;text-transform:uppercase;color:#1A1A2E}
+.pt .pp{display:block;font:700 20px Georgia,serif;color:#1F4788;margin:4px 0 2px}
+.pt .pp s{font-size:13px;color:#6B7280;font-weight:400;margin-right:3px}
+.pt small{display:block;font-size:11px;line-height:1.35;color:#4B5563}
+.pnote{margin-top:10px;font-size:12px;color:#6B7280;line-height:1.45;text-align:center}
+@media(max-width:520px){.pgrid{grid-template-columns:1fr}.pt{text-align:left;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 10px}.pt small{grid-column:1/-1}.pt .pp{margin:0}}
+.noprice .price-only{display:none!important}
+html:not(.noprice) .free-only{display:none!important}
+</style>
+<script>
+/* PRICE SWITCH: false = prices hidden (all listings free through Mar 31, 2027). Change to true to show prices again. */
+var FVD_SHOW_PRICES=false;
+if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
+</script>
+</head>
+<body>
+<div style="background:#B91C1C;color:#fff;font:700 13px sans-serif;text-align:center;padding:8px">TEST COPY &middot; nothing you send here is delivered</div>
+<header>
+  <div class="wrap">
+    <div class="bar">
+      <img class="badge seal" src="brand/fvd-seal-512.jpg" alt="Fraternal Vocational Directory official seal">
+      <div class="brand"><div class="eyebrow">Fraternal Vocational Directory</div><h1>Member Directory</h1></div>
+      <a class="join" href="signup-test.html">Get Listed</a>
+    </div>
+    <div class="hero">
+      <h2>Do business with the people you call family.</h2>
+      <p>Find verified members of our fraternal organizations — professionals, tradespeople, and business owners — and keep our dollars in our community.</p>
+      <div class="stats">
+        <div class="stat"><b id="sMembers">0</b><span id="sMembersL">Verified members</span></div>
+        <div class="stat"><b id="sBiz">0</b><span>Businesses</span></div>
+        <div class="stat"><b id="sCities">0</b><span>Cities</span></div>
+        <div class="stat"><b>Free</b><span>Charter listings through 3/31/27</span></div>
+      </div>
+      <div class="trust" aria-label="How the directory works">
+        <div><b>✓ Members only</b>Every listing is a fraternal member. Your chapter confirms your member number before you go live, and the number is never shown.</div>
+        <div><b>✓ Every listing reviewed</b>Nothing goes live until it is approved.</div>
+        <div><b>✓ Private contact</b>Personal email and phone are never shown. Members and businesses get messages through the directory.</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap" style="margin:16px auto"><div class="pstrip" id="pricing">
+  <h3><span class="price-only">Simple pricing</span><span class="free-only">Choose your listing type</span></h3>
+  <div class="psub">Pick your listing type when you sign up. Every listing is reviewed before it goes live.</div>
+  <div class="pgrid">
+    <div class="pt"><b>Member</b><span class="pp">Free</span><small>Free through Mar 31, 2027<span class="price-only">, then $25/yr</span>. Name, photo, organization, trade, city, private messages.</small></div>
+    <div class="pt"><b>Business</b><span class="pp"><span class="price-only"><s>$75</s>$50/yr</span><span class="free-only">Free</span></span><small><span class="price-only">Founding rate for the first 100, locked 2 years.</span><span class="free-only">Charter offer, free through Mar 31, 2027.</span> Adds business name, logo, Call, Website and Request a Quote buttons.</small></div>
+    <div class="pt feat"><b>&#9733; Featured</b><span class="pp"><span class="price-only">$99/yr</span><span class="free-only">Free</span></span><small><span class="price-only">Launch price.</span><span class="free-only">Charter offer, free through Mar 31, 2027.</span> Adds top spot in your category, first on the opening screen and a gold Featured badge.</small></div>
+  </div>
+  <div class="pnote">No fees are collected before Mar 31, 2027.</div>
+</div>
+</div>
+<div class="searchbox">
+  <div class="wrap">
+    <div class="q">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search name, trade, or business (e.g. electrician)" autocomplete="off" aria-label="Search the directory">
+    </div>
+    <div class="filters">
+      <select id="fCat" aria-label="Category"><option value="">All categories</option></select>
+      <select id="fOrg" aria-label="Organization"><option value="">All organizations</option></select>
+      <select id="fCity" aria-label="City"><option value="">All cities</option></select>
+      <select id="fChap" aria-label="Temple, lodge, court or chapter"><option value="">All temples, lodges &amp; courts</option></select>
+      <button class="chip" id="fBiz" type="button">Businesses only</button>
+    </div>
+    <div class="meta"><span id="count"></span><button class="clear" id="clear" type="button" hidden>Clear filters</button></div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="demo" id="demoNote" hidden><b>Preview:</b> these are sample listings to show how the directory works. Real, verified member listings will replace them at launch.</div>
+  <div class="grid" id="grid" aria-live="polite"></div>
+</main>
+
+<section class="give">
+  <div class="wrap in">
+    <img class="seal" src="brand/fvd-seal-512.jpg" alt="Fraternal Vocational Directory official seal" loading="lazy">
+    <div>
+      <h3>Built to support our organizations</h3>
+      <p>A share of future listing fees will support our organizations. Details will be shared once they are approved by leadership.</p>
+    </div>
+  </div>
+</section>
+
+<section class="reqsec">
+  <div class="wrap in2">
+    <div>
+      <h3>Want your organization to partner with us?</h3>
+      <p>Members may list their fraternity, sorority, lodge, or auxiliary by name. Listing a name does not mean that organization has endorsed or partnered with this directory. An organization&rsquo;s emblem is used by the directory only with its written approval or as a partner. Verified members may show their own organization&rsquo;s name, letters or emblem on their own listing after confirming they are a member in good standing. Every listing has a Report button, and we remove any content an organization objects to within 48 hours.</p>
+    </div>
+    <a class="act pri reqbtn" href="https://form.jotform.com/263007405643047" target="_blank" rel="noopener">Request your organization</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Fraternal Vocational Directory · A program of Greenway International, Inc., a 501(c)(3) nonprofit · <a href="signup-test.html">List your profession or business</a><br><span id="upd"></span></div>
+</footer>
+
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="dName">
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<script>
+const FALLBACK = {"updated": "2026-10-28", "demo": true, "listings": [{"id": "d1", "first": "Marcus", "last": "Hollins", "org": "AEAONMS", "orgs": ["Prince Hall Masons (F&AM)"], "chapter": "Desert of Georgia", "category": "Real Estate", "title": "Licensed Real Estate Agent", "years": 12, "city": "Decatur", "state": "GA", "tier": "Business", "bio": "Helping first-time buyers and veterans use their VA loan benefit. I walk every client through the numbers before they sign anything.", "business": "Hollins Home Group", "phone": "(404) 555-0142", "email": "hello@example.com", "website": "https://example.com", "mobile": false, "available": ["Consultations", "Speaking", "Mentoring"]}, {"id": "d2", "first": "Andrea", "last": "Whitfield", "org": "Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc.", "orgs": ["Eastern Star (Prince Hall)"], "chapter": "Desert of Georgia", "category": "Healthcare & Medicine", "title": "Registered Nurse (RN)", "years": 18, "city": "Macon", "state": "GA", "tier": "Member", "bio": "ICU nurse and health educator. Happy to talk with young members about nursing school and careers in healthcare.", "business": "", "phone": "", "email": "", "website": "", "mobile": false, "available": ["Mentoring", "Speaking"]}, {"id": "d3", "first": "Terrence", "last": "Boyd", "org": "AEAONMS", "orgs": [], "chapter": "Desert of Georgia", "category": "Construction & Skilled Trades", "title": "Master Electrician", "years": 22, "city": "Columbus", "state": "GA", "tier": "Business", "bio": "Residential and light commercial electrical. Panel upgrades, EV chargers, and generator hookups. Licensed and insured.", "business": "Boyd Electric Services", "phone": "(706) 555-0187", "email": "office@example.com", "website": "", "mobile": true, "available": ["Hiring", "Apprenticeships", "Consultations"]}, {"id": "d4", "first": "Denise", "last": "Carrington", "org": "Eastern Star (Prince Hall)", "orgs": [], "chapter": "Desert of Georgia", "category": "Finance & Accounting", "title": "CPA / Tax Preparer", "years": 15, "city": "Atlanta", "state": "GA", "tier": "Business", "bio": "Tax preparation and bookkeeping for small businesses, churches, and nonprofits. Year-round support, not just in April.", "business": "Carrington Tax & Advisory", "phone": "(470) 555-0119", "email": "info@example.com", "website": "https://example.com", "mobile": false, "available": ["Consultations", "Workshops"]}, {"id": "d5", "first": "Reginald", "last": "Fair", "org": "Prince Hall Masons (F&AM)", "orgs": ["AEAONMS"], "chapter": "Desert of Georgia", "category": "Military & Veterans Services", "title": "Veterans Services Officer (VSO)", "years": 9, "city": "Savannah", "state": "GA", "tier": "Member", "bio": "Army veteran. I help fellow veterans file claims and find the benefits they've earned.", "business": "", "phone": "", "email": "", "website": "", "mobile": false, "available": ["Mentoring", "Volunteering"]}, {"id": "d6", "first": "Kendrick", "last": "Lowe", "org": "AEAONMS", "orgs": [], "chapter": "Desert of Georgia", "category": "Barbering & Cosmetology", "title": "Master Barber", "years": 14, "city": "Covington", "state": "GA", "tier": "Business", "bio": "Classic cuts, fades, and beard work. Walk-ins welcome. Booth chairs open for licensed barbers.", "business": "Lowe's Grooming Lounge", "phone": "(678) 555-0164", "email": "", "website": "", "mobile": false, "available": ["Hiring", "Apprenticeships"]}, {"id": "d7", "first": "Angela", "last": "Pruitt", "org": "Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc.", "orgs": [], "chapter": "Desert of Georgia", "category": "Events, Food & Hospitality", "title": "Caterer / Event Planner", "years": 7, "city": "Augusta", "state": "GA", "tier": "Business", "bio": "Full-service catering for balls, banquets, and family events from 20 to 400 guests. Southern menu with tasting appointments.", "business": "Pruitt Premier Catering", "phone": "(762) 555-0133", "email": "events@example.com", "website": "https://example.com", "mobile": true, "available": ["Consultations"]}, {"id": "d8", "first": "Calvin", "last": "Nesbitt", "org": "Prince Hall Masons (F&AM)", "orgs": [], "chapter": "Desert of Georgia", "category": "Legal & Law", "title": "Attorney", "years": 20, "city": "Atlanta", "state": "GA", "tier": "Business", "bio": "Wills, trusts, and estate planning. I also help small business owners form and protect their companies.", "business": "Nesbitt Law, LLC", "phone": "(404) 555-0108", "email": "intake@example.com", "website": "https://example.com", "mobile": false, "available": ["Consultations", "Workshops", "Speaking"]}, {"id": "d9", "first": "Sharon", "last": "Ellis", "org": "Eastern Star (Prince Hall)", "orgs": ["Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc."], "chapter": "Desert of Georgia", "category": "Education & Academia", "title": "High School Counselor", "years": 11, "city": "Albany", "state": "GA", "tier": "Member", "bio": "College and scholarship advising. I've helped hundreds of students file the FAFSA and find aid.", "business": "", "phone": "", "email": "", "website": "", "mobile": false, "available": ["Mentoring", "Workshops"]}, {"id": "d10", "first": "Derrick", "last": "Simmons", "org": "AEAONMS", "orgs": ["Prince Hall Masons (F&AM)"], "chapter": "Desert of Georgia", "category": "Automotive", "title": "Auto Mechanic / ASE Technician", "years": 16, "city": "Warner Robins", "state": "GA", "tier": "Business", "bio": "Brakes, diagnostics, and preventive maintenance. Discount for members and veterans.", "business": "Simmons Auto Care", "phone": "(478) 555-0176", "email": "", "website": "", "mobile": false, "available": ["Hiring"]}]};
+let ALL = [], state = {q:'',cat:'',org:'',city:'',chap:'',biz:false};
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const initials = l => ((l.first||'')[0]||'') + ((l.last||'')[0]||'');
+const QUOTE_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/23900090/Cw3Qmoia8B6xDIsyo/';
+const isBiz = l => (l.tier === 'Business' || l.tier === 'Featured') && l.business;
+const isFeat = l => l.tier === 'Featured' && l.business;
+const loc = l => [l.city, l.state].filter(Boolean).join(', ');
+const allOrgs = l => [l.org, ...(l.orgs||[])].filter(Boolean);
+const shortOrg = o => o.startsWith('Daughters of AEAONMS') ? 'Daughters of AEAONMS' : o.replace(/\s*\(.*?\)\s*/,'').replace(/,? Inc\.?$/,'');
+
+function badges(l){
+  if (l.sample) return '<div class="badges"><span class="bdg s">Sample listing</span></div>';
+  return `<div class="badges"><span class="bdg v">${isBiz(l) ? '✓ Verified Business' : l.referral ? '✓ Verified (member referral)' : '✓ Verified member'}</span>${l.charter ? '<span class="bdg c">★ Charter Member</span>' : ''}</div>`;
+}
+
+function avatar(l){ return `<div class="av">${l.photo ? `<img src="${esc(l.photo)}" alt="">` : esc(initials(l))}</div>`; }
+
+function endorseOrgs(l){ const o = allOrgs(l); return o.length ? o.join(', ') : 'No organization'; }
+function reportHref(l){
+  const who = (l.first+' '+l.last).trim();
+  const sub = 'Report listing: '+who+' ('+l.id+')';
+  const body = 'Listing: '+who+' ('+l.id+')\nPage: '+location.href.split('#')[0]+'\n\nWhat is wrong with this listing?\n\nAre you contacting us on behalf of an organization? If yes, which one and your role:\n';
+  return 'mailto:fraternalvocationaldirectory@gmail.com?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body);
+}
+
+function card(l){
+  const biz = isBiz(l);
+  const feat = !l.sample && isFeat(l);
+  return `<button class="card${feat ? ' feat' : ''}" type="button" data-id="${esc(l.id)}">
+    <div class="top">${avatar(l)}
+      <div class="who"><h3>${esc(l.first)} ${esc(l.last)}</h3><div class="t">${esc(l.title)}</div><div class="loc">${esc(loc(l))}${l.years ? ` · ${esc(l.years)} yrs` : ''}</div>${badges(l)}</div>
+      ${l.sample ? '' : biz ? (isFeat(l) ? '<span class="tier feat">&#9733; Featured</span>' : '<span class="tier">Business</span>') : ''}
+    </div>
+    ${feat && l.bizPhoto ? `<img class="bizphoto" src="${esc(l.bizPhoto)}" alt="${esc(l.business)}" loading="lazy">` : ''}
+    ${biz ? `<div class="biz bizrow">${l.logo ? `<img class="logo" src="${esc(l.logo)}" alt="" loading="lazy">` : ''}<div><b>${esc(l.business)}</b><span>${l.mobile ? 'Serves ' + esc(loc(l)) + ' area' : esc(loc(l))}</span></div></div>` : ''}
+    <div class="orgs">${allOrgs(l).map((o,i)=>`<span class="org${i?'':' p'}">${esc(shortOrg(o))}</span>`).join('')}</div>
+    <div class="note" style="font-size:11px;margin-top:6px;color:#6b7280">Listed by the member &middot; not endorsed by any organization</div>
+  </button>`;
+}
+
+function render(){
+  const q = state.q.trim().toLowerCase();
+  const list = ALL.filter(l => {
+    if (state.cat && l.category !== state.cat) return false;
+    if (state.org && !allOrgs(l).includes(state.org)) return false;
+    if (state.city && loc(l) !== state.city) return false;
+    if (state.chap && (l.chapter||'') !== state.chap) return false;
+    if (state.biz && !isBiz(l)) return false;
+    if (q) {
+      const hay = [l.first,l.last,l.title,l.category,l.business,l.city,l.chapter,l.bio,...allOrgs(l),...(l.available||[])].join(' ').toLowerCase();
+      return q.split(/\s+/).every(w => hay.includes(w));
+    }
+    return true;
+  });
+  $('grid').innerHTML = list.length ? list.map(card).join('') :
+    `<div class="empty"><b>No members found</b>Try a different trade or clear your filters.<br><a href="signup-test.html" style="color:var(--primary);font-weight:600;display:inline-block;margin-top:10px">Get Listed</a> &middot; <a href="https://form.jotform.com/263007405643047" target="_blank" rel="noopener" style="color:var(--primary);font-weight:600;display:inline-block;margin-top:10px">Don\'t see your organization? Request it</a></div>`;
+  $('count').textContent = `${list.length} ${list.length===1?'member':'members'}`;
+  const active = state.q||state.cat||state.org||state.city||state.chap||state.biz;
+  $('clear').hidden = !active;
+  ['fCat','fOrg','fCity','fChap'].forEach(id => $(id).classList.toggle('on', !!$(id).value));
+  $('fBiz').classList.toggle('on', state.biz);
+}
+
+function open(id){
+  const l = ALL.find(x => x.id === id); if (!l) return;
+  const biz = isBiz(l);
+  const tel = (l.phone||'').replace(/[^\d+]/g,'');
+  const acts = [];
+  if (biz && tel) acts.push(`<a class="act pri" href="tel:${esc(tel)}">Call</a>`);
+  if (biz) acts.push(`<button class="act${acts.length?'':' pri'}" type="button" id="qBtn">Request a Quote</button>`);
+  if (biz && l.website) acts.push(`<a class="act" href="${esc(l.website)}" target="_blank" rel="noopener">Website</a>`);
+  if (!biz) acts.push(`<button class="act pri" type="button" id="qBtn">Want to hire ${esc(l.first)}? Let them know</button>`);
+  $('sheet').innerHTML = `
+    <button class="x" id="close" aria-label="Close">×</button>
+    <div class="top">${avatar(l)}<div class="who"><h3 id="dName">${esc(l.first)} ${esc(l.last)}</h3><div class="t">${esc(l.title)}</div><div class="loc">${esc(l.category)}</div>
+      ${badges(l)}</div></div>
+    ${biz && l.bizPhoto ? `<img class="bizphoto" src="${esc(l.bizPhoto)}" alt="${esc(l.business)}" loading="lazy">` : ''}
+    ${biz ? `<div class="sec"><h4>Business</h4><div class="biz bizrow">${l.logo ? `<img class="logo" src="${esc(l.logo)}" alt="">` : ''}<div><b>${esc(l.business)}</b><span>${l.mobile ? 'Mobile · serves the ' + esc(loc(l)) + ' area' : esc(loc(l))}${l.phone ? ' · <span style="white-space:nowrap">' + esc(l.phone) + '</span>' : ''}</span></div></div></div>` : `<div class="sec"><h4>Location</h4><p>${esc(loc(l))}</p></div>`}
+    ${l.bio ? `<div class="sec"><h4>About</h4><p>${esc(l.bio)}</p></div>` : ''}
+    ${(l.available||[]).length ? `<div class="sec"><h4>Available for</h4><div class="tags">${l.available.map(a=>`<span class="tag">${esc(a)}</span>`).join('')}</div></div>` : ''}
+    ${l.chapter ? `<div class="sec"><h4>Temple, lodge, court or chapter</h4><p>${esc(l.chapter)}</p></div>` : ''}
+    <div class="sec"><h4>Organizations</h4><div class="orgs">${allOrgs(l).map((o,i)=>`<span class="org${i?'':' p'}">${esc(o)}${i?'':' · primary'}</span>`).join('')}</div></div>
+    ${l.years ? `<div class="sec"><h4>Experience</h4><p>${esc(l.years)} years in the field</p></div>` : ''}
+    <p class="note" style="margin-top:10px">Listed by the member. ${esc(endorseOrgs(l))} ${allOrgs(l).length>1?'have':'has'} not endorsed or partnered with the Fraternal Vocational Directory.</p>
+    ${acts.length ? `<div class="actions">${acts.join('')}</div><div id="qHost"></div>` : `<p class="note">This member has a personal listing. Ask for an introduction through your temple, lodge, or chapter.</p>`}
+    <p class="note" style="text-align:center;margin-top:14px"><a href="${reportHref(l)}" style="color:#6b7280">&#9873; Report this listing</a></p>
+  `;
+  $('scrim').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  $('close').onclick = close; $('close').focus();
+  const qb = $('qBtn'); if (qb) qb.onclick = () => showQuote(l);
+}
+
+function showHire(l){
+  const host = $('qHost'); if (!host) return;
+  host.innerHTML = `<form class="qform" id="hForm" novalidate>
+    <h4>Let ${esc(l.first)} know you want to hire them</h4>
+    <p class="sub">${esc(l.first)} has a free member listing, so they don't take requests directly. We'll tell them someone wants to hire them as a ${esc(l.title)}. If they open a Business listing, your request goes to them right away.</p>
+    <label for="hName">Your name *</label><input id="hName" autocomplete="name" maxlength="120">
+    <label for="hEmail">Your email *</label><input id="hEmail" type="email" autocomplete="email" maxlength="200">
+    <label for="hMsg">What do you need? *</label><textarea id="hMsg" maxlength="1000" placeholder="Describe the job, timing, and location."></textarea>
+    <div class="err" id="hErr" hidden></div>
+    <button class="act pri" type="submit">Let ${esc(l.first)} know</button>
+  </form>`;
+  $('hName').focus();
+  $('hForm').onsubmit = ev => {
+    ev.preventDefault();
+    const name=$('hName').value.trim(), email=$('hEmail').value.trim(), msg=$('hMsg').value.trim(), err=$('hErr'); err.hidden=true;
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || msg.length < 10) { err.textContent='Please enter your name, a valid email, and what you need (at least 10 characters).'; err.hidden=false; return; }
+    // TEST COPY: nothing is sent.
+    const near = ALL.filter(x => !x.sample && isBiz(x) && x.category === l.category).sort((a,b) => (b.state===l.state)-(a.state===l.state)).slice(0,3);
+    host.innerHTML = `<div class="qdone"><b>We let ${esc(l.first)} know.</b><br>(Test copy: nothing was sent.) If they open a Business listing, your request goes straight to them.</div>
+      <div class="sec"><h4>${near.length ? 'Businesses in this trade' : 'No businesses in this trade yet'}</h4>
+      ${near.map(b => `<button class="act" type="button" data-go="${esc(b.id)}" style="width:100%;margin-top:6px;text-align:left">${esc(b.business||b.first+' '+b.last)} · ${esc(loc(b))}</button>`).join('')}
+      <button class="act${near.length?'':' pri'}" type="button" id="seeBiz" style="width:100%;margin-top:8px">See all businesses</button></div>`;
+    host.querySelectorAll('[data-go]').forEach(b => b.onclick = () => open(b.dataset.go));
+    $('seeBiz').onclick = () => { close(); state.biz = true; render(); };
+  };
+}
+function showQuote(l){
+  const host = $('qHost'); if (!host) return;
+  const biz = isBiz(l);
+  if (!biz) return showHire(l);
+  host.innerHTML = `<form class="qform" id="qForm" novalidate>
+    <h4>${biz ? 'Request a quote from ' + esc(l.business) : 'Send a message to ' + esc(l.first)}</h4>
+    <p class="sub">${biz ? 'Your message goes to the business by email. Your contact details are shared only with them.' : 'Your message goes to ' + esc(l.first) + ' by email. Their contact details stay private. Your name and email are shared only with them.'}</p>
+    <label for="qName">Your name *</label><input id="qName" autocomplete="name" maxlength="120" required>
+    <label for="qEmail">Your email *</label><input id="qEmail" type="email" autocomplete="email" maxlength="200" required>
+    <label for="qPhone">Phone (optional)</label><input id="qPhone" type="tel" autocomplete="tel" maxlength="40">
+    <label for="qMsg">${biz ? 'What do you need?' : 'Your message'} *</label><textarea id="qMsg" maxlength="2000" placeholder="${biz ? 'Describe the job, timing, and location.' : 'Say who you are and why you are reaching out.'}"></textarea>
+    <div class="hp" aria-hidden="true"><label>Website</label><input id="qHp" tabindex="-1" autocomplete="off"></div>
+    <div class="err" id="qErr" hidden></div>
+    <button class="act pri" type="submit" id="qSend">${biz ? 'Send request' : 'Send message'}</button>
+    <p class="note">The Fraternal Vocational Directory does not endorse or guarantee any member's work.</p>
+  </form>`;
+  $('qName').focus();
+  $('qForm').onsubmit = async ev => {
+    ev.preventDefault();
+    const name=$('qName').value.trim(), email=$('qEmail').value.trim(), phone=$('qPhone').value.trim(), message=$('qMsg').value.trim();
+    const err=$('qErr'); err.hidden=true;
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || message.length < 10) {
+      err.textContent='Please enter your name, a valid email, and a short message (at least 10 characters).'; err.hidden=false; return;
+    }
+    if (!/^rec[A-Za-z0-9]{14}$/.test(l.id)) {
+      err.textContent='This is a sample listing, so messages are turned off. They work on live listings.'; err.hidden=false; return;
+    }
+    const btn=$('qSend'); btn.disabled=true; btn.textContent='Sending...';
+    try {
+      await fetch(QUOTE_WEBHOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+        body:JSON.stringify({listingId:l.id,name,email,phone,message,website_url:$('qHp').value})});
+      host.innerHTML = biz
+        ? '<div class="qdone"><b>Request sent.</b><br>'+esc(l.business)+' will reply to you directly by email. A confirmation is on its way to '+esc(email)+'.</div>'
+        : '<div class="qdone"><b>Message sent.</b><br>If '+esc(l.first)+' chooses to reply, it will come to '+esc(email)+'. A confirmation is on its way.</div>';
+    } catch(e) {
+      btn.disabled=false; btn.textContent=biz ? 'Send request' : 'Send message';
+      err.textContent='Could not send. Check your connection and try again.'; err.hidden=false;
+    }
+  };
+}
+function close(){ $('scrim').classList.remove('open'); document.body.style.overflow = ''; }
+
+function fill(sel, values){ values.forEach(v => sel.insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`)); }
+
+function boot(data){
+  (data.listings||[]).forEach(l => { if (!/^rec[A-Za-z0-9]{14}$/.test(String(l.id||''))) l.sample = true; });
+  ALL = (data.listings||[]).slice().sort((a,b) => (!!a.sample-!!b.sample) || (isFeat(b)-isFeat(a)) || (isBiz(b)-isBiz(a)) || (a.last||'').localeCompare(b.last||''));
+  const uniq = a => [...new Set(a.filter(Boolean))].sort();
+  fill($('fCat'), uniq(ALL.map(l=>l.category)));
+  // Always offer every organization the directory supports, even before anyone has listed under it.
+  const ORG_NAMES = ['AEAONMS','Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc.','Eastern Star (Prince Hall)','Prince Hall Masons (F&AM)','Alpha Phi Alpha Fraternity, Inc.','Alpha Kappa Alpha Sorority, Inc.','Kappa Alpha Psi Fraternity, Inc.','Omega Psi Phi Fraternity, Inc.','Delta Sigma Theta Sorority, Inc.','Phi Beta Sigma Fraternity, Inc.','Zeta Phi Beta Sorority, Inc.','Sigma Gamma Rho Sorority, Inc.','Iota Phi Theta Fraternity, Inc.','Other Fraternal Organization'];
+  const orgOpts = ORG_NAMES.concat(uniq(ALL.flatMap(allOrgs)).filter(o => !ORG_NAMES.includes(o)));
+  fill($('fOrg'), orgOpts);
+  fill($('fCity'), uniq(ALL.map(loc)));
+  fill($('fChap'), uniq(ALL.map(l=>l.chapter)));
+  // Count real members only; if there are none yet, count the samples and say so.
+  const real = ALL.filter(l => !l.sample), base = real.length ? real : ALL;
+  $('sMembers').textContent = base.length;
+  if (!real.length) $('sMembersL').textContent = 'Sample listings';
+  $('sBiz').textContent = base.filter(isBiz).length;
+  $('sCities').textContent = uniq(base.map(loc)).length;
+  $('demoNote').hidden = !data.demo;
+  if (data.demo && data.real) $('demoNote').innerHTML = '<b>Preview:</b> listings marked <b>Sample</b> show how the directory works. Every other listing is a verified member.';
+  if (data.updated) $('upd').textContent = 'Updated ' + new Date(data.updated + 'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  render();
+}
+
+$('q').addEventListener('input', e => { state.q = e.target.value; render(); });
+$('fCat').onchange = e => { state.cat = e.target.value; render(); };
+$('fOrg').onchange = e => { state.org = e.target.value; render(); };
+$('fCity').onchange = e => { state.city = e.target.value; render(); };
+$('fChap').onchange = e => { state.chap = e.target.value; render(); };
+$('fBiz').onclick = () => { state.biz = !state.biz; render(); };
+$('clear').onclick = () => { state = {q:'',cat:'',org:'',city:'',chap:'',biz:false}; $('q').value=''; ['fCat','fOrg','fCity','fChap'].forEach(id=>$(id).value=''); render(); };
+$('grid').addEventListener('click', e => { const c = e.target.closest('.card'); if (c) open(c.dataset.id); });
+$('scrim').addEventListener('click', e => { if (e.target.id === 'scrim') close(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+fetch('listings.json', {cache:'no-store'}).then(r => r.ok ? r.json() : Promise.reject()).then(boot)
+  .catch(() => boot(FALLBACK || {listings:[]}));
+</script>
+</body>
+</html>
