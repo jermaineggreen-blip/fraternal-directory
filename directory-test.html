@@ -309,7 +309,7 @@ function render(){
   $('grid').innerHTML = list.length ? list.map(card).join('') :
     `<div class="empty"><b>${state.type==='elite'?'No Business Elite listings yet':state.type==='biz'?'No businesses found':'No members found'}</b>${state.type==='elite'||state.type==='biz'?'Be the first in your trade.':'Try a different trade or clear your filters.'}<br><a href="signup-test.html" style="color:var(--primary);font-weight:600;display:inline-block;margin-top:10px">Get Listed</a> &middot; <a href="https://form.jotform.com/263007405643047" target="_blank" rel="noopener" style="color:var(--primary);font-weight:600;display:inline-block;margin-top:10px">Don\'t see your organization? Request it</a></div>`;
   $('count').textContent = `${list.length} ${list.length===1?'listing':'listings'}`;
-  const active = state.q||state.cat||state.org||state.city||state.chap||state.biz||state.type;
+  const active = state.q||state.cat||state.org||state.city||state.chap||state.type;
   $('clear').hidden = !active;
   ['fCat','fOrg','fCity','fChap'].forEach(id => $(id).classList.toggle('on', !!$(id).value));
   document.querySelectorAll('.pt.tt').forEach(b => b.classList.toggle('on', b.dataset.type === state.type));
@@ -371,7 +371,7 @@ function showHire(l){
       ${near.map(b => `<button class="act" type="button" data-go="${esc(b.id)}" style="width:100%;margin-top:6px;text-align:left">${isFeat(b)?'&#9733; ':''}${esc(b.business||b.first+' '+b.last)} · ${esc(loc(b))}</button>`).join('')}
       <button class="act${near.length?'':' pri'}" type="button" id="seeBiz" style="width:100%;margin-top:8px">See all businesses</button></div>`;
     host.querySelectorAll('[data-go]').forEach(b => b.onclick = () => open(b.dataset.go));
-    $('seeBiz').onclick = () => { close(); state.biz = true; render(); };
+    $('seeBiz').onclick = () => { close(); state.type = 'biz'; render(); };
   };
 }
 function showQuote(l){
