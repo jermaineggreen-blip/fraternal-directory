@@ -50,6 +50,66 @@ F = {
     "Verification Method": "fld1cRo2FN3oMEkfP",
 }
 ID2NAME = {v: k for k, v in F.items()}
+
+# Spec B1-T4: privacy label for EVERY Members field (updated Nov 26, 2026).
+#   Public   = may appear on the public directory.
+#   Logic    = read only to decide what to show (never copied into listings.json).
+#   Reviewer = Jermaine/reviewers only (Airtable, review emails). Never published.
+#   Never    = must never leave Airtable/Drive (IDs, keys, numbers, dues cards).
+# Business Phone/Email/Website publish ONLY for Business and Business Elite listings (paid perk, F6).
+FIELD_PRIVACY = {
+    "First Name": "Public", "Last Name": "Public", "Primary Organization": "Public",
+    "Chapter / Temple / Lodge / Court": "Public", "Additional Organizations": "Public",
+    "City": "Public", "State": "Public", "Occupation Category": "Public", "Occupation Title": "Public",
+    "Years in Field": "Public", "Professional Bio": "Public", "Available For": "Public",
+    "Member Photo": "Public", "Business Name": "Public", "Business Phone": "Public",
+    "Business Email": "Public", "Business City": "Public", "Business State": "Public",
+    "Website": "Public", "Business Logo": "Public", "Business Photo": "Public",
+    "Is Mobile Business": "Public",
+    "Status": "Logic", "Listing Tier": "Logic", "Has Business": "Logic",
+    "Payment Status": "Logic", "Verification Method": "Logic",
+    "Personal Email": "Reviewer", "Personal Phone": "Reviewer", "Notes": "Reviewer",
+    "Assignee": "Reviewer", "Urgent Availability": "Reviewer", "Last Verified Date": "Reviewer",
+    "Business Street Address": "Reviewer", "Business ZIP": "Reviewer", "Divide Contribution": "Reviewer",
+    "Submission Date": "Reviewer", "Member # (Last 4)": "Reviewer", "Annual Fee": "Reviewer",
+    "Renewal Date": "Reviewer", "Verified By": "Reviewer", "Paid Date": "Reviewer",
+    "Org Contribution (15%)": "Reviewer", "Contribution Period (half-year)": "Reviewer",
+    "Contribution Paid Out": "Reviewer", "Two-Way Reviews": "Reviewer", "Marks Attestation": "Reviewer",
+    "Dues Card": "Reviewer", "Dues Card Deleted On": "Reviewer", "Vouch Status": "Reviewer",
+    "Vouched By (name)": "Reviewer", "Vouch Requested On": "Reviewer", "Vouch Answered On": "Reviewer",
+    "Vouching Revoked": "Reviewer", "Vouch Reminder Sent": "Reviewer", "Status Reason": "Reviewer",
+    "Status Changed": "Reviewer", "FVD-ID": "Reviewer", "FVD Seq": "Reviewer",
+    "Years in Field (old number)": "Reviewer",
+    "Member Number": "Never", "Review Key": "Never", "Vouch Key": "Never",
+    "Vouched By (record ID)": "Never", "Dues Card File ID": "Never",
+    "Attachments": "Never", "Attachment Summary": "Never",
+}
+# Script field names that differ from the Airtable column name.
+F_ALIASES = {"Chapter": "Chapter / Temple / Lodge / Court"}
+# The only keys allowed in a published listing.
+ALLOWED_KEYS = {"id", "first", "last", "org", "orgs", "chapter", "category", "title", "years", "city", "state",
+                "tier", "bio", "available", "photo", "verified", "referral", "charter",
+                "business", "phone", "email", "website", "mobile", "logo", "bizPhoto"}
+BUSINESS_ONLY_KEYS = ("business", "phone", "email", "website", "logo", "bizPhoto")
+
+
+def check_field_list():
+    """Fail if the script ever reads a field that is not Public or Logic."""
+    bad = [n for n in F if FIELD_PRIVACY.get(F_ALIASES.get(n, n)) not in ("Public", "Logic")]
+    if bad:
+        sys.exit("PRIVACY STOP: publish script reads non-public fields: " + ", ".join(bad))
+
+
+def check_listings(listings):
+    """Fail the publish if any listing carries a key outside the allowlist, or business contact on a Member listing."""
+    for l in listings:
+        if l.get("sample"):
+            continue
+        extra = set(l) - ALLOWED_KEYS
+        if extra:
+            sys.exit(f"PRIVACY STOP: listing {l.get('id')} has unexpected keys: {sorted(extra)}")
+        if l.get("tier") == "Member" and any(l.get(k) for k in BUSINESS_ONLY_KEYS):
+            sys.exit(f"PRIVACY STOP: member listing {l.get('id')} carries business contact data")
 HIDDEN_ORGS = set()  # add a code here to hide an organization again
 
 
@@ -167,10 +227,12 @@ def to_listing(rec, keep):
 
 
 def main():
+    check_field_list()
     os.makedirs(IMG, exist_ok=True)
     keep = set()
     real = [to_listing(r, keep) for r in fetch_active()]
     real.sort(key=lambda l: (l["tier"] == "Member", l["last"].lower()))
+    check_listings(real)
     listings = list(real)
     demo = len(real) < MIN_REAL_BEFORE_SAMPLES_HIDE
     if demo and os.path.exists(SAMPLES):
