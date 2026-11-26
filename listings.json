@@ -1,7 +1,7 @@
 {
- "updated": "2026-11-25",
+ "updated": "2026-11-26",
  "demo": false,
- "real": 7,
+ "real": 8,
  "listings": [
   {
    "id": "rec4SHUtRKP7wcvJg",
@@ -199,6 +199,33 @@
     "Networking"
    ],
    "photo": "img/recILCHeBMqGBnqPB-photo-ab2e46a9.jpg",
+   "verified": true,
+   "referral": false,
+   "charter": true,
+   "business": "",
+   "phone": "",
+   "email": "",
+   "website": "",
+   "mobile": false
+  },
+  {
+   "id": "recJk7pqWyakWmzYy",
+   "first": "Emanuel",
+   "last": "Murray",
+   "org": "Prince Hall Masons (F&AM)",
+   "orgs": [],
+   "chapter": "Friendship lodge #20",
+   "category": "Construction & Skilled Trades",
+   "title": "Welder",
+   "years": "20+",
+   "city": "Covington",
+   "state": "GA",
+   "tier": "Member",
+   "bio": "",
+   "available": [
+    "Networking"
+   ],
+   "photo": "",
    "verified": true,
    "referral": false,
    "charter": true,
