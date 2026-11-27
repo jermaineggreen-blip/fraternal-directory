@@ -1,7 +1,7 @@
 {
  "updated": "2026-11-27",
  "demo": false,
- "real": 11,
+ "real": 12,
  "listings": [
   {
    "id": "rec4SHUtRKP7wcvJg",
@@ -34,6 +34,38 @@
    "mobile": true,
    "logo": "",
    "bizPhoto": "img/rec4SHUtRKP7wcvJg-biz-b2451a41.jpg"
+  },
+  {
+   "id": "recKQGsPeRrvlreYu",
+   "first": "Jermaine",
+   "last": "Green",
+   "org": "Prince Hall Masons (F&AM)",
+   "orgs": [
+    "AEAONMS"
+   ],
+   "chapter": "True Level Lodge No. 595",
+   "category": "Barbering & Cosmetology",
+   "title": "Master Barber/FFL Weapons Dealer",
+   "years": "20+",
+   "city": "Covington",
+   "state": "GA",
+   "tier": "Featured",
+   "bio": "",
+   "available": [
+    "Training/ Speaking / Teaching"
+   ],
+   "photo": "img/recKQGsPeRrvlreYu-photo-e74b9cd9.jpg",
+   "verified": true,
+   "referral": false,
+   "officer": false,
+   "charter": true,
+   "business": "XL Tactical Firearms",
+   "phone": "4049892379",
+   "email": "thetruelevelgroup@yahoo.com",
+   "website": "www.urbanbladezbarbershop.com",
+   "mobile": false,
+   "logo": "img/recKQGsPeRrvlreYu-logo-db1bdd5d.jpg",
+   "bizPhoto": "img/recKQGsPeRrvlreYu-biz-c144d375.jpg"
   },
   {
    "id": "recuzymyr9VyLUjZe",
@@ -180,36 +212,6 @@
    "mobile": false
   },
   {
-   "id": "recKQGsPeRrvlreYu",
-   "first": "Jermaine",
-   "last": "Green",
-   "org": "Prince Hall Masons (F&AM)",
-   "orgs": [
-    "AEAONMS"
-   ],
-   "chapter": "True Level Lodge No. 595",
-   "category": "Barbering & Cosmetology",
-   "title": "Master Barber/FFL Weapons Dealer",
-   "years": "20+",
-   "city": "Atlanta",
-   "state": "GA",
-   "tier": "Member",
-   "bio": "",
-   "available": [
-    "Training/ Speaking / Teaching"
-   ],
-   "photo": "img/recKQGsPeRrvlreYu-photo-e74b9cd9.jpg",
-   "verified": true,
-   "referral": false,
-   "officer": false,
-   "charter": true,
-   "business": "",
-   "phone": "",
-   "email": "",
-   "website": "",
-   "mobile": false
-  },
-  {
    "id": "recWm6CquGkNoPqtH",
    "first": "Sherman",
    "last": "Lofton Jr",
@@ -285,6 +287,36 @@
    "available": [
     "Networking"
    ],
+   "photo": "",
+   "verified": true,
+   "referral": false,
+   "officer": false,
+   "charter": true,
+   "business": "",
+   "phone": "",
+   "email": "",
+   "website": "",
+   "mobile": false
+  },
+  {
+   "id": "recrYdgsa4pYkqUz2",
+   "first": "Corey",
+   "last": "Thomas",
+   "org": "AEAONMS",
+   "orgs": [
+    "Alpha Phi Alpha Fraternity, Inc.",
+    "Prince Hall Masons (F&AM)",
+    "Order of the Eastern Star (Prince Hall)"
+   ],
+   "chapter": "Shaaban Temple No. 103",
+   "category": "Government & Public Service",
+   "title": "Federal Government Employee",
+   "years": "20+",
+   "city": "Tyrone",
+   "state": "GA",
+   "tier": "Member",
+   "bio": "",
+   "available": [],
    "photo": "",
    "verified": true,
    "referral": false,
