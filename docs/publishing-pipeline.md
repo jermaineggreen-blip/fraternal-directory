@@ -13,7 +13,7 @@ File: `.github/workflows/sync-listings.yml` (workflow id 425016638, "Publish app
 
 | Trigger | Detail |
 |---|---|
-| Schedule | `*/30 11-22 * * *` UTC = every 30 min, 6:00 AM–5:30 PM Eastern (EST). The file comment says "6 PM"; the last run is 5:30 PM. |
+| Schedule | `*/10 * * * *` = every 10 minutes, around the clock (changed Nov 27, 2026, B5-T4 option A; was every 30 min, 6 AM–5:30 PM ET). |
 | Manual | `workflow_dispatch` ("Run workflow" button in GitHub Actions, or the API). |
 | Concurrency | Group `sync-listings`: two runs never overlap. |
 
@@ -88,7 +88,7 @@ Fewer than 5 Active listings → the 10 labeled samples from `scripts/sample_lis
 |---|---|
 | Image names use the Airtable record ID, not `FVD-ID-1.jpg` as Spec B5-T3 says. DECISION (Jermaine, Nov 27): keep record-ID names. | B5-T3 |
 | ~~No orphan test file yet.~~ Done Nov 27: `tests/test_images.py` (orphan deleted, site art kept, stable names, one download, dues card never published). | B5-T3 |
-| "Publish now" is a GitHub button, not one tap from the approval email. Approve → live can take up to 30 min (overnight approvals wait until 6 AM). | B5-T4 |
+| DECISION (Jermaine, Nov 27): option A, publish every 10 minutes around the clock instead of an instant trigger (the Zapier–GitHub connection could not be used). Approve → live in about 10–15 min, any hour. An instant trigger can be added later. | B5-T4 |
 | No FVD-specific failure email. GitHub's own failure notice may reach the account owner; not verified. | B5-T5 (UNKNOWN until tested) |
 | ~~Field allowlist not yet diff-tested on staging.~~ Done Nov 27: `tests/test_allowlist_staging.py` (2 staging canary records, every private field marked; 0 leaks, planted leak caught). | B5-T2 |
 

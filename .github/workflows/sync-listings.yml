@@ -1,7 +1,7 @@
 name: Publish approved listings
 on:
   schedule:
-    - cron: "*/30 11-22 * * *"   # every 30 min, about 6 AM–6 PM Eastern
+    - cron: "*/10 * * * *"   # every 10 min, around the clock (Jermaine, Nov 27, 2026, B5-T4 option A)
   workflow_dispatch: {}
 permissions:
   contents: write
