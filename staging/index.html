@@ -961,6 +961,9 @@ function bad(idOrEl,msg){
 document.addEventListener('input',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('has-err'))clearErr();});
 document.addEventListener('change',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('has-err'))clearErr();});
 
+// B8-T1: current legal page versions. Update this line whenever terms.html or privacy.html changes.
+const LEGAL_VERSIONS='Terms v2026-11-27, Privacy v2026-11-22';
+
 // ── VALIDATE ──────────────────────────────────────────────────────────────
 // B2-T3 (Nov 27, 2026): same rules the sign-up Zap and Airtable expect, checked before anything is sent.
 const EMAIL_OK=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -1521,7 +1524,8 @@ async function handleSubmit(){
     vouchType:S.vouchRequested?S.vouchType:'',
     bizLogoBase64:S.bizLogoBase64,
     bizPhotoBase64:S.bizPhotoBase64,
-    marksAttestation:'Yes \u2013 '+new Date().toLocaleString('en-US',{timeZone:'America/New_York'})+' ET',
+    // B8-T1 (Nov 27, 2026): record which Terms/Privacy versions the member agreed to, with the time.
+    marksAttestation:'Yes \u2013 '+new Date().toLocaleString('en-US',{timeZone:'America/New_York'})+' ET \u2013 agreed to '+LEGAL_VERSIONS,
   };
 
   try{
