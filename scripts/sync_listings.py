@@ -49,6 +49,8 @@ F = {
     "Listing Tier": "fldTWlHv31fX4zh16", "Payment Status": "fldkbDxdCWAgZqGCE",
     "Verification Method": "fld1cRo2FN3oMEkfP",
     "Secretary Answer": "fldxAtHn4XZnzl9Tq",
+    # Admin-only Elite switch (Jermaine, Nov 27, 2026). Never changes the fee.
+    "Elite (admin)": "fldqyJDSpfmlENX5A",
 }
 ID2NAME = {v: k for k, v in F.items()}
 
@@ -68,7 +70,7 @@ FIELD_PRIVACY = {
     "Website": "Public", "Business Logo": "Public", "Business Photo": "Public",
     "Is Mobile Business": "Public",
     "Status": "Logic", "Listing Tier": "Logic", "Has Business": "Logic",
-    "Payment Status": "Logic", "Verification Method": "Logic", "Secretary Answer": "Logic",
+    "Payment Status": "Logic", "Verification Method": "Logic", "Secretary Answer": "Logic", "Elite (admin)": "Logic",
     "Secretary Reason": "Reviewer", "Review Log": "Reviewer",
     "Personal Email": "Reviewer", "Personal Phone": "Reviewer", "Notes": "Reviewer",
     "Assignee": "Reviewer", "Urgent Availability": "Reviewer", "Last Verified Date": "Reviewer",
@@ -90,7 +92,7 @@ FIELD_PRIVACY = {
 F_ALIASES = {"Chapter": "Chapter / Temple / Lodge / Court"}
 # The only keys allowed in a published listing.
 ALLOWED_KEYS = {"id", "first", "last", "org", "orgs", "chapter", "category", "title", "years", "city", "state",
-                "tier", "bio", "available", "photo", "verified", "referral", "officer", "charter",
+                "tier", "bio", "available", "photo", "verified", "referral", "officer", "charter", "elite",
                 "business", "phone", "email", "website", "mobile", "logo", "bizPhoto"}
 BUSINESS_ONLY_KEYS = ("business", "phone", "email", "website", "logo", "bizPhoto")
 
@@ -223,7 +225,9 @@ def to_listing(rec, keep):
     f = rec["fields"]
     tier_raw = f.get("Listing Tier") or ""
     has_biz = bool(f.get("Has Business")) and ("Business" in tier_raw or "Featured" in tier_raw)
-    featured = "Featured" in tier_raw
+    admin_elite = bool(f.get("Elite (admin)"))
+    # Business Elite = Elite tier chosen, or Jermaine ticked Elite (admin) on a business listing.
+    featured = "Featured" in tier_raw or admin_elite
     years = re.sub(r"\s*years?\s*$", "", str(f.get("Years in Field") or ""), flags=re.I)
     primary = org_label(f.get("Primary Organization")) or "Other Fraternal Organization"
     orgs = [o for o in (org_label(c) for c in split(f.get("Additional Organizations"))) if o and o != primary]
@@ -251,6 +255,8 @@ def to_listing(rec, keep):
         # Chapter secretary confirmed membership (Nov 27, 2026). Secretary identity is never published.
         "officer": f.get("Secretary Answer") in ("In good standing", "Not current, never expelled"),
         "charter": f.get("Payment Status") == "Charter (free)",
+        # Elite look and placement. Members without a business get "Elite Member"; business contact stays hidden.
+        "elite": (has_biz and featured) or admin_elite,
     }
     if has_biz:
         listing.update({
@@ -272,7 +278,7 @@ def main():
     os.makedirs(IMG, exist_ok=True)
     keep = set()
     real = [to_listing(r, keep) for r in fetch_active()]
-    real.sort(key=lambda l: (l["tier"] == "Member", l["last"].lower()))
+    real.sort(key=lambda l: (not l["elite"], l["tier"] == "Member", l["last"].lower()))
     check_listings(real)
     listings = list(real)
     demo = len(real) < MIN_REAL_BEFORE_SAMPLES_HIDE

@@ -252,8 +252,9 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const initials = l => ((l.first||'')[0]||'') + ((l.last||'')[0]||'');
 const QUOTE_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/23900090/Cw3Qmoia8B6xDIsyo/';
-const isBiz = l => (l.tier === 'Business' || l.tier === 'Featured') && l.business;
-const isFeat = l => l.tier === 'Featured' && l.business;
+const isBiz = l => !!((l.tier === 'Business' || l.tier === 'Featured') && l.business);
+// Elite look: Business Elite listings, or any listing Jermaine marked Elite (admin), Nov 27, 2026.
+const isFeat = l => !!((l.tier === 'Featured' && l.business) || (!l.sample && l.elite));
 const loc = l => [l.city, l.state].filter(Boolean).join(', ');
 const allOrgs = l => [l.org, ...(l.orgs||[])].filter(Boolean);
 const shortOrg = o => o.startsWith('Daughters of AEAONMS') ? 'Daughters of AEAONMS' : o.replace(/\s*\(.*?\)\s*/,'').replace(/,? Inc\.?$/,'');
@@ -287,7 +288,7 @@ function card(l){
   return `<button class="card${feat ? ' feat' : ''}" type="button" data-id="${esc(l.id)}">
     <div class="top">${avatar(l)}
       <div class="who"><h3>${esc(l.first)} ${esc(l.last)}</h3><div class="t">${esc(l.title)}</div><div class="loc">${esc(loc(l))}${l.years ? ` · ${esc(l.years)} yrs` : ''}</div>${badges(l)}</div>
-      ${l.sample ? '' : biz ? (isFeat(l) ? '<span class="tier feat">&#9733; Elite</span>' : '<span class="tier">Business</span>') : ''}
+      ${l.sample ? '' : biz ? (isFeat(l) ? '<span class="tier feat">&#9733; Elite</span>' : '<span class="tier">Business</span>') : isFeat(l) ? '<span class="tier feat">&#9733; Elite Member</span>' : ''}
     </div>
     ${feat && l.bizPhoto ? `<img class="bizphoto" src="${esc(l.bizPhoto)}" alt="${esc(l.business)}" loading="lazy">` : ''}
     ${biz ? `<div class="biz bizrow">${l.logo ? `<img class="logo" src="${esc(l.logo)}" alt="" loading="lazy">` : ''}<div><b>${esc(l.business)}</b><span>${l.mobile ? 'Serves ' + esc(loc(l)) + ' area' : esc(loc(l))}</span></div></div>` : ''}
@@ -305,7 +306,7 @@ function render(){
     if (state.chap && (l.chapter||'') !== state.chap) return false;
     if (state.type === 'member' && isBiz(l)) return false;
     if (state.type === 'biz' && !isBiz(l)) return false;
-    if (state.type === 'elite' && !isFeat(l)) return false;
+    if (state.type === 'elite' && !(isFeat(l) && isBiz(l))) return false;
     if (q) {
       const hay = [l.first,l.last,l.title,l.category,l.business,l.city,l.chapter,l.bio,...allOrgs(l),...(l.available||[])].join(' ').toLowerCase();
       return q.split(/\s+/).every(w => hay.includes(w));
@@ -443,7 +444,7 @@ function boot(data){
   $('sBiz').textContent = base.filter(isBiz).length;
   $('cMem').textContent = base.filter(l => !isBiz(l)).length;
   $('cBiz').textContent = base.filter(isBiz).length;
-  $('cElite').textContent = base.filter(isFeat).length;
+  $('cElite').textContent = base.filter(l => isFeat(l) && isBiz(l)).length;
   $('sCities').textContent = uniq(base.map(loc)).length;
   $('demoNote').hidden = !data.demo;
   if (data.demo && data.real) $('demoNote').innerHTML = '<b>Preview:</b> listings marked <b>Sample</b> show how the directory works. Every other listing is a verified member.';
