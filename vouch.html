@@ -21,6 +21,11 @@ button:disabled{opacity:.5}
 .done{font-size:40px;margin-bottom:6px}
 ul{text-align:left;color:var(--ink);font-size:14px;margin:0 0 18px 18px;padding:0}li{margin-bottom:6px}
 #no{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.opt{background:#fff;color:var(--ink);border:1px solid var(--line);text-align:left;font-weight:600}
+.opt.on{border:2px solid var(--primary);background:#EEF3FB}
+textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:10px;padding:10px;font:15px/1.4 inherit;margin-top:10px}
+.err{color:#B91C1C;font-size:14px;margin:8px 0 0;text-align:left}
+#send{background:var(--primary);color:#fff}
 </style>
 </head>
 <body>
@@ -61,6 +66,52 @@ function send(a) {
     .catch(() => {
       box.innerHTML = '<div class="done">&#9888;&#65039;</div><h1>Didn\'t go through</h1><p>Check your signal and tap the link in your email again.</p>';
     });
+}
+
+// Chapter secretary mode (added Nov 27, 2026). The secretary reports membership status; FVD admin makes the final decision.
+const SEC = q.get('s') === '1';
+const SEC_DONE = {
+  good: 'Thank you. Your answer was recorded. The directory administrator will finish the review.',
+  notcurrent: 'Thank you. Your answer was recorded. The directory administrator will finish the review.',
+  suspended: 'Thank you for the details. The directory administrator will review them and make the final decision.',
+  expelled: 'Thank you. Your answer was recorded and stays private.'
+};
+function sendSec(a, reason) {
+  document.querySelectorAll('button').forEach(b => b.disabled = true);
+  fetch(HOOK, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({v, k, a, reason: reason || '', role: 'secretary'})})
+    .then(() => { box.innerHTML = '<div class="done">&#9989;</div><h1>Answer received</h1><p>' + SEC_DONE[a] + '</p>'; })
+    .catch(() => { box.innerHTML = '<div class="done">&#9888;&#65039;</div><h1>Didn\'t go through</h1><p>Check your signal and tap the link in your email again.</p>'; });
+}
+if (SEC && document.getElementById('yes')) {
+  const esc = t => t.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  box.innerHTML =
+    '<img src="brand/fvd-seal-512.jpg" alt="Fraternal Vocational Directory official seal" width="88" height="88" style="display:block;width:88px;height:88px;border-radius:12px;margin:0 auto 10px">' +
+    '<div class="k">Chapter secretary</div>' +
+    '<h1>Membership status' + (n ? ' for ' + esc(n) : '') + '</h1>' +
+    '<p>' + (o ? 'Organization: ' + esc(o) + '. ' : '') + 'Choose the answer that fits. Your answer is private; the directory administrator makes the final decision.</p>' +
+    '<button class="opt" data-a="good" type="button">&#9989; In good standing</button>' +
+    '<button class="opt" data-a="notcurrent" type="button">&#128336; Not current, but never expelled</button>' +
+    '<button class="opt" data-a="suspended" type="button">&#9888;&#65039; Suspended</button>' +
+    '<button class="opt" data-a="expelled" type="button">&#10060; Expelled</button>' +
+    '<div id="why" style="display:none;text-align:left;margin-top:12px"><label for="reason" style="font-size:14px;font-weight:600">Please give a detailed reason for the suspension (required)</label>' +
+    '<textarea id="reason" maxlength="1500" placeholder="What the suspension is for, when it started, and when it ends if known"></textarea></div>' +
+    '<div class="err" id="err"></div>' +
+    '<button id="send" type="button" disabled>Send answer</button>' +
+    '<p style="font-size:12px;margin:14px 0 0">You are confirming membership status only, not the quality of their work. If you are not this chapter\'s secretary, please close this page. Questions? fraternalvocationaldirectory@gmail.com</p>';
+  let pick = '';
+  box.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    pick = b.dataset.a;
+    box.querySelectorAll('.opt').forEach(x => x.classList.toggle('on', x === b));
+    document.getElementById('why').style.display = pick === 'suspended' ? 'block' : 'none';
+    document.getElementById('err').textContent = '';
+    document.getElementById('send').disabled = false;
+  }));
+  document.getElementById('send').addEventListener('click', () => {
+    const r = (document.getElementById('reason').value || '').trim();
+    if (!pick) return;
+    if (pick === 'suspended' && r.length < 30) { document.getElementById('err').textContent = 'Please give a detailed reason (at least a full sentence).'; return; }
+    sendSec(pick, pick === 'suspended' ? r : '');
+  });
 }
 document.getElementById('yes')?.addEventListener('click', () => send('yes'));
 document.getElementById('no')?.addEventListener('click', () => send('no'));

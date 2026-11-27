@@ -390,11 +390,20 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
     <div class="field" id="vouch-wrap" style="margin-top:-4px">
       <label style="display:flex;gap:8px;align-items:flex-start;font-family:sans-serif;font-size:14px;cursor:pointer">
         <input type="checkbox" id="vouchToggle" style="margin-top:3px;flex:none" onchange="toggleVouch()"/>
-        <span><strong>No dues card handy?</strong> A verified member of my organization can vouch for me.</span>
+        <span><strong>No dues card handy?</strong> A verified FVD member or my chapter secretary can confirm my membership.</span>
       </label>
       <div id="vouch-box" style="display:none;margin-top:10px;padding:12px 14px;border:1.5px solid #E5E7EB;border-radius:10px;background:#FAFAF7;font-family:sans-serif;font-size:13px;line-height:1.5">
-        <div style="font-weight:700;margin-bottom:6px">How a vouch works</div>
-        <ul style="margin:0 0 10px 18px;padding:0">
+        <div style="font-weight:700;margin-bottom:6px">Who will confirm your membership?</div>
+        <label style="display:flex;gap:8px;align-items:center;margin-bottom:6px;cursor:pointer"><input type="radio" name="vouchType" value="member" checked onchange="setVouchType()"/> A verified FVD member of my organization</label>
+        <label style="display:flex;gap:8px;align-items:center;margin-bottom:10px;cursor:pointer"><input type="radio" name="vouchType" value="secretary" onchange="setVouchType()"/> My chapter secretary</label>
+        <ul id="secRules" style="display:none;margin:0 0 10px 18px;padding:0">
+          <li>Use your chapter secretary&rsquo;s <strong>official chapter email</strong> if there is one.</li>
+          <li>We email them privately. They tell us your membership status.</li>
+          <li>You don&rsquo;t have to be current on dues, but members who were expelled can&rsquo;t be listed.</li>
+          <li>FVD makes the final decision on every listing.</li>
+          <li>You can still send your dues card at any time instead.</li>
+        </ul>
+        <ul id="memberRules" style="margin:0 0 10px 18px;padding:0">
           <li>Your voucher must be a member of <strong>your</strong> organization who was verified with a dues card.</li>
           <li>We email your voucher privately. They tap Yes or No.</li>
           <li>A vouch confirms your membership only. It is not a review of your work.</li>
@@ -403,12 +412,12 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
           <li>You can still send your dues card at any time instead.</li>
         </ul>
         <div class="grid2">
-          <div class="field"><label class="field-label">Voucher&rsquo;s name *</label><input id="voucherName" type="text" placeholder="e.g., John Smith"/></div>
-          <div class="field"><label class="field-label">Voucher&rsquo;s email *</label><input id="voucherEmail" type="email" placeholder="the email they used on FVD"/></div>
+          <div class="field"><label class="field-label" id="vnLabel">Voucher&rsquo;s name *</label><input id="voucherName" type="text" placeholder="e.g., John Smith"/></div>
+          <div class="field"><label class="field-label" id="veLabel">Voucher&rsquo;s email *</label><input id="voucherEmail" type="email" placeholder="the email they used on FVD"/></div>
         </div>
         <label style="display:flex;gap:8px;align-items:flex-start;margin-top:4px;cursor:pointer">
           <input type="checkbox" id="vouchRules" style="margin-top:3px;flex:none"/>
-          <span>I understand how a vouch works.</span>
+          <span id="vrText">I understand how a vouch works.</span>
         </label>
       </div>
     </div>
@@ -964,9 +973,9 @@ function validate(step){
     if(!$('chapterName').value.trim()){return bad('chapterName',msgs[1][1]);}
     if(!$('memberNumber').value.trim()){return bad('memberNumber',msgs[1][2]);}
     if($('vouchToggle').checked&&!S.duesCardBase64){
-      if(!$('voucherName').value.trim()){return bad('voucherName','Enter the name of the member who will vouch for you.');}
-      if(!EMAIL_OK.test($('voucherEmail').value.trim())){return bad('voucherEmail','Enter a valid email for your voucher.');}
-      if(!$('vouchRules').checked){return bad('vouchRules','Please check the box confirming you understand how a vouch works.');}
+      if(!$('voucherName').value.trim()){return bad('voucherName',vouchType()==='secretary'?'Enter your chapter secretary\u2019s name.':'Enter the name of the member who will vouch for you.');}
+      if(!EMAIL_OK.test($('voucherEmail').value.trim())){return bad('voucherEmail',vouchType()==='secretary'?'Enter a valid email for your chapter secretary.':'Enter a valid email for your voucher.');}
+      if(!$('vouchRules').checked){return bad('vouchRules','Please check the box confirming you understand how this works.');}
     }
     if(!$('city').value.trim()){return bad('city',msgs[1][3]);}
     if(!$('state').value){return bad('state',msgs[1][4]);}
@@ -977,7 +986,7 @@ function validate(step){
     if(!$('phone').value.trim()){return bad('phone',msgs[2][2]);}
     if(!phoneOk($('phone').value)){return bad('phone','Enter a 10-digit phone number, like 404-555-0123.');}
     if(!EMAIL_OK.test($('email').value.trim())){return bad('email','Enter a valid email address, like name@example.com.');}
-    if($('vouchToggle').checked&&!S.duesCardBase64&&$('voucherEmail').value.trim().toLowerCase()===$('email').value.trim().toLowerCase()){return bad('email','Your email matches your voucher\u2019s email. A member can\u2019t vouch for themselves; go back and name a different member, or upload your dues card.');}
+    if($('vouchToggle').checked&&!S.duesCardBase64&&$('voucherEmail').value.trim().toLowerCase()===$('email').value.trim().toLowerCase()){return bad('email','Your email matches the email you gave for the person confirming your membership. Go back and enter their email, or upload your dues card.');}
   }
   if(step===3){
     if(!$('vocCategory').value){return bad('vocCategory','Select an occupation category.');}
@@ -1004,6 +1013,7 @@ function syncState(){
   S.vouchRequested=$('vouchToggle').checked&&$('vouchRules').checked&&!S.duesCardBase64;
   S.voucherName=$('voucherName').value.trim();
   S.voucherEmail=$('voucherEmail').value.trim();
+  S.vouchType=vouchType();
   S.city=$('city').value.trim();
   S.orgState=$('state').value;
   S.firstName=$('firstName').value.trim();
@@ -1507,6 +1517,7 @@ async function handleSubmit(){
     vouchRequested:!!S.vouchRequested,
     voucherName:S.vouchRequested?S.voucherName:'',
     voucherEmail:S.vouchRequested?S.voucherEmail:'',
+    vouchType:S.vouchRequested?S.vouchType:'',
     bizLogoBase64:S.bizLogoBase64,
     bizPhotoBase64:S.bizPhotoBase64,
     marksAttestation:'Yes \u2013 '+new Date().toLocaleString('en-US',{timeZone:'America/New_York'})+' ET',
@@ -1526,6 +1537,14 @@ async function handleSubmit(){
 
 // Member vouch toggle (added Nov 22, 2026)
 function toggleVouch(){$('vouch-box').style.display=$('vouchToggle').checked?'block':'none';}
+// Chapter secretary option (added Nov 27, 2026)
+function vouchType(){const r=document.querySelector('input[name="vouchType"]:checked');return r?r.value:'member';}
+function setVouchType(){const sec=vouchType()==='secretary';
+  $('secRules').style.display=sec?'block':'none';$('memberRules').style.display=sec?'none':'block';
+  $('vnLabel').innerHTML=sec?'Secretary&rsquo;s name *':'Voucher&rsquo;s name *';
+  $('veLabel').innerHTML=sec?'Secretary&rsquo;s email (official chapter email is best) *':'Voucher&rsquo;s email *';
+  $('voucherEmail').placeholder=sec?'e.g., secretary@yourchapter.org':'the email they used on FVD';
+  $('vrText').textContent=sec?'I understand how a secretary confirmation works.':'I understand how a vouch works.';}
 
 // Invite link (added Nov 22, 2026). Uses the phone's share sheet when available, otherwise copies the link.
 const INVITE_URL='https://jermaineggreen-blip.github.io/fraternal-directory/index.html';
@@ -1550,7 +1569,7 @@ function showConfirmation(){
   $('confirm-msg').innerHTML='Thank you, <strong>'+eh(S.firstName)+'</strong>. Your <strong>'+tierName(S.listingTier)+' Listing</strong> has been received. <strong>Your listing is not live yet and nothing is due today.</strong> A confirmation is on its way to <strong>'+eh(S.email)+'</strong> (check your spam folder if you do not see it).';
   const step1='\u2460 We verify your membership (member # <strong>'+eh(last4(S.memberNumber))+'</strong>) within 2\u20133 business days.'
     +(S.duesCardBase64?' Your dues card photo is kept private and deleted as soon as you are verified.'
-      :S.vouchRequested?' We are emailing <strong>'+eh(S.voucherName)+'</strong> to confirm your membership. If they can&rsquo;t confirm, we&rsquo;ll ask for your dues card.'
+      :S.vouchRequested?' We are emailing '+(S.vouchType==='secretary'?'your chapter secretary, ':'')+'<strong>'+eh(S.voucherName)+'</strong> to confirm your membership. If they can&rsquo;t confirm, we&rsquo;ll ask for your dues card.'
       :' Because no dues card was uploaded, we may contact you for extra verification. Listings we cannot verify may be removed.')+'<br>';
   if(charter){
     $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>'+step1
