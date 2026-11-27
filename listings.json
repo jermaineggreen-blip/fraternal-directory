@@ -199,7 +199,9 @@
    "state": "KY",
    "tier": "Member",
    "bio": "",
-   "available": [],
+   "available": [
+    "Networking"
+   ],
    "photo": "img/recKW7PRpPyzTK63m-photo-b93a9d53.jpg",
    "verified": true,
    "referral": false,
