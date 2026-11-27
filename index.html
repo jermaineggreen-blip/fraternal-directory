@@ -674,14 +674,14 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
       <div class="tier-icon">&#x1F3E2;</div>
       <div class="tier-name">Business Listing</div>
       <div class="tier-price"><span class="price-only"><span id="biz-price-old" style="font-size:13px;font-weight:400;color:#9CA3AF;text-decoration:line-through;margin-right:4px">$75</span>$50<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></span><span class="free-only">Free<span style="font-size:12px;font-weight:400;color:#9CA3AF"> through Mar 31, 2027</span></span></div>
-      <div class="tier-desc">Everything in Member, plus:<br>&#10003; Business name, logo and photo<br>&#10003; <strong>Call</strong>, <strong>Website</strong> and <strong>Request a Quote</strong> buttons<br>&#10003; Shows in the &ldquo;Businesses&rdquo; filter, ahead of member-only listings<br><span class="price-only"><strong>Founding rate</strong>: $50/yr locked for 2 years for the first 100 businesses (then $75/yr).</span><span class="free-only"><strong>Charter offer</strong>: free through March 31, 2027.</span></div>
+      <div class="tier-desc">Everything in Member, plus:<br>&#10003; Business name, logo and photo<br>&#10003; <strong>Call</strong>, <strong>Website</strong> and <strong>Request a Quote</strong> buttons<br>&#10003; Shows in the &ldquo;Businesses&rdquo; filter, ahead of member-only listings<br><span class="price-only"><strong>Founding rate</strong>: $50/yr locked for 2 years for the first 100 businesses (then $75/yr).</span><span class="free-only"><strong>Founding offer</strong>: join by March 31, 2027 and it is free for 1 year after approval.</span></div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
     <div class="tier-card biz-only" id="tier-featured" onclick="selectTier('featured')">
       <div class="tier-icon">&#x2B50;</div>
       <div class="tier-name">&#9733; Business Elite</div>
       <div class="tier-price"><span class="price-only">$99<span style="font-size:12px;font-weight:400;color:#9CA3AF">/yr</span></span><span class="free-only">Free<span style="font-size:12px;font-weight:400;color:#9CA3AF"> through Mar 31, 2027</span></span></div>
-      <div class="tier-desc">Everything in Business, plus:<br>&#10003; <strong>Top of your trade</strong> in every search<br>&#10003; Your own <strong>Business Elite</strong> tab on the directory<br>&#10003; Gold card with your work photo right on it<br>&#10003; <strong>First in line for referrals</strong>: when someone wants to hire a member in your trade, we show you first<br><span class="price-only"><strong>Launch price</strong>: $99/yr.</span><span class="free-only"><strong>Charter offer</strong>: free through March 31, 2027.</span></div>
+      <div class="tier-desc">Everything in Business, plus:<br>&#10003; <strong>Top of your trade</strong> in every search<br>&#10003; Your own <strong>Business Elite</strong> tab on the directory<br>&#10003; Gold card with your work photo right on it<br>&#10003; <strong>First in line for referrals</strong>: when someone wants to hire a member in your trade, we show you first<br><span class="price-only"><strong>Launch price</strong>: $99/yr.</span><span class="free-only"><strong>Founding offer</strong>: join by March 31, 2027 and it is free for 1 year after approval.</span></div>
       <div class="tier-badge">&#10003; Selected</div>
     </div>
   </div>
@@ -1390,7 +1390,7 @@ function renderContrib(){
   $('contrib-body').innerHTML=`
     <div class="c-row"><span>${tierIcon} ${tierLabel}</span><span class="val" style="font-weight:600">${FVD_SHOW_PRICES?fmt(price)+'/yr':'Free'}</span></div>
     <div class="c-divider"></div>
-    <div class="c-row total"><span>Your annual fee</span><span class="val">${isCharter(S.listingTier)?(FVD_SHOW_PRICES?'$0 through '+CHARTER_END_TXT+', then '+fmt(price)+'/yr':'Free through '+CHARTER_END_TXT):fmt(price)+'/yr'}</span></div>
+    <div class="c-row total"><span>Your annual fee</span><span class="val">${isCharter(S.listingTier)?(FVD_SHOW_PRICES?'$0 for your first year after approval, then '+fmt(price)+'/yr':'Free for 1 year from approval'):fmt(price)+'/yr'}</span></div>
     <div class="contrib-note">${SUPPORT_TXT}</div>
   `;
 }
@@ -1565,7 +1565,7 @@ function setVouchType(){const sec=vouchType()==='secretary';
 
 // Invite link (added Nov 22, 2026). Uses the phone's share sheet when available, otherwise copies the link.
 const INVITE_URL='https://jermaineggreen-blip.github.io/fraternal-directory/index.html';
-const INVITE_TXT='Are you a member? List your trade or business on the Fraternal Vocational Directory so we can hire each other first. Free through March 31, 2027 \u2014 and possibly longer: ';
+const INVITE_TXT='Are you a member? List your trade or business on the Fraternal Vocational Directory so we can hire each other first. Join by March 31, 2027 and your listing is free for a full year after you are approved: ';
 function inviteMembers(){
   const note=$('invite-note');
   if(navigator.share){navigator.share({title:'Fraternal Vocational Directory',text:INVITE_TXT,url:INVITE_URL}).catch(()=>{});return;}
@@ -1590,7 +1590,7 @@ function showConfirmation(){
       :' Because no dues card was uploaded, we may contact you for extra verification. Listings we cannot verify may be removed.')+'<br>';
   if(charter){
     $('confirm-steps').innerHTML='<strong>What happens next:</strong><br>'+step1
-      +'\u2461 Once approved, your listing goes live <strong>free through '+CHARTER_END_TXT+'</strong> as a Charter Member. No payment is needed now.<br>'
+      +'\u2461 Once approved, your listing goes live <strong>free for one full year from your approval date</strong> as a founding member. No payment is needed now.<br>'
       +'\u2462 Before the charter period ends we will email you about '+(FVD_SHOW_PRICES?'renewing at <strong>$'+price+'/year</strong>':'your renewal options')+'.<br>'
       +'\u2463 '+SUPPORT_TXT;
   } else {

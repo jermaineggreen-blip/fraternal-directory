@@ -69,7 +69,7 @@ FIELD_PRIVACY = {
     "Is Mobile Business": "Public",
     "Status": "Logic", "Listing Tier": "Logic", "Has Business": "Logic",
     "Payment Status": "Logic", "Verification Method": "Logic", "Secretary Answer": "Logic",
-    "Secretary Reason": "Reviewer",
+    "Secretary Reason": "Reviewer", "Review Log": "Reviewer",
     "Personal Email": "Reviewer", "Personal Phone": "Reviewer", "Notes": "Reviewer",
     "Assignee": "Reviewer", "Urgent Availability": "Reviewer", "Last Verified Date": "Reviewer",
     "Business Street Address": "Reviewer", "Business ZIP": "Reviewer", "Divide Contribution": "Reviewer",
