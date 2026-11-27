@@ -44,7 +44,7 @@ function send(a) {
   fetch(HOOK, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({r, k, a, w: q.get('w') || '', ua: (navigator.userAgent||'').slice(0,80)})})
     .then(() => {
       box.innerHTML = a === 'approve'
-        ? '<div class="done">✅</div><h1>Approved</h1><p>Charter listings go live on the directory within 30 minutes and the member gets a welcome email. If nothing changes, the link was old: check your email for a fresh one.</p>'
+        ? '<div class="done">✅</div><h1>Approved</h1><p>The member gets a welcome email. To put the listing live now, tap below, then tap <b>Run workflow</b> (live in about 1 minute). If nothing changes, the link was old: check your email for a fresh one.</p><p><a href="https://github.com/jermaineggreen-blip/fraternal-directory/actions/workflows/sync-listings.yml" style="display:inline-block;padding:12px 18px;border-radius:8px;background:#1f2d4d;color:#fff;text-decoration:none;font-weight:600">Publish now</a></p>'
         : '<div class="done">⏸</div><h1>On hold</h1><p>The listing stays off the directory. Change it in Airtable anytime.</p>';
     })
     .catch(() => {
