@@ -2,7 +2,12 @@ name: Publish approved listings
 on:
   schedule:
     - cron: "*/10 * * * *"   # every 10 min, around the clock (Jermaine, Nov 27, 2026, B5-T4 option A)
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      test_failure:
+        description: "Test only: fail on purpose (publishes nothing) to check the failure email"
+        type: boolean
+        default: false
 permissions:
   contents: write
 concurrency: sync-listings
@@ -10,6 +15,11 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      - name: Test failure (only when asked)
+        if: ${{ inputs.test_failure == true }}
+        run: |
+          echo "Failing on purpose to test the failure email. Nothing is published."
+          exit 1
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
@@ -24,3 +34,13 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add -A listings.json img
           git diff --cached --quiet || (git commit -m "Publish approved listings" && git push)
+      # B5-T5 (Nov 27, 2026): email Jermaine when any step above fails (Zapier "FVD Publish Failure Alert").
+      # The alert address is the repo secret FVD_FAILURE_HOOK, so it never appears in public code.
+      - name: Email Jermaine if this run failed
+        if: ${{ failure() }}
+        env:
+          HOOK: ${{ secrets.FVD_FAILURE_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then echo "FVD_FAILURE_HOOK secret not set; no email sent."; exit 0; fi
+          curl -sS -m 20 -X POST "$HOOK" -H "Content-Type: application/json" \
+            -d "{\"run_id\":\"${{ github.run_id }}\",\"event\":\"${{ github.event_name }}\"}" || true
