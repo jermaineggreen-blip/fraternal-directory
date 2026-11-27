@@ -81,7 +81,7 @@ FIELD_PRIVACY = {
     "Vouched By (name)": "Reviewer", "Vouch Requested On": "Reviewer", "Vouch Answered On": "Reviewer",
     "Vouching Revoked": "Reviewer", "Vouch Reminder Sent": "Reviewer", "Status Reason": "Reviewer",
     "Status Changed": "Reviewer", "FVD-ID": "Reviewer", "FVD Seq": "Reviewer",
-    "Years in Field (old number)": "Reviewer",
+    "Years in Field (old number)": "Reviewer", "Days Waiting": "Reviewer",
     "Member Number": "Never", "Review Key": "Never", "Vouch Key": "Never",
     "Vouched By (record ID)": "Never", "Dues Card File ID": "Never",
     "Attachments": "Never", "Attachment Summary": "Never",
