@@ -952,6 +952,10 @@ document.addEventListener('input',e=>{if(e.target&&e.target.classList&&e.target.
 document.addEventListener('change',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('has-err'))clearErr();});
 
 // ── VALIDATE ──────────────────────────────────────────────────────────────
+// B2-T3 (Nov 27, 2026): same rules the sign-up Zap and Airtable expect, checked before anything is sent.
+const EMAIL_OK=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+function digits(v){return String(v||'').replace(/\D/g,'');}
+function phoneOk(v){const d=digits(v);return d.length===10||(d.length===11&&d[0]==='1');}
 function validate(step){
   const msgs={1:['Select your primary organization.','Enter your chapter / temple / lodge name.','Enter your member number.','Enter your city.','Select your state.'],
                2:['Enter your first name.','Enter your last name.','Enter your phone number.',null]};
@@ -961,7 +965,7 @@ function validate(step){
     if(!$('memberNumber').value.trim()){return bad('memberNumber',msgs[1][2]);}
     if($('vouchToggle').checked&&!S.duesCardBase64){
       if(!$('voucherName').value.trim()){return bad('voucherName','Enter the name of the member who will vouch for you.');}
-      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('voucherEmail').value.trim())){return bad('voucherEmail','Enter a valid email for your voucher.');}
+      if(!EMAIL_OK.test($('voucherEmail').value.trim())){return bad('voucherEmail','Enter a valid email for your voucher.');}
       if(!$('vouchRules').checked){return bad('vouchRules','Please check the box confirming you understand how a vouch works.');}
     }
     if(!$('city').value.trim()){return bad('city',msgs[1][3]);}
@@ -971,7 +975,9 @@ function validate(step){
     if(!$('firstName').value.trim()){return bad('firstName',msgs[2][0]);}
     if(!$('lastName').value.trim()){return bad('lastName',msgs[2][1]);}
     if(!$('phone').value.trim()){return bad('phone',msgs[2][2]);}
-    if(!$('email').value.trim()||!$('email').value.includes('@')){return bad('email','Enter a valid email address.');}
+    if(!phoneOk($('phone').value)){return bad('phone','Enter a 10-digit phone number, like 404-555-0123.');}
+    if(!EMAIL_OK.test($('email').value.trim())){return bad('email','Enter a valid email address, like name@example.com.');}
+    if($('vouchToggle').checked&&!S.duesCardBase64&&$('voucherEmail').value.trim().toLowerCase()===$('email').value.trim().toLowerCase()){return bad('email','Your email matches your voucher\u2019s email. A member can\u2019t vouch for themselves; go back and name a different member, or upload your dues card.');}
   }
   if(step===3){
     if(!$('vocCategory').value){return bad('vocCategory','Select an occupation category.');}
@@ -980,6 +986,9 @@ function validate(step){
   if(step===4&&S.hasBusiness){
     if(!$('businessName').value.trim()){return bad('businessName','Enter your business name.');}
     if(!$('businessPhone').value.trim()){return bad('businessPhone','Enter your business phone.');}
+    if(!phoneOk($('businessPhone').value)){return bad('businessPhone','Enter a 10-digit business phone, like 404-555-0123.');}
+    if($('businessEmail').value.trim()&&!EMAIL_OK.test($('businessEmail').value.trim())){return bad('businessEmail','Enter a valid business email, or leave it blank.');}
+    if($('website').value.trim()&&!/^(https?:\/\/)?[^\s.]+\.[^\s]{2,}$/i.test($('website').value.trim())){return bad('website','Enter a website like www.yourbusiness.com, or leave it blank.');}
     if(S.isMobile){if(!$('mobileBizCity').value.trim()){return bad('mobileBizCity','Enter your service area city.');}}
     else{if(!$('businessStreet').value.trim()){return bad('businessStreet','Enter your street address.');}
          if(!$('businessCity').value.trim()){return bad('businessCity','Enter your business city.');}}
@@ -1128,6 +1137,7 @@ function handlePhoto(input,key){
   const file=input.files[0];
   if(!file)return;
   if(file.size>15*1024*1024){bad(input,'Please choose an image under 15 MB.');input.value='';return;}
+  if(file.type&&!/^image\/(jpeg|jpg|png|webp|heic|heif)$/i.test(file.type)){bad(input,'Please choose a photo (JPG, PNG or WEBP).');input.value='';return;}
   const reader=new FileReader();
   reader.onload=function(e){
     S._orig=S._orig||{};S._orig[key]=e.target.result;
@@ -1465,6 +1475,10 @@ async function handleSubmit(){
   errEl.style.display='none';
   if(!$('consent').checked){errEl.textContent='Please check the box confirming your membership and agreeing to the Terms and Privacy Policy.';errEl.style.display='block';return;}
   if(!$('marksConsent').checked){errEl.textContent='Please check the box confirming you are a member in good standing with the right to display your organization\u2019s marks.';errEl.style.display='block';return;}
+  for(const st of (typeof stepsFor==='function'?stepsFor():[1,2,3,4,5])){
+    if(st<5&&validate(st)!==true){clearErr();showStep(st);validate(st);return;}
+  }
+  if(S.website&&!/^https?:\/\//i.test(S.website))S.website='https://'+S.website;
   const btn=$('btn-submit');
   btn.disabled=true;btn.textContent='Submitting\u2026';
 
