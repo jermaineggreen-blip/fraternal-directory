@@ -89,7 +89,7 @@ Fewer than 5 Active listings → the 10 labeled samples from `scripts/sample_lis
 | Image names use the Airtable record ID, not `FVD-ID-1.jpg` as Spec B5-T3 says. DECISION (Jermaine, Nov 27): keep record-ID names. | B5-T3 |
 | ~~No orphan test file yet.~~ Done Nov 27: `tests/test_images.py` (orphan deleted, site art kept, stable names, one download, dues card never published). | B5-T3 |
 | DECISION (Jermaine, Nov 27): option A, publish every 10 minutes around the clock instead of an instant trigger (the Zapier–GitHub connection could not be used). Approve → live in about 10–15 min, any hour. An instant trigger can be added later. | B5-T4 |
-| No FVD-specific failure email. GitHub's own failure notice may reach the account owner; not verified. | B5-T5 (UNKNOWN until tested) |
+| ~~No failure email.~~ Done Nov 27: on any failed step the job posts to Zapier "FVD Publish Failure Alert" (address in repo secret FVD_FAILURE_HOOK), which emails Jermaine the run link. Tested with the `test_failure` switch: email arrived 3:05 PM ET. | B5-T5 |
 | ~~Field allowlist not yet diff-tested on staging.~~ Done Nov 27: `tests/test_allowlist_staging.py` (2 staging canary records, every private field marked; 0 leaks, planted leak caught). | B5-T2 |
 
 ## 12. Rollback
