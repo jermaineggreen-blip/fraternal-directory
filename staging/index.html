@@ -363,6 +363,7 @@ if(!FVD_SHOW_PRICES)document.documentElement.className+=' noprice';
       <div class="field">
         <label class="field-label" id="chapter-label">Chapter Name *</label>
         <input id="chapterName" type="text" placeholder="e.g., AKHi Temple No. 280"/>
+        <div id="chapterPreview" style="font-family:sans-serif;font-size:12px;color:#6B7280;margin-top:4px;display:none"></div>
       </div>
       <div class="field">
         <label class="field-label" id="member-num-label">Member / ID Number *</label>
@@ -1008,7 +1009,7 @@ function validate(step){
 // ── SYNC ──────────────────────────────────────────────────────────────────
 function syncState(){
   S.primaryOrg=$('primaryOrg').value;
-  S.chapterName=$('chapterName').value.trim();
+  S.chapterName=chapterLabel($('chapterName').value,orgName($('primaryOrg').value));
   S.memberNumber=$('memberNumber').value.trim();
   S.vouchRequested=$('vouchToggle').checked&&$('vouchRules').checked&&!S.duesCardBase64;
   S.voucherName=$('voucherName').value.trim();
@@ -1536,6 +1537,24 @@ async function handleSubmit(){
 }
 
 // Member vouch toggle (added Nov 22, 2026)
+// Standard chapter format (Nov 27, 2026): "<Name> <Unit> No. <number>". Same rules as scripts/sync_listings.py.
+function chapterLabel(raw,org){
+  let s=String(raw||'').trim().replace(/\s*-\s*/g,'-');if(!s)return '';
+  const m=s.match(/(?:#|\bno\.?|\bnumber)?\s*(\d+)\s*$/i);const num=m?m[1]:'';
+  let name=(m?s.slice(0,m.index):s).replace(/[#,]|\bno\.?$/ig,'').trim();
+  let unit='';const um=name.match(/\b(temple|lodge|court|chapter|assembly|consistory|council|commandery)$/i);
+  if(um){unit=um[1][0].toUpperCase()+um[1].slice(1).toLowerCase();name=name.slice(0,um.index).trim();}
+  const U={'AEAONMS':'Temple','Prince Hall Masons (F&AM)':'Lodge','Order of the Eastern Star (Prince Hall)':'Chapter'};
+  if(!unit)unit=U[org]||(/^Daughters of AEAONMS/.test(org||'')?'Court':/, Inc\.$/.test(org||'')?'Chapter':'');
+  const AC=['AEAONMS','PHA','OES','USA','II','III','IV'];
+  const w=x=>AC.includes(x.toUpperCase())?x.toUpperCase():(x===x.toUpperCase()||x===x.toLowerCase())?x.charAt(0).toUpperCase()+x.slice(1).toLowerCase():x;
+  const SM=['of','the','and','de','du','la'];
+  name=name.split('-').map((p,j)=>p.split(/\s+/).filter(Boolean).map((x,i)=>(i||j)&&SM.includes(x.toLowerCase())?x.toLowerCase():w(x)).join(' ')).join('-');
+  return (name+(unit?' '+unit:'')+(num?' No. '+num:'')).trim();
+}
+function updateChapterPreview(){const v=$('chapterName').value.trim();const el=$('chapterPreview');if(!el)return;
+  if(!v){el.style.display='none';return;}el.style.display='block';el.textContent='Will show as: '+chapterLabel(v,orgName($('primaryOrg').value));}
+document.addEventListener('DOMContentLoaded',()=>{['chapterName','primaryOrg'].forEach(id=>{const e=$(id);if(e){e.addEventListener('input',updateChapterPreview);e.addEventListener('change',updateChapterPreview);}});});
 function toggleVouch(){$('vouch-box').style.display=$('vouchToggle').checked?'block':'none';}
 // Chapter secretary option (added Nov 27, 2026)
 function vouchType(){const r=document.querySelector('input[name="vouchType"]:checked');return r?r.value:'member';}

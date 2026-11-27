@@ -260,11 +260,19 @@ const shortOrg = o => o.startsWith('Daughters of AEAONMS') ? 'Daughters of AEAON
 
 function badges(l){
   if (l.sample) return '<div class="badges"><span class="bdg s">Sample listing</span></div>';
-  return `<div class="badges"><span class="bdg v">${isBiz(l) ? '✓ Verified Business' : l.referral ? '✓ Verified (member referral)' : '✓ Verified member'}</span>${l.charter ? '<span class="bdg c">★ Charter Member</span>' : ''}</div>`;
+  return `<div class="badges"><span class="bdg v">${isBiz(l) ? '✓ Verified Business' : l.referral ? '✓ Verified (member referral)' : l.officer ? '✓ Verified (chapter officer)' : '✓ Verified member'}</span>${l.charter ? '<span class="bdg c">★ Charter Member</span>' : ''}</div>`;
 }
 
 function avatar(l){ return `<div class="av">${l.photo ? `<img src="${esc(l.photo)}" alt="">` : esc(initials(l))}</div>`; }
 
+// Standard org format on every card (Nov 27, 2026): primary org + chapter on one chip, then up to 2 more orgs, then "+N".
+function orgChips(l){
+  const o = allOrgs(l);
+  const first = o.length ? `<span class="org p">${esc(shortOrg(o[0]))}${l.chapter ? ' &middot; ' + esc(l.chapter) : ''}</span>` : '';
+  const rest = o.slice(1, 3).map(x => `<span class="org">${esc(shortOrg(x))}</span>`).join('');
+  const more = o.length > 3 ? `<span class="org">+${o.length - 3}</span>` : '';
+  return `<div class="orgs">${first}${rest}${more}</div>`;
+}
 function endorseOrgs(l){ const o = allOrgs(l); return o.length ? o.join(', ') : 'No organization'; }
 function reportHref(l){
   const who = (l.first+' '+l.last).trim();
@@ -283,7 +291,7 @@ function card(l){
     </div>
     ${feat && l.bizPhoto ? `<img class="bizphoto" src="${esc(l.bizPhoto)}" alt="${esc(l.business)}" loading="lazy">` : ''}
     ${biz ? `<div class="biz bizrow">${l.logo ? `<img class="logo" src="${esc(l.logo)}" alt="" loading="lazy">` : ''}<div><b>${esc(l.business)}</b><span>${l.mobile ? 'Serves ' + esc(loc(l)) + ' area' : esc(loc(l))}</span></div></div>` : ''}
-    <div class="orgs">${allOrgs(l).map((o,i)=>`<span class="org${i?'':' p'}">${esc(shortOrg(o))}</span>`).join('')}</div>
+    ${orgChips(l)}
     <div class="note" style="font-size:11px;margin-top:6px;color:#6b7280">Listed by the member &middot; not endorsed by any organization</div>
   </button>`;
 }

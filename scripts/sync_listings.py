@@ -21,7 +21,7 @@ MIN_REAL_BEFORE_SAMPLES_HIDE = 5
 ORGS = {
     "aeaonms": "AEAONMS",
     "pha": "Prince Hall Masons (F&AM)",
-    "oes": "Eastern Star (Prince Hall)",
+    "oes": "Order of the Eastern Star (Prince Hall)",
     "doi": "Daughters of AEAONMS of North and South America and Its Jurisdictions, Inc.",
     "other": "Other Fraternal Organization",
     # Divine Nine: published BY NAME ONLY (text). No emblems anywhere until each approves
@@ -48,6 +48,7 @@ F = {
     "Business Photo": "fld7Of5kfSTqytpPk", "Available For": "fldXzR0M9qHZ8LKZE",
     "Listing Tier": "fldTWlHv31fX4zh16", "Payment Status": "fldkbDxdCWAgZqGCE",
     "Verification Method": "fld1cRo2FN3oMEkfP",
+    "Secretary Answer": "fldxAtHn4XZnzl9Tq",
 }
 ID2NAME = {v: k for k, v in F.items()}
 
@@ -67,7 +68,8 @@ FIELD_PRIVACY = {
     "Website": "Public", "Business Logo": "Public", "Business Photo": "Public",
     "Is Mobile Business": "Public",
     "Status": "Logic", "Listing Tier": "Logic", "Has Business": "Logic",
-    "Payment Status": "Logic", "Verification Method": "Logic",
+    "Payment Status": "Logic", "Verification Method": "Logic", "Secretary Answer": "Logic",
+    "Secretary Reason": "Reviewer",
     "Personal Email": "Reviewer", "Personal Phone": "Reviewer", "Notes": "Reviewer",
     "Assignee": "Reviewer", "Urgent Availability": "Reviewer", "Last Verified Date": "Reviewer",
     "Business Street Address": "Reviewer", "Business ZIP": "Reviewer", "Divide Contribution": "Reviewer",
@@ -88,7 +90,7 @@ FIELD_PRIVACY = {
 F_ALIASES = {"Chapter": "Chapter / Temple / Lodge / Court"}
 # The only keys allowed in a published listing.
 ALLOWED_KEYS = {"id", "first", "last", "org", "orgs", "chapter", "category", "title", "years", "city", "state",
-                "tier", "bio", "available", "photo", "verified", "referral", "charter",
+                "tier", "bio", "available", "photo", "verified", "referral", "officer", "charter",
                 "business", "phone", "email", "website", "mobile", "logo", "bizPhoto"}
 BUSINESS_ONLY_KEYS = ("business", "phone", "email", "website", "logo", "bizPhoto")
 
@@ -152,7 +154,8 @@ def split(v):
         return []
     if isinstance(v, list):
         return [str(x).strip() for x in v if str(x).strip()]
-    return [p.strip() for p in re.split(r"[,\n;]+", str(v)) if p.strip()]
+    # Never split inside an official name such as "Alpha Phi Alpha Fraternity, Inc." (fixed Nov 27, 2026).
+    return [p.strip() for p in re.split(r"[\n;]+|,(?!\s*Inc\.)", str(v)) if p.strip()]
 
 
 HIDDEN_WORDS = ()
@@ -164,7 +167,42 @@ def org_label(code):
         return None
     if code.lower().startswith("daughters of aeaonms"):
         return ORGS["doi"]
+    for full in ORGS.values():
+        if code.lower() == full.lower() or (full.endswith(" (Prince Hall)") and code.lower() == "eastern star (prince hall)"):
+            return full
     return ORGS.get(code.lower(), code or None)
+
+
+# Standard chapter format (Jermaine, Nov 27, 2026): "<Name> <Unit> No. <number>", e.g. "Al-Karim Temple No. 242".
+UNIT_BY_ORG = {ORGS["aeaonms"]: "Temple", ORGS["pha"]: "Lodge", ORGS["oes"]: "Chapter", ORGS["doi"]: "Court"}
+UNIT_WORDS = r"(temple|lodge|court|chapter|assembly|consistory|council|commandery)"
+ACRONYMS = {"AEAONMS", "PHA", "OES", "USA", "II", "III", "IV"}
+
+
+def _word(w):
+    if w.upper() in ACRONYMS:
+        return w.upper()
+    if w.isupper() or w.islower():
+        return w[:1].upper() + w[1:].lower()
+    return w  # mixed case is kept as typed (AKHi, McDonald)
+
+
+def chapter_label(raw, org):
+    s = re.sub(r"\s*-\s*", "-", (raw or "").strip())
+    if not s:
+        return ""
+    m = re.search(r"(?:#|\bno\.?|\bnumber)?\s*(\d+)\s*$", s, re.I)
+    num = m.group(1) if m else ""
+    name = re.sub(r"[#,]|\bno\.?$", "", s[:m.start()] if m else s, flags=re.I).strip()
+    unit = ""
+    um = re.search(r"\b" + UNIT_WORDS + r"$", name, re.I)
+    if um:
+        unit, name = um.group(1).title(), name[:um.start()].strip()
+    unit = unit or UNIT_BY_ORG.get(org, "Chapter" if (org or "").endswith(", Inc.") else "")
+    small = {"of", "the", "and", "de", "du", "la"}
+    name = "-".join(" ".join(w.lower() if (i or j) and w.lower() in small else _word(w) for i, w in enumerate(part.split()))
+                    for j, part in enumerate(name.split("-")))
+    return (name + (" " + unit if unit else "") + (" No. " + num if num else "")).strip()
 
 
 def save_image(att, rec_id, kind, keep):
@@ -187,16 +225,17 @@ def to_listing(rec, keep):
     has_biz = bool(f.get("Has Business")) and ("Business" in tier_raw or "Featured" in tier_raw)
     featured = "Featured" in tier_raw
     years = re.sub(r"\s*years?\s*$", "", str(f.get("Years in Field") or ""), flags=re.I)
-    orgs = [o for o in (org_label(c) for c in split(f.get("Additional Organizations"))) if o]
+    primary = org_label(f.get("Primary Organization")) or "Other Fraternal Organization"
+    orgs = [o for o in (org_label(c) for c in split(f.get("Additional Organizations"))) if o and o != primary]
     city = (f.get("Business City") if has_biz and f.get("Business City") else f.get("City")) or ""
     state = (f.get("Business State") if has_biz and f.get("Business State") else f.get("State")) or ""
     listing = {
         "id": rec["id"],
         "first": (f.get("First Name") or "").strip(),
         "last": (f.get("Last Name") or "").strip(),
-        "org": org_label(f.get("Primary Organization")) or "Other Fraternal Organization",
+        "org": primary,
         "orgs": orgs,
-        "chapter": f.get("Chapter") or "",
+        "chapter": chapter_label(f.get("Chapter"), primary),
         "category": f.get("Occupation Category") or "",
         "title": f.get("Occupation Title") or "",
         "years": years,
@@ -209,6 +248,8 @@ def to_listing(rec, keep):
         "verified": True,
         # Member vouch (Nov 22, 2026): public badge only; the voucher's identity is never published.
         "referral": f.get("Verification Method") == "Member vouch",
+        # Chapter secretary confirmed membership (Nov 27, 2026). Secretary identity is never published.
+        "officer": f.get("Secretary Answer") in ("In good standing", "Not current, never expelled"),
         "charter": f.get("Payment Status") == "Charter (free)",
     }
     if has_biz:
